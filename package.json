@@ -1,0 +1,28 @@
+{
+  "name": "financeiro-pessoal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasboeck06/financeiro-pessoal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/lucasboeck06/financeiro-pessoal/issues"
+  },
+  "homepage": "https://github.com/lucasboeck06/financeiro-pessoal#readme",
+  "dependencies": {
+    "@fastify/jwt": "^10.1.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "fastify": "^5.8.5",
+    "pg": "^8.21.0"
+  }
+}
