@@ -1,3 +1,5 @@
+import { criarTransacao } from "../services/webhookService.js";
+
 export async function logHook(request, reply) {
   try {
     const token = request.headers["asaas-access-token"];
@@ -5,8 +7,8 @@ export async function logHook(request, reply) {
       return reply.status(401).send({ erro: "Token inválido" });
     }
 
-    console.log(request.body);
-    reply.send({ recebido: true });
+    const transacao = await criarTransacao(request.body);
+    reply.status(201).send(transacao);
   } catch (err) {
     reply.status(500).send({ erro: err.message });
   }
