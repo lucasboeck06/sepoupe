@@ -1,6 +1,7 @@
 import {
   transacoesQuery,
   transacoesQueryAdd,
+  transacoesSemInfoQuery,
 } from "../database/transacoesRepository.js";
 
 export async function listarTransacoes() {
@@ -10,5 +11,10 @@ export async function listarTransacoes() {
 
 export async function adicionarTransacao(transacao) {
   const result = await transacoesQueryAdd(transacao);
+  return result;
+}
+
+export async function transacoesSemCategoria() {
+  const result = await transacoesSemInfoQuery();
   return result;
 }
