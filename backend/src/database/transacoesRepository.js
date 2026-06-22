@@ -19,3 +19,11 @@ export async function transacoesQueryAdd(transacao) {
 
   return result.rows;
 }
+
+export async function transacoesSemInfoQuery() {
+  const result = await pool.query(
+    "SELECT * FROM public.transacoes WHERE categoria_id IS NULL",
+  );
+
+  return result.rows;
+}
