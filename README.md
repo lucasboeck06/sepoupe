@@ -51,3 +51,58 @@ Exemplo de payload do Asaas:
 }
 
 A gente precisa reconhecer o usuario, reconhecer a categoria, se houver, e fazer o insert associando corretamente.
+
+FRONT-END:
+
+- npm create vite@latest frontend -- --template react
+  (Criamos o projeto frontend para o front, com Vite)
+- Cria /src/pages (Onde teremos Login.tsx, Dash.tsx, as páginas)
+- npm install react-router-dom
+  (Registra as rotas para o front (Que podem ser mascaras para as do back))
+- Atualiza o main.jsx, com as rotas das páginas, importando elas
+
+Sobre o react:
+
+- useState: Serve para reconstruir a página, quando algo atualiza e precisa ser exibido
+- useEffect: Em combo com fetch, usamos para req para o back. Sempre precisa do useState, pois roda depois do componente renderizar, logo, precisa atualizar a página com is novos dados vindos da rota.
+- .then, vem da parada das promisses, sobre concorrência.
+- components: São funções que se repetem no projeto, logo viram componentes para serem reaproveitados.
+- props: Parametros que são passados aos componentes, mas são props ({nome})...<h1>Olá {nome}!</h1>
+
+Para rodar o front fazendo requisições (usando ngrok):
+
+- npm install @fastify/cors
+- fastify.register(fastifyCors, {
+  origin: "\*", // Libera tudo por enquanto, em produção restringe
+  });
+- E o fetch no front precisamos: headers: { "ngrok-skip-browser-warning": "true" }
+
+Para conseguir armazenar o JWT, após o Login, precisamos utilizar o localStorage para lembrar disso para as requisições:
+localStorage.setItem('token', 'eyJhbGc...')
+localStorage.getItem('token')
+localStorage.removeItem('token') // pra fazer logout
+
+Como redirecionar:
+O React Router tem um hook chamado useNavigate pra isso:
+import { useNavigate } from 'react-router-dom'
+
+const navigate = useNavigate()
+
+// depois do login:
+navigate('/dashboard')
+
+Vamos usar tailwind para estilização:
+npm install tailwindcss @tailwindcss/vite
+Depois configura no vite.config.js e importa no index.css. Pesquisa "tailwind vite setup" — a doc oficial tem o passo a passo certinho.
+Configura: vite.config.js
+
+    import { defineConfig } from "vite";
+    import react from "@vitejs/plugin-react";
+    import tailwindcss from "@tailwindcss/vite";
+
+    // https://vite.dev/config/
+    export default defineConfig({
+    plugins: [react(), tailwindcss()],
+    });
+
+E em: index.css, deixa só: @import "tailwindcss";

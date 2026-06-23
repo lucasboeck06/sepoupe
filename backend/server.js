@@ -5,6 +5,7 @@ import { usuariosRoutes } from "./src/routes/usuarios.js";
 import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
 import { webhookRoutes } from "./src/routes/webhook.js";
+import fastifyCors from "@fastify/cors";
 
 const fastify = Fastify({
   logger: true,
@@ -27,6 +28,10 @@ fastify.register(usuariosRoutes);
 fastify.register(transacoesRoutes);
 fastify.register(authRoutes);
 fastify.register(webhookRoutes);
+
+fastify.register(fastifyCors, {
+  origin: "*", // Libera tudo por enquanto, em produção restringe
+});
 
 // fastify.listen({ port: 3000 }, function (err, address) {
 //   if (err) {
