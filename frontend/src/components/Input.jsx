@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 // Precisa das chaves envolvendo os parametros!
-export default function Input({ type, placeholder, Icon }) {
+export default function Input({ type, placeholder, Icon, value, onChange }) {
   const inputRef = useRef(null);
 
   return (
@@ -14,6 +14,8 @@ export default function Input({ type, placeholder, Icon }) {
         ref={inputRef}
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="w-full bg-transparent outline-none text-gray-300 text-sm"
       />
     </div>
