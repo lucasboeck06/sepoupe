@@ -1,1 +1,15 @@
+/* Primeiro as fontes externas */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+/* Depois o Tailwind */
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
