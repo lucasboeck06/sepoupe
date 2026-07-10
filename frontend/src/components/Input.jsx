@@ -6,17 +6,17 @@ export default function Input({ type, placeholder, Icon, value, onChange }) {
 
   return (
     <div
-      className="flex flex-row justify-center items-center gap-3 border border-[#EEEEEE] rounded-lg py-2 px-4"
+      className="flex flex-row justify-center items-center gap-3 border border-[#aeaeb5] rounded-lg py-2 px-4"
       onClick={() => inputRef.current?.focus()}
     >
-      <Icon className="w-4 h-4 text-gray-300 font-thin" />
+      <Icon className="w-4 h-4 text-[#aeaeb5] font-normal" />
       <input
         ref={inputRef}
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="w-full bg-transparent outline-none text-gray-300 text-sm"
+        className="w-full bg-transparent outline-none text-[#aeaeb5] text-sm font-normal"
       />
     </div>
   );

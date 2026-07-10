@@ -34,9 +34,11 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col items-center h-full w-full px-12 pt-12">
+    <div className="bg-[#F0F0F7] flex flex-col items-center h-full w-full px-12 pt-12">
       <img src={illustration} className="w-full mb-6" />
-      <h1 className="mb-6">Insira os dados para logar</h1>
+      <h1 className="text-[#161637] mb-6 font-medium">
+        Insira os dados para logar
+      </h1>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-3">
         <Input
@@ -55,7 +57,7 @@ export default function Login() {
         />
         <button
           type="submit"
-          className="bg-[#9D9DCC] rounded-lg py-2 px-4 text-sm text-[#090933] font-medium"
+          className="bg-[#b6b6ec] rounded-lg py-2 px-4 text-sm text-[#090933] font-normal"
         >
           Enviar
         </button>
