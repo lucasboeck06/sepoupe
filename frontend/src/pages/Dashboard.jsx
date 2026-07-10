@@ -1,10 +1,11 @@
 import NavBar from "../components/NavBar.jsx";
 import RankGastos from "../components/RankGastos.jsx";
+import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
 
 export default function Dashboard() {
   return (
-    <div className="h-full flex flex-col justify-between bg-[#F0F0F7]">
-      <div className="h-full flex flex-col p-6">
+    <div className="flex flex-col justify-between bg-[#F0F0F7]">
+      <div className="flex flex-col p-6 mb-18">
         <div>
           <h1>Total gasto esse mês:</h1>
           <p>R$ 500,00</p>
@@ -19,6 +20,8 @@ export default function Dashboard() {
           <RankGastos categoria="Fastfood" value={0.5} valor={900.0} />
           <RankGastos categoria="Gasolina" value={0.5} valor={900.0} />
         </div>
+
+        <GraficoGastosScroll />
       </div>
 
       <NavBar />

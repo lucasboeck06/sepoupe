@@ -1,11 +1,12 @@
-/* Primeiro as fontes externas */
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/600.css";
+@import "@fontsource/poppins/700.css";
 
 /* Depois o Tailwind */
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Montserrat", sans-serif;
+  --font-sans: "Poppins", sans-serif;
 }
 
 html,
