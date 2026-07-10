@@ -1,11 +1,12 @@
 import NavBar from "../components/NavBar.jsx";
-import RankGastos from "../components/RankGastos.jsx";
-import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
+// import RankGastos from "../components/RankGastos.jsx";
+// import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col justify-between bg-[#F0F0F7]">
-      <div className="flex flex-col p-6 mb-18">
+    // Aqui o bg é F0F0F7
+    <div className="h-full flex flex-col justify-between bg-[#000000]">
+      {/* <div className="flex flex-col p-6 mb-18">
         <div>
           <h1>Total gasto esse mês:</h1>
           <p>R$ 500,00</p>
@@ -22,7 +23,7 @@ export default function Dashboard() {
         </div>
 
         <GraficoGastosScroll />
-      </div>
+      </div> */}
 
       <NavBar />
     </div>
