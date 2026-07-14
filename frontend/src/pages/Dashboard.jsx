@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar.jsx";
 import RankGastos from "../components/RankGastos.jsx";
 import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
-import { Bell } from "lucide-react";
+import { Bell, CreditCard } from "lucide-react";
 import CircularProgress from "../components/CircularProgress.jsx";
 
 export default function Dashboard() {
@@ -28,7 +28,7 @@ export default function Dashboard() {
 
         <div className="bg-white p-6 rounded-3xl shadow-sm flex flex-row items-center gap-4">
           <CircularProgress porcentagem={33} />
-          <div>
+          <div className="flex-1 w-full">
             <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
             <span className="text-xl font-semibold text-[#EB7070]">
               R$ 500,00
@@ -40,6 +40,32 @@ export default function Dashboard() {
             <span className="text-base font-semibold text-[#68C18C]">
               R$ 1.000,00
             </span>
+          </div>
+        </div>
+
+        <div className=" bg-white p-6 rounded-3xl shadow-sm flex flex-row gap-4">
+          <div>
+            <div className="bg-[#e9f0fa] p-2 rounded-full">
+              <CreditCard className="text-[#7fa8d6] w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-[#aeaeb5]">Cartão de crédito</span>
+              <span className="text-base font-semibold text-[#7fa8d6]">
+                R$ 320,00
+              </span>
+            </div>
+            <progress
+              value={0.5}
+              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full [&::-moz-progress-bar]:bg-[#7fa8d6]"
+            />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
+              <span className="text-xs text-[#aeaeb5] font-semibold">
+                R$ 680,00 de R$ 1.000,00
+              </span>
+            </div>
           </div>
         </div>
 
