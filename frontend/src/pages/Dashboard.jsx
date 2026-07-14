@@ -2,6 +2,7 @@ import NavBar from "../components/NavBar.jsx";
 import RankGastos from "../components/RankGastos.jsx";
 import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
 import { Bell } from "lucide-react";
+import CircularProgress from "../components/CircularProgress.jsx";
 
 export default function Dashboard() {
   return (
@@ -25,7 +26,22 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div></div>
+        <div className="bg-white p-6 rounded-3xl shadow-sm flex flex-row items-center gap-4">
+          <CircularProgress porcentagem={33} />
+          <div>
+            <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
+            <span className="text-xl font-semibold text-[#EB7070]">
+              R$ 500,00
+              <br />
+            </span>
+            <span className="text-xs text-[#aeaeb5]">
+              Saldo disponível: <br />
+            </span>
+            <span className="text-base font-semibold text-[#68C18C]">
+              R$ 1.000,00
+            </span>
+          </div>
+        </div>
 
         <div>
           <h2>Top de gastos:</h2>
