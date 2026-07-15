@@ -1,86 +1,99 @@
-import { AreaChart, Area, XAxis, Tooltip, LabelList } from "recharts";
-
-// Mock de dados simulando o mês cheio para testar o scroll
-const dadosTrintaDias = Array.from({ length: 30 }, (_, i) => {
-  const dia = String(i + 1).padStart(2, "0");
-  // Simulando alguns dias com gasto zero e outros com picos
-  const gasto = i % 5 === 0 ? Math.floor(Math.random() * 200) + 20 : 0;
-  return { dia, gasto };
-});
-
 export default function GraficoGastosScroll() {
+  const dadosMensais = [
+    { dia: 1, valor: 80 },
+    { dia: 2, valor: 230 },
+    { dia: 3, valor: 40 },
+    { dia: 4, valor: 310 },
+    { dia: 5, valor: 20 },
+    { dia: 6, valor: 450 },
+    { dia: 7, valor: 90 },
+    { dia: 8, valor: 150 },
+    { dia: 9, valor: 280 },
+    { dia: 10, valor: 60 },
+    { dia: 11, valor: 340 },
+    { dia: 12, valor: 10 },
+    { dia: 13, valor: 190 },
+    { dia: 14, valor: 400 },
+    { dia: 15, valor: 70 },
+  ];
+
+  const eixoY = [600, 450, 300, 150, 0];
+  const valorMaximo = 600;
+
   return (
-    <div className="w-full bg-[#F0F0F7] rounded-xl">
-      <h3 className="text-[#161637] font-bold mb-4">
-        Gasto diário no mês de Julho
-      </h3>
+    <div className="w-full bg-white rounded-3xl p-6 shadow-sm">
+      {/* Cabeçalho */}
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-[#1a1a3b] leading-tight mb-1">
+          Gastos Diários
+        </h2>
+        <span className="text-[13px] font-medium text-[#aeaeb5]">
+          Julho 2026 • Média R$ 167/dia
+        </span>
+      </div>
 
-      {/* CONTAINER DO SCROLL: 
-        A classe 'overflow-x-auto' ativa o scroll horizontal.
-        As classes com [&::-webkit-scrollbar] escondem a barra de scroll nativa do sistema,
-        deixando o visual muito mais limpo. O usuário só precisa arrastar.
-      */}
-      <div className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {/* LARGURA FIXA: 
-          Forçamos uma div interna a ter 1200px de largura. 
-          Isso garante que o gráfico estique para o lado e ative o scroll da div pai.
-        */}
-        <div className="w-[1200px] h-64">
-          {/* Aqui não usamos o ResponsiveContainer, passamos a largura fixa direto no AreaChart */}
-          <AreaChart
-            width={1200}
-            height={220}
-            data={dadosTrintaDias}
-            margin={{ top: 25, right: 20, left: 20, bottom: 0 }}
+      {/* Container Principal do Gráfico */}
+      <div className="relative flex">
+        {/* EIXO Y - Agora com altura cravada de 150px */}
+        <div className="flex flex-col justify-between items-end pr-4 text-[11px] font-medium text-[#aeaeb5] h-[150px] shrink-0">
+          {eixoY.map((valor, index) => (
+            <span key={index} className="leading-none">
+              {valor === 0 ? "R$0" : `R$${valor}`}
+            </span>
+          ))}
+        </div>
+
+        {/* ÁREA DO GRÁFICO (Linhas e Barras) */}
+        {/* min-w-0 é um truque do flexbox para permitir que o scroll horizontal funcione */}
+        <div className="relative flex-1 min-w-0">
+          {/* LINHAS TRACEJADAS DE FUNDO */}
+          {/* Também com os mesmos 150px de altura para bater perfeitamente com os números */}
+          <div className="absolute top-0 left-0 right-0 h-[150px] flex flex-col justify-between pointer-events-none z-0">
+            {eixoY.map((_, index) => (
+              <div
+                key={index}
+                className="w-full border-t border-dashed border-[#e1e1f7]"
+              ></div>
+            ))}
+          </div>
+
+          {/* ÁREA DE SCROLL (Barras + Textos dos dias) */}
+          <div
+            className="flex gap-5 overflow-x-auto pb-4 relative z-10
+            [&::-webkit-scrollbar]:h-1.5 
+            [&::-webkit-scrollbar-track]:bg-[#F0F0F7] [&::-webkit-scrollbar-track]:rounded-full 
+            [&::-webkit-scrollbar-thumb]:bg-[#D1D1E0] [&::-webkit-scrollbar-thumb]:rounded-full"
           >
-            <defs>
-              <linearGradient id="corLavanda" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#B6B6EC" stopOpacity={0.6} />
-                <stop offset="95%" stopColor="#B6B6EC" stopOpacity={0} />
-              </linearGradient>
-            </defs>
+            {dadosMensais.map((item) => {
+              // A matemática pura: se o gasto é 300 e o max é 600, a altura é 50%
+              const alturaPorcentagem = (item.valor / valorMaximo) * 100;
 
-            {/* Eixo X mostrando TODOS os dias, sem pular nenhum */}
-            <XAxis
-              dataKey="dia"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 11, fill: "#575799", fontWeight: "500" }}
-              dy={10}
-            />
+              return (
+                <div
+                  key={item.dia}
+                  className="flex flex-col items-center shrink-0 w-7 gap-2"
+                >
+                  {/* O SEGREDO TÁ AQUI: Um container só para a barra, cravado em 150px */}
+                  <div className="w-full h-[150px] flex items-end">
+                    <div
+                      className="w-full bg-[#ece6f7] rounded-t-md transition-all duration-1000 ease-out"
+                      style={{ height: `${alturaPorcentagem}%` }}
+                    />
+                  </div>
 
-            <Tooltip />
-
-            <Area
-              type="monotone"
-              dataKey="gasto"
-              stroke="#6363D1"
-              strokeWidth={3}
-              fillOpacity={1}
-              fill="url(#corLavanda)"
-            >
-              {/* VALORES EM CIMA DOS PONTOS:
-                O LabelList projeta o valor de cada dia direto no gráfico.
-                Usamos um formatter para mostrar o valor zerado como vazio "",
-                assim a tela não fica poluída nos dias que o usuário não gastou nada.
-              */}
-              <LabelList
-                dataKey="gasto"
-                position="top"
-                offset={10}
-                fill="#161637"
-                fontSize={10}
-                fontWeight="700"
-                formatter={(value) => (value > 0 ? `R$ ${value}` : "")}
-              />
-            </Area>
-          </AreaChart>
+                  {/* O texto do dia fica solto em baixo, sem afetar o cálculo da altura */}
+                  <span className="text-[12px] font-medium text-[#aeaeb5]">
+                    {item.dia}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Um pequeno aviso sutil para o usuário saber que dá para arrastar */}
-      <p className="text-center text-[10px] text-[#575799] mt-2 animate-pulse">
-        ← Arraste para o lado para ver o mês completo →
+      <p className="text-center text-[11px] font-medium text-[#aeaeb5] mt-2">
+        ◂ Arraste para o lado para ver o mês completo ▸
       </p>
     </div>
   );
