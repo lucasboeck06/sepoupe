@@ -1,13 +1,32 @@
-export default function RankGastos({ value, categoria, valor }) {
+import ItemRank from "./ItemRank.jsx";
+import { House } from "lucide-react";
+
+export default function RankGastos() {
+  const topGastos = [
+    {
+      id: 1,
+      categoria: "Moradia",
+      porcentagem: 31,
+      valor: 1400,
+      Icon: House,
+      corBg: "#ece6f7",
+      corIco: "#8b7bc7",
+    },
+  ];
+
   return (
     <div>
-      <h3>
-        {categoria}: R$ {valor}
-      </h3>
-      <progress
-        value={value}
-        className="w-full h-4 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#E1E1F7] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#B6B6EC] [&::-webkit-progress-value]:rounded-full [&::-moz-progress-bar]:bg-[#B6B6EC]"
-      />
+      {topGastos.map((n) => (
+        <ItemRank
+          key={n.id}
+          Icon={n.Icon}
+          categoria={n.categoria}
+          porcentagem={n.porcentagem}
+          valor={n.valor}
+          corBg={n.corBg}
+          corIco={n.corIco}
+        />
+      ))}
     </div>
   );
 }

@@ -7,7 +7,7 @@ import CircularProgress from "../components/CircularProgress.jsx";
 export default function Dashboard() {
   return (
     <div className="flex flex-col justify-between bg-[#F0F0F7]">
-      <div className="flex flex-col p-6 mb-18 gap-4">
+      <div className="flex flex-col p-5 mb-18 gap-4">
         <div className="flex flex-row justify-between items-center">
           <div>
             <h1>
@@ -26,7 +26,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl shadow-sm flex flex-row items-center gap-4">
+        <div className="bg-white p-4 rounded-3xl shadow-sm flex flex-row items-center gap-4">
           <CircularProgress porcentagem={33} />
           <div className="flex-1 w-full">
             <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
@@ -43,7 +43,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className=" bg-white p-6 rounded-3xl shadow-sm flex flex-row gap-4">
+        <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
           <div>
             <div className="bg-[#e9f0fa] p-2 rounded-full">
               <CreditCard className="text-[#7fa8d6] w-4 h-4" />
@@ -69,13 +69,14 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div>
-          <h2>Top de gastos:</h2>
-          <RankGastos categoria="Mercado" value={0.5} valor={900.0} />
-          <RankGastos categoria="Moto" value={0.5} valor={900.0} />
-          <RankGastos categoria="Roupas" value={0.5} valor={900.0} />
-          <RankGastos categoria="Fastfood" value={0.5} valor={900.0} />
-          <RankGastos categoria="Gasolina" value={0.5} valor={900.0} />
+        <div className="flex flex-col bg-white p-4 rounded-3xl shadow-sm gap-1">
+          <h2 className="text-md font-semibold">Ranking de Gastos</h2>
+          <span className="text-xs text-[#9B93A8]">
+            Julho 2026 • Total R$4.720,90
+          </span>
+          <div className="mt-3 gap-3">
+            <RankGastos />
+          </div>
         </div>
 
         <GraficoGastosScroll />
