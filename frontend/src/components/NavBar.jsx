@@ -11,7 +11,7 @@ export default function NavBar() {
   ];
 
   return (
-    <div className="w-full bottom-0 fixed flex flex-raw justify-between px-12 pt-3 pb-2 bg-[#F0F0F7] shadow-[0_-20px_25px_-5px_rgba(0,0,0,0.06)] rounded-t-4xl">
+    <div className="w-full bottom-0 fixed flex flex-raw justify-between px-12 pt-3 pb-2 bg-[#F0F0F7] shadow-[0_-20px_25px_-5px_rgba(0,0,0,0.06)] rounded-t-4xl z-50">
       <div className="w-full flex flex-row items-center justify-between">
         {navItems.map(({ id, Icon }) => (
           <button
