@@ -5,7 +5,6 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Transacoes from "./pages/Transacoes";
 import NovaTransacao from "./pages/NovaTransacao";
-import Pendentes from "./pages/Pendentes";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
@@ -16,7 +15,6 @@ createRoot(document.getElementById("root")).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transacoes" element={<Transacoes />} />
         <Route path="/nova-transacao" element={<NovaTransacao />} />
-        <Route path="/pendentes" element={<Pendentes />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
