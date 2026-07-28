@@ -27,7 +27,6 @@ fastify.register(categoriasRoutes);
 fastify.register(usuariosRoutes);
 fastify.register(transacoesRoutes);
 fastify.register(authRoutes);
-fastify.register(webhookRoutes);
 
 fastify.register(fastifyCors, {
   origin: "*", // Libera tudo por enquanto, em produção restringe
