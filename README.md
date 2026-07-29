@@ -19,11 +19,10 @@
 
 > Tirar do caminho crítico tudo que travou o projeto. Repo honesto = cabeça limpa.
 
-- [ ] Mover código de webhook (Asaas + Pluggy) para branch `feature/open-finance`
-- [ ] Remover `pluggy-sdk` do `package.json` e rodar `npm install`
-- [ ] Remover rotas `/webhook/*` do `main`
-- [ ] Limpar variáveis de Pluggy/Asaas do `.env.example`
-- [ ] Escrever no README: o que o v1 faz e o que ficou de fora (e por quê)
+- [x] Mover código de webhook (Asaas + Pluggy) para branch `feature/open-finance`
+- [x] Remover `pluggy-sdk` do `package.json` e rodar `npm install`
+- [x] Remover rotas `/webhook/*` do `main`
+- [x] Limpar variáveis de Pluggy/Asaas do `.env.example`
 
 **Pronto quando:** `main` sobe sem nenhuma referência a integração bancária.
 **Tempo:** 1 sessão curta (~30 min)
