@@ -1,17 +1,26 @@
 import { pool } from "./db.js";
 
 export async function criaCategoriaQuery(nome, tipo) {
-  const result = await pool.query(
+  const { rows } = await pool.query(
     "INSERT INTO public.categorias (nome, tipo) VALUES ($1, $2) RETURNING *",
     [nome, tipo],
   );
 
-  return result.rows[0];
+  return rows[0];
 }
 
 export async function listaCategoriasQuery() {
-  const result = await pool.query("SELECT * FROM public.categorias");
-  return result.rows;
+  const { rows } = await pool.query("SELECT * FROM public.categorias");
+  return rows;
+}
+
+export async function consultaCategoriaPorNome(nome) {
+  const { rows } = pool.query(
+    `SELECT * FROM public.categorias WHERE nome = $1`,
+    [nome],
+  );
+
+  return rows[0];
 }
 
 export async function atualizaCategoriaQuery(nome, tipo, id) {
@@ -36,19 +45,19 @@ export async function atualizaCategoriaQuery(nome, tipo, id) {
 
   // join aqui monta nossa string: "nome = $1, tipo = $2", necessário porque não sabemos quantos dados enviaremos
   // valores.length nos da o tamanho do array, logo, a posição do id, que é o último
-  const result = await pool.query(
+  const { rows } = await pool.query(
     `UPDATE public.categorias SET ${campos.join(", ")} WHERE id = $${valores.length} RETURNING *`,
     valores,
   );
 
-  return result.rows[0];
+  return rows[0];
 }
 
 export async function deletaCategoriaQuery(id) {
-  const result = await pool.query(
+  const { rows } = await pool.query(
     `DELETE FROM public.categorias WHERE id = $1 RETURNING *`,
     [id],
   );
 
-  return result.rows[0];
+  return rows[0];
 }
