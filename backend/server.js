@@ -6,10 +6,20 @@ import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
 import { webhookRoutes } from "./src/routes/webhook.js";
 import fastifyCors from "@fastify/cors";
+import fastifyCookie from "@fastify/cookie";
 
 const fastify = Fastify({
   logger: true,
 });
+
+// Precisamos definir o Cors aqui em cima!
+fastify.register(fastifyCors, {
+  origin: "http://localhost:5173", // Libera a rota para o front, proteja futuramente!
+  credentials: true,
+});
+
+// Registro da ferramenta de cookie
+fastify.register(fastifyCookie);
 
 //Define o método como GET
 //async aqui porque, algum dia vai consultar um banco e precisar de um await para a resposta
@@ -21,23 +31,15 @@ const fastify = Fastify({
 //   return { hello: "world" };
 // });
 
-fastify.register(fastifyJwt, { secret: process.env.SECRET });
-
-fastify.register(categoriasRoutes);
-fastify.register(usuariosRoutes);
-fastify.register(transacoesRoutes);
-fastify.register(authRoutes);
-
-fastify.register(fastifyCors, {
-  origin: "*", // Libera tudo por enquanto, em produção restringe
+// Register sempre acima das rotas registradaas
+fastify.register(fastifyJwt, {
+  secret: process.env.SECRET,
+  // Configurações para o acess_token nos cookies
+  cookie: {
+    cookieName: "access_token",
+    signed: false,
+  },
 });
-
-// fastify.listen({ port: 3000 }, function (err, address) {
-//   if (err) {
-//     fastify.log.error(err);
-//     process.exit(1);
-//   }
-// });
 
 fastify.decorate("authenticate", async function (request, reply) {
   try {
@@ -46,6 +48,18 @@ fastify.decorate("authenticate", async function (request, reply) {
     reply.status(401).send({ erro: "Token inválido ou ausente" });
   }
 });
+
+fastify.register(categoriasRoutes);
+fastify.register(usuariosRoutes);
+fastify.register(transacoesRoutes);
+fastify.register(authRoutes);
+
+// fastify.listen({ port: 3000 }, function (err, address) {
+//   if (err) {
+//     fastify.log.error(err);
+//     process.exit(1);
+//   }
+// });
 
 const start = async () => {
   try {
