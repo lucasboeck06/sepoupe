@@ -10,7 +10,7 @@ export async function criarCategoria(nome, tipo) {
   const categoriaExistente = await consultarPorNome(nome);
 
   if (categoriaExistente) {
-    throw new Error("Já existe uma categoria com este nome!s");
+    throw new Error("Já existe uma categoria com este nome!");
   }
 
   return await inserir(nome, tipo);
