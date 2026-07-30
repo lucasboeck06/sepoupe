@@ -1,27 +1,28 @@
 import {
-  criaCategoriaQuery,
-  listaCategoriasQuery,
-  atualizaCategoriaQuery,
-  deletaCategoriaQuery,
+  inserir,
+  listar,
+  atualizar,
+  deletar,
+  consultarPorNome,
 } from "../database/categoriaRepository.js";
 
-export async function criaCategoria(nome, tipo) {
-  const categoriaExistente = await consultaCategoriaPorNome(nome);
+export async function criarCategoria(nome, tipo) {
+  const categoriaExistente = await consultarPorNome(nome);
 
   if (categoriaExistente) {
     throw new Error("Já existe uma categoria com este nome!s");
   }
 
-  return await criaCategoriaQuery(nome, tipo);
+  return await inserir(nome, tipo);
 }
 
 export async function listarCategorias() {
   // Services mensageiro, passa func direto no return
-  return await listaCategoriasQuery();
+  return await listar();
 }
 
-export async function atualizaCategoria(nome, tipo, id) {
-  const categoriaAtualizada = await atualizaCategoriaQuery(nome, tipo, id);
+export async function atualizarCategoria(nome, tipo, id) {
+  const categoriaAtualizada = await atualizar(nome, tipo, id);
 
   if (!categoriaAtualizada) {
     throw new Error("Categoria não existe!");
@@ -30,8 +31,8 @@ export async function atualizaCategoria(nome, tipo, id) {
   return categoriaAtualizada;
 }
 
-export async function deletaCategoria(id) {
-  const categoriaDeletada = await deletaCategoriaQuery(id);
+export async function deletarCategoria(id) {
+  const categoriaDeletada = await deletar(id);
 
   if (!categoriaDeletada) {
     throw new Error("Categoria não existente");

@@ -1,6 +1,6 @@
 import { pool } from "./db.js";
 
-export async function criaCategoriaQuery(nome, tipo) {
+export async function inserir(nome, tipo) {
   const { rows } = await pool.query(
     "INSERT INTO public.categorias (nome, tipo) VALUES ($1, $2) RETURNING *",
     [nome, tipo],
@@ -9,12 +9,12 @@ export async function criaCategoriaQuery(nome, tipo) {
   return rows[0];
 }
 
-export async function listaCategoriasQuery() {
+export async function listar() {
   const { rows } = await pool.query("SELECT * FROM public.categorias");
   return rows;
 }
 
-export async function consultaCategoriaPorNome(nome) {
+export async function consultarPorNome(nome) {
   const { rows } = pool.query(
     `SELECT * FROM public.categorias WHERE nome = $1`,
     [nome],
@@ -23,7 +23,7 @@ export async function consultaCategoriaPorNome(nome) {
   return rows[0];
 }
 
-export async function atualizaCategoriaQuery(nome, tipo, id) {
+export async function atualizar(nome, tipo, id) {
   const valores = [];
   const campos = [];
 
@@ -53,7 +53,7 @@ export async function atualizaCategoriaQuery(nome, tipo, id) {
   return rows[0];
 }
 
-export async function deletaCategoriaQuery(id) {
+export async function deletar(id) {
   const { rows } = await pool.query(
     `DELETE FROM public.categorias WHERE id = $1 RETURNING *`,
     [id],
