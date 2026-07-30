@@ -4,7 +4,6 @@ import { categoriasRoutes } from "./src/routes/categorias.js";
 import { usuariosRoutes } from "./src/routes/usuarios.js";
 import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
-import { webhookRoutes } from "./src/routes/webhook.js";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
 
