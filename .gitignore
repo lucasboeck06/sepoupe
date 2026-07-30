@@ -1,6 +1,9 @@
 .env
 node_modules/
 package-lock.json
+*.log
+.DS_Store
+.vscode/
 frontend/dist
 frontend/.env
 NOTAS.md
