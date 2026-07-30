@@ -15,7 +15,7 @@ export async function listar() {
 }
 
 export async function consultarPorNome(nome) {
-  const { rows } = pool.query(
+  const { rows } = await pool.query(
     `SELECT * FROM public.categorias WHERE nome = $1`,
     [nome],
   );
