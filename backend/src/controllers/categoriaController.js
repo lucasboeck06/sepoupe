@@ -24,6 +24,11 @@ export async function criar(request, reply) {
 export async function listar(request, reply) {
   try {
     const { nome } = request.query;
+
+    // nome é verdadeiro ? = sim, : = não
+    // previne espaços inesperados na digitação do usuário
+    const nomeLimpo = nome ? nome.trim() : undefined;
+
     const categorias = await listarCategorias(nome);
     reply.status(200).send(categorias);
   } catch (err) {
