@@ -10,14 +10,23 @@ export const categoriaRepository = {
     return rows[0];
   },
 
-  async listar() {
+  async listar(nomeBusca) {
+    if (nomeBusca) {
+      const { rows } = await pool.query(
+        "SELECT * FROM public.categorias WHERE nome ILIKE $1",
+        [`%${nomeBusca}%`],
+      );
+
+      return rows;
+    }
+
     const { rows } = await pool.query("SELECT * FROM public.categorias");
     return rows;
   },
 
   async consultarPorNome(nome) {
     const { rows } = await pool.query(
-      `SELECT * FROM public.categorias WHERE nome = $1`,
+      `SELECT * FROM public.categorias WHERE nome ILIKE $1`,
       [nome],
     );
 

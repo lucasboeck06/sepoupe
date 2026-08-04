@@ -10,9 +10,9 @@ export async function criarCategoria(nome, tipo) {
   return await categoriaRepository.inserir(nome, tipo);
 }
 
-export async function listarCategorias() {
+export async function listarCategorias(nome) {
   // Services mensageiro, passa func direto no return
-  return await categoriaRepository.listar();
+  return await categoriaRepository.listar(nome);
 }
 
 export async function atualizarCategoria(nome, tipo, id) {
