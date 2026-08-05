@@ -4,9 +4,23 @@ export async function logar(request, reply) {
   try {
     const usuario = await login(request.body.email, request.body.senha);
 
+    // Isso aqui é um erro comum,  o que permite XSS
+    // const token = await reply.jwtSign({ id: usuario.id, email: usuario.email });
+
+    // Precisamos de dois replys, mas não necessariamente eles enviam coisas ao cliente.
+    // O primeiro é onde o plugin decorou o método de assinatura, e o segundo é o que faz o envio
+
     const token = await reply.jwtSign({ id: usuario.id, email: usuario.email });
 
-    reply.send({ token });
+    reply
+      .setCookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Quando na env for "production", será true
+        sameSite: "strict", // ou "lax" se front e back forem em domínios diferentes
+        path: "/",
+      })
+      .status(200)
+      .send({ usuario: { id: usuario.id, email: usuario.email } });
   } catch (err) {
     reply.status(401).send({ erro: err.message });
   }

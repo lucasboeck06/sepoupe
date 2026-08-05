@@ -27,7 +27,7 @@ export const categoriaRepository = {
   async consultarPorNome(nome) {
     const { rows } = await pool.query(
       `SELECT * FROM public.categorias WHERE nome ILIKE $1`,
-      [nome],
+      [`%${nome}%`],
     );
 
     return rows[0];
