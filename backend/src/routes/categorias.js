@@ -11,7 +11,7 @@ export async function categoriasRoutes(fastify) {
   // fastify.get('/categorias/publicas', listar);
 
   fastify.register(async function rotasProtegidas(instanciaIsolada) {
-    instanciaIsolada.addHook("preHandler", verificarToken);
+    instanciaIsolada.addHook("preHandler", instanciaIsolada.authenticate);
 
     instanciaIsolada.post("/categorias", criar);
     instanciaIsolada.get("/categorias", listar);

@@ -29,7 +29,7 @@ export async function listar(request, reply) {
     // previne espaços inesperados na digitação do usuário
     const nomeLimpo = nome ? nome.trim() : undefined;
 
-    const categorias = await listarCategorias(nome);
+    const categorias = await listarCategorias(nomeLimpo);
     reply.status(200).send(categorias);
   } catch (err) {
     return reply.status(500).send({ erro: err.message });
