@@ -11,25 +11,30 @@ export default function Login() {
 
   async function handleLogin(e) {
     e.preventDefault();
-    console.log("email:", email);
-    console.log("senha:", senha);
 
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          "ngrok-skip-browser-warning": "true",
+    try {
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+          credentials: "include", // Necessário agora que temos token via cookie
+          body: JSON.stringify({ email, senha }),
         },
-        body: JSON.stringify({ email, senha }),
-      },
-    );
+      );
 
-    const dados = await resposta.json();
-    if (dados.token) {
-      localStorage.setItem("token", dados.token);
-      navigate("/dashboard");
+      if (resposta.ok) {
+        navigate("/dashboard");
+      } else {
+        const erro = await resposta.json();
+        alert(erro.mensagem || "Erro ao fazer login, tente novamente!");
+      }
+    } catch (err) {
+      console.error("Erro na requisição: ", err);
+      alert("Erro ao conectar com o servidor");
     }
   }
 
