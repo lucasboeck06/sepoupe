@@ -20,7 +20,7 @@ export async function logar(request, reply) {
         path: "/",
       })
       .status(200)
-      .send({ usuario: { id: usuario.id, email: usuario.email } });
+      .send({ mensagem: "Login realizado com sucesso!" });
   } catch (err) {
     reply.status(401).send({ erro: err.message });
   }
