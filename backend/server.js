@@ -44,7 +44,7 @@ fastify.decorate("authenticate", async function (request, reply) {
   try {
     await request.jwtVerify();
   } catch (err) {
-    reply.status(401).send({ erro: "Token inválido ou ausente" });
+    return reply.status(401).send({ erro: "Token inválido ou ausente" });
   }
 });
 
