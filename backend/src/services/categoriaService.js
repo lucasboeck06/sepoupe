@@ -1,9 +1,9 @@
 import { categoriaRepository } from "../database/categoriaRepository.js";
 
 export async function criarCategoria(nome, tipo) {
-  const categoriaExistente = await categoriaRepository.consultarPorNome(nome);
+  const categoriaExistente = await categoriaRepository.listar(nome);
 
-  if (categoriaExistente) {
+  if (categoriaExistente[0]) {
     throw new Error("Já existe uma categoria com este nome!");
   }
 
