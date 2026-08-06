@@ -24,15 +24,6 @@ export const categoriaRepository = {
     return rows;
   },
 
-  async consultarPorNome(nome) {
-    const { rows } = await pool.query(
-      `SELECT * FROM public.categorias WHERE nome ILIKE $1`,
-      [`%${nome}%`],
-    );
-
-    return rows[0];
-  },
-
   async atualizar(nome, tipo, id) {
     const valores = [];
     const campos = [];
