@@ -183,6 +183,7 @@ Só se o v2 não resolver. A branch `feature/open-finance` está te esperando.
 
 > Tudo que der vontade de fazer fora de ordem vem pra cá.
 
--
--
+- Adicionar a questão de "famílias", grupo de pessoas que tem acesso a infos umas das outras.
+  Com permissões internas e segurança contra outros usuários
+- Editar transações entra para uma release futura, basta apagar e criar de novo aqui.
 -

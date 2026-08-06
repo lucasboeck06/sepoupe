@@ -1,20 +1,29 @@
-import {
-  transacoesQuery,
-  transacoesQueryAdd,
-  transacoesSemInfoQuery,
-} from "../database/transacoesRepository.js";
+import { transacaoRepository } from "../database/transacoesRepository.js";
 
-export async function listarTransacoes() {
-  const result = await transacoesQuery();
-  return result;
-}
+export async function criarTransacao(
+  usuarioId,
+  descricao,
+  categoriaId,
+  tipo,
+  valor,
+  operacaoTipo,
+) {
+  if (!valor) {
+    throw new Error("O valor não pode ser 0, negativo ou inexistente");
+  }
 
-export async function adicionarTransacao(transacao) {
-  const result = await transacoesQueryAdd(transacao);
-  return result;
-}
+  if (!usuarioId || !descricao || !categoriaId || !tipo || !operacaoTipo) {
+    throw new Error("Todos os dados são necessários para criar uma transação");
+  }
 
-export async function transacoesSemCategoria() {
-  const result = await transacoesSemInfoQuery();
-  return result;
+  const transacaoCriada = await transacaoRepository.inserir(
+    usuarioId,
+    descricao,
+    categoriaId,
+    tipo,
+    valor,
+    operacaoTipo,
+  );
+
+  return transacaoCriada;
 }

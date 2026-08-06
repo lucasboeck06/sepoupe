@@ -1,56 +1,36 @@
 import { pool } from "./db.js";
 
-export async function transacoesQuery() {
-  const result = await pool.query("SELECT * FROM public.transacoes");
-  return result.rows;
-}
+export const transacaoRepository = {
+  async inserir(usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo) {
+    const { rows } = await pool.query(
+      "INSERT INTO public.transacoes (usuario_id, descricao, categoria_id, tipo, valor, operacao_tipo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo],
+    );
 
-export async function transacoesQueryAdd(transacao) {
-  const result = await pool.query(
-    "INSERT INTO public.transacoes(usuario_id, descricao, categoria_id, tipo, valor) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [
-      transacao.usuario_id,
-      transacao.descricao,
-      transacao.categoria_id,
-      transacao.tipo,
-      transacao.valor,
-    ],
-  );
+    return rows[0];
+  },
 
-  return result.rows;
-}
+  async listar(tipo) {
+    if (tipo) {
+      const { rows } = await pool.query(
+        "SELECT * FROM public.transacoes WHERE tipo = $1",
+        [tipo],
+      );
 
-export async function transacoesSemInfoQuery() {
-  const result = await pool.query(
-    "SELECT * FROM public.transacoes WHERE categoria_id IS NULL",
-  );
+      return rows;
+    }
 
-  return result.rows;
-}
+    const { rows } = await pool.query("SELECT * FROM public.transacoes");
 
-export async function buscarPorId(id, usuarioId) {
-  const result = await pool.query(
-    "SELECT * FROM public.transacoes WHERE id = $1 AND usuario_id = $2 LIMIT 1",
-    [id, usuarioId],
-  );
+    return rows;
+  },
 
-  return result.rows[0];
-}
+  async deletar(id) {
+    const { rows } = await pool.query(
+      "DELETE FROM public.transacoes WHERE id = $1 RETURNING *",
+      [id],
+    );
 
-export async function categoriaPorId(categoriaId) {
-  const result = await pool.query(
-    "SELECT * FROM public.categorias WHERE id = $1",
-    [categoriaId],
-  );
-
-  return result.rows;
-}
-
-export async function atualizarCategoria(id, categoriaId) {
-  const result = await pool.query(
-    "UPDATE public.transacoes SET categoria_id = $1 WHERE id = $2 RETUNING *",
-    [categoriaId, id],
-  );
-
-  return result.rows[0];
-}
+    return rows[0];
+  },
+};
