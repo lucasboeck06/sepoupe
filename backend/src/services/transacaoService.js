@@ -27,3 +27,21 @@ export async function criarTransacao(
 
   return transacaoCriada;
 }
+
+export async function listarTransacoes(tipo) {
+  return transacaoRepository.listar(tipo);
+}
+
+export async function deletarTransacao(id) {
+  if (!id) {
+    throw new Error("É necessário o ID para identificar a transação!");
+  }
+
+  const transacaoDeletada = await transacaoRepository.deletar(id);
+
+  if (!transacaoDeletada) {
+    throw new Error("Não existe transação com esse ID!");
+  }
+
+  return transacaoDeletada;
+}

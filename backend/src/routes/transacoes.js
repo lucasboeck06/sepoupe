@@ -1,15 +1,11 @@
-import {
-  adicionar,
-  listar,
-  transacaoSemInfo,
-} from "../controllers/transacaoController.js";
+import { criar, listar, deletar } from "../controllers/transacaoController.js";
 
 export async function transacoesRoutes(fastify) {
-  fastify.get("/transacoes", { preHandler: fastify.authenticate }, listar);
-  fastify.post("/transacoes", adicionar);
-  fastify.get(
-    "/transacoes/pendentes",
-    { preHandler: fastify.authenticate },
-    transacaoSemInfo,
-  );
+  fastify.register(async function rotasProtegidas(instanciaIsolada) {
+    instanciaIsolada.addHook("preHandler", instanciaIsolada.authenticate);
+
+    instanciaIsolada.post("/transacoes", criar);
+    instanciaIsolada.get("/transacoes", listar);
+    instanciaIsolada.delete("/transacoes", deletar);
+  });
 }
