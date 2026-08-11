@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const navItems = [
-    { id: "detalhes", Icon: SlidersHorizontal, path: "/detalhes" },
+    { id: "transacoes", Icon: SlidersHorizontal, path: "/transacoes" },
     { id: "home", Icon: Home, path: "/dashboard" },
-    { id: "transacoes", Icon: BanknoteArrowUp, path: "/transacoes" },
+    { id: "nova-transacao", Icon: BanknoteArrowUp, path: "/nova-transacao" },
   ];
 
   return (
