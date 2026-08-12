@@ -14,11 +14,9 @@ export async function criarCategoria(nome, tipo) {
   return await categoriaRepository.inserir(nome, tipo);
 }
 
-export async function listarCategorias(nome) {
-  const nomeLimpo = nome ? nome.trim() : undefined;
-
+export async function listarCategorias() {
   // Services mensageiro, passa func direto no return
-  return await categoriaRepository.listar(nomeLimpo);
+  return await categoriaRepository.listar();
 }
 
 export async function atualizarCategoria(nome, tipo, id) {
