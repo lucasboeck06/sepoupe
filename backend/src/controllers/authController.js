@@ -18,6 +18,7 @@ export async function logar(request, reply) {
         secure: process.env.NODE_ENV === "production", // Quando na env for "production", será true
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // "none" exige secure:true, obrigatório p/ cross-domain (ngrok)
         path: "/",
+        maxAge: 60 * 60 * 24 * 7,
       })
       .status(200)
       .send({ mensagem: "Login realizado com sucesso!" });
