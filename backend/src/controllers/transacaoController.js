@@ -6,21 +6,15 @@ import {
 
 export async function criar(request, reply) {
   try {
-    const {
-      usuarioId,
-      descricao,
-      categoriaId,
-      tipo,
-      valor,
-      operacaoTipo,
-      data,
-    } = request.body;
+    const { descricao, categoriaId, tipo, valor, operacaoTipo, data } =
+      request.body;
+
+    const usuarioId = request.user.id;
 
     const novaTransacao = await criarTransacao(
       usuarioId,
       descricao,
       categoriaId,
-      tipo,
       valor,
       operacaoTipo,
       data,

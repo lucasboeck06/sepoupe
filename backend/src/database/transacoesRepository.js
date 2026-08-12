@@ -5,14 +5,22 @@ export const transacaoRepository = {
     usuarioId,
     descricao,
     categoriaId,
-    tipo,
+    categoriaTipo,
     valor,
     operacaoTipo,
     data,
   ) {
     const { rows } = await pool.query(
       "INSERT INTO public.transacoes (usuario_id, descricao, categoria_id, tipo, valor, operacao_tipo, data) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo, data],
+      [
+        usuarioId,
+        descricao,
+        categoriaId,
+        categoriaTipo,
+        valor,
+        operacaoTipo,
+        data,
+      ],
     );
 
     return rows[0];
