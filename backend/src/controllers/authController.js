@@ -16,7 +16,7 @@ export async function logar(request, reply) {
       .setCookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // Quando na env for "production", será true
-        sameSite: "strict", // ou "lax" se front e back forem em domínios diferentes
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // "none" exige secure:true, obrigatório p/ cross-domain (ngrok)
         path: "/",
       })
       .status(200)
