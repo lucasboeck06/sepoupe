@@ -7,12 +7,20 @@ export async function criarTransacao(
   tipo,
   valor,
   operacaoTipo,
+  data,
 ) {
   if (!valor) {
     throw new Error("O valor não pode ser 0, negativo ou inexistente");
   }
 
-  if (!usuarioId || !descricao || !categoriaId || !tipo || !operacaoTipo) {
+  if (
+    !usuarioId ||
+    !descricao ||
+    !categoriaId ||
+    !tipo ||
+    !operacaoTipo ||
+    !data
+  ) {
     throw new Error("Todos os dados são necessários para criar uma transação");
   }
 
@@ -23,6 +31,7 @@ export async function criarTransacao(
     tipo,
     valor,
     operacaoTipo,
+    data,
   );
 
   return transacaoCriada;
