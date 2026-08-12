@@ -10,7 +10,16 @@ export const categoriaRepository = {
     return rows[0];
   },
 
-  async listar() {
+  async listar(id) {
+    if (id) {
+      const { rows } = await pool.query(
+        "SELECT tipo FROM public.categorias WHERE id = $1",
+        [id],
+      );
+
+      return rows[0];
+    }
+
     const { rows } = await pool.query("SELECT * FROM public.categorias");
     return rows;
   },
