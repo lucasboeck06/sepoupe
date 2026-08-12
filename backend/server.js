@@ -13,7 +13,11 @@ const fastify = Fastify({
 
 // Precisamos definir o Cors aqui em cima!
 fastify.register(fastifyCors, {
-  origin: "http://localhost:5173", // Libera a rota para o front, proteja futuramente!
+  // Adicione o IP do front se rodar com -- --host
+  origin: [
+    "http://localhost:5173",
+    "https://pelagial-bessie-thornless.ngrok-free.dev",
+  ], // Libera a rota para o front, proteja futuramente!
   credentials: true,
 });
 
