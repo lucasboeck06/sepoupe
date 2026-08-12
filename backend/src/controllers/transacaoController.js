@@ -6,8 +6,15 @@ import {
 
 export async function criar(request, reply) {
   try {
-    const { usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo } =
-      request.body;
+    const {
+      usuarioId,
+      descricao,
+      categoriaId,
+      tipo,
+      valor,
+      operacaoTipo,
+      data,
+    } = request.body;
 
     const novaTransacao = await criarTransacao(
       usuarioId,
@@ -16,6 +23,7 @@ export async function criar(request, reply) {
       tipo,
       valor,
       operacaoTipo,
+      data,
     );
 
     return reply.status(201).send(novaTransacao);

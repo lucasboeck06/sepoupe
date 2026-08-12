@@ -1,10 +1,18 @@
 import { pool } from "./db.js";
 
 export const transacaoRepository = {
-  async inserir(usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo) {
+  async inserir(
+    usuarioId,
+    descricao,
+    categoriaId,
+    tipo,
+    valor,
+    operacaoTipo,
+    data,
+  ) {
     const { rows } = await pool.query(
-      "INSERT INTO public.transacoes (usuario_id, descricao, categoria_id, tipo, valor, operacao_tipo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo],
+      "INSERT INTO public.transacoes (usuario_id, descricao, categoria_id, tipo, valor, operacao_tipo, data) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [usuarioId, descricao, categoriaId, tipo, valor, operacaoTipo, data],
     );
 
     return rows[0];
