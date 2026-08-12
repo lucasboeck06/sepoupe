@@ -4,6 +4,9 @@ import { DynamicIcon } from "lucide-react/dynamic";
 
 export default function NovaTransacao() {
   const [centavos, setCentavos] = useState(0);
+
+  const [operacaoTipo, setOperacaoTipo] = useState("PIX");
+
   const [descricao, setDescricao] = useState("");
   const inputRef = useRef(null);
 
@@ -61,6 +64,39 @@ export default function NovaTransacao() {
     buscarCategorias();
   }, []);
 
+  async function criar() {
+    if (!centavos || !operacaoTipo || !descricao || !categoriaId || !data) {
+      alert("Todos os campos são obrigatórios!");
+      return;
+    }
+
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/transacoes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          descricao,
+          categoriaId,
+          valor: centavos / 100,
+          operacaoTipo,
+          data,
+        }),
+      },
+    );
+
+    if (!resposta.ok) {
+      alert("Erro ao salvar!");
+      return;
+    }
+
+    alert("Transacao criada!");
+  }
+
   return (
     <div className="p-4 bg-white min-h-screen">
       <div className="flex flex-row items-center gap-2">
@@ -75,6 +111,22 @@ export default function NovaTransacao() {
         value={valorFormatado}
         onChange={handleValor}
       />
+
+      <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">
+        Forma do pagamento
+      </p>
+      <div className="flex flex-row gap-2">
+        {["PIX", "Débito", "Crédito", "Dinheiro"].map((metodo) => (
+          <button
+            key={metodo}
+            type="button"
+            onClick={() => setOperacaoTipo(metodo)}
+            className={`px-4 py-2 rounded-full text-xs font-medium ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
+          >
+            {metodo}
+          </button>
+        ))}
+      </div>
 
       <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">Descrição</p>
       <input
@@ -152,7 +204,10 @@ export default function NovaTransacao() {
         onChange={(e) => setData(e.target.value)}
       />
 
-      <button className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full">
+      <button
+        onClick={criar}
+        className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full"
+      >
         Criar transação
       </button>
     </div>
