@@ -121,7 +121,7 @@ export default function NovaTransacao() {
             key={metodo}
             type="button"
             onClick={() => setOperacaoTipo(metodo)}
-            className={`px-4 py-2 rounded-full text-xs font-medium ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
+            className={`px-3 py-2 rounded-full text-[0.60rem] font-medium ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
           >
             {metodo}
           </button>

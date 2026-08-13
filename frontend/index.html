@@ -4,10 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#8b5cf6" />
     <title>frontend</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((registration) => {
+              console.log(
+                "✅ Service Worker registrado com sucesso!",
+                registration.scope,
+              );
+            })
+            .catch((error) => {
+              console.error("❌ Erro ao registrar o Service Worker:", error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
