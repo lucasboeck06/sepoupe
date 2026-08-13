@@ -116,7 +116,7 @@ export default function NovaTransacao() {
         Forma do pagamento
       </p>
       <div className="flex flex-row gap-2">
-        {["PIX", "Débito", "Crédito", "Dinheiro"].map((metodo) => (
+        {["PIX", "Débito", "Crédito", "Cheque E.", "Dinheiro"].map((metodo) => (
           <button
             key={metodo}
             type="button"
