@@ -16,6 +16,8 @@ fastify.register(fastifyCors, {
   // Adicione o IP do front se rodar com -- --host
   origin: [
     "http://localhost:5173",
+    "http://172.55.0.64:5173",
+    "https://supporting-beyond-collectors-hostel.trycloudflare.com",
     "http://10.150.230.180:5173",
     "https://pelagial-bessie-thornless.ngrok-free.dev",
   ], // Libera a rota para o front, proteja futuramente!
