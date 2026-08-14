@@ -22,7 +22,7 @@ export async function listar(request, reply) {
     const categorias = await listarCategorias();
     reply.status(200).send(categorias);
   } catch (err) {
-    return reply.status(500).send({ erro: err.message });
+    return reply.status(500).send({ err: err.message });
   }
 }
 
