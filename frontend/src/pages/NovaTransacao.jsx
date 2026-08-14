@@ -19,6 +19,13 @@ export default function NovaTransacao() {
   const [busca, setBusca] = useState("");
   const [categorias, setCategorias] = useState([]);
 
+  const [categoriaId, setCategoriaId] = useState(null);
+  const [data, setData] = useState(new Date().toISOString().slice(0, 10));
+
+  const [cardAberto, setCardAberto] = useState(false);
+  const [tipoCategoria, setTipoCategoria] = useState("Saída");
+  const [categoriaNome, setCategoriaNome] = useState("");
+
   // Função padrão de matar acentos e retornar somente o texto puro
   function semAcento(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -38,9 +45,6 @@ export default function NovaTransacao() {
     : // Limita o início em 7 categorias (caso não haja busca)
       categorias.slice(0, 7);
 
-  const [categoriaId, setCategoriaId] = useState(null);
-  const [data, setData] = useState(new Date().toISOString().slice(0, 10));
-
   // No campo do valor, substitui tudo que não é dígito, por nada
   function handleValor(e) {
     const digitos = e.target.value.replace(/\D/g, "");
@@ -53,20 +57,21 @@ export default function NovaTransacao() {
     currency: "BRL",
   });
 
-  useEffect(() => {
-    async function buscarCategorias() {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/categorias`,
-        {
-          method: "GET",
-          headers: { "ngrok-skip-browser-warning": "true" },
-          credentials: "include",
-        },
-      );
-      const dados = await resposta.json();
-      setCategorias(dados);
-    }
+  async function buscarCategorias() {
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
+      {
+        method: "GET",
+        headers: { "ngrok-skip-browser-warning": "true" },
+        credentials: "include",
+      },
+    );
+    const dados = await resposta.json();
+    setCategorias(dados);
+  }
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
     buscarCategorias();
   }, []);
 
@@ -109,10 +114,6 @@ export default function NovaTransacao() {
     setBusca("");
   }
 
-  const [cardAberto, setCardAberto] = useState(false);
-  const [tipoCategoria, setTipoCategoria] = useState("Saída");
-  const [categoriaNome, setCategoriaNome] = useState("");
-
   async function criarCategoria() {
     if (!categoriaNome || !tipoCategoria) {
       alert("Nome e tipo da categoria são necessários!");
@@ -136,11 +137,20 @@ export default function NovaTransacao() {
     );
 
     if (!resposta.ok) {
-      alert("Erro ao salvar!");
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
       return;
     }
 
     alert("Categoria criada!");
+
+    await buscarCategorias();
+
+    setCategoriaNome("");
+    setTipoCategoria("Saída");
   }
 
   return (
@@ -166,16 +176,18 @@ export default function NovaTransacao() {
         Forma do pagamento
       </p>
       <div className="flex flex-row gap-2">
-        {["PIX", "Débito", "Crédito", "Cheque E.", "Dinheiro"].map((metodo) => (
-          <button
-            key={metodo}
-            type="button"
-            onClick={() => setOperacaoTipo(metodo)}
-            className={`px-3 py-2 rounded-full text-[0.68rem] font-semibold ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
-          >
-            {metodo}
-          </button>
-        ))}
+        {["PIX", "Débito", "VA", "Crédito", "Cheque", "Dinheiro"].map(
+          (metodo) => (
+            <button
+              key={metodo}
+              type="button"
+              onClick={() => setOperacaoTipo(metodo)}
+              className={`px-2 py-2 rounded-full text-[0.70rem] font-semibold ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
+            >
+              {metodo}
+            </button>
+          ),
+        )}
       </div>
 
       <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Descrição</p>
