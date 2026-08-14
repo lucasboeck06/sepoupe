@@ -1,8 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, Search, Plus } from "lucide-react";
+import { ChevronLeft, Search, Plus, X } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
+import { useThemeColor } from "../hooks/useThemeColor";
+import { useNavigate } from "react-router-dom";
 
 export default function NovaTransacao() {
+  useThemeColor("#FFFFFF");
+
+  const navigate = useNavigate();
+
   const [centavos, setCentavos] = useState(0);
 
   const [operacaoTipo, setOperacaoTipo] = useState("PIX");
@@ -64,7 +70,7 @@ export default function NovaTransacao() {
     buscarCategorias();
   }, []);
 
-  async function criar() {
+  async function criarTransacao() {
     if (!centavos || !operacaoTipo || !descricao || !categoriaId || !data) {
       alert("Todos os campos são obrigatórios!");
       return;
@@ -95,24 +101,68 @@ export default function NovaTransacao() {
     }
 
     alert("Transacao criada!");
+
+    setCentavos(0);
+    setDescricao("");
+    setCategoriaId(null);
+    setOperacaoTipo("PIX");
+    setBusca("");
+  }
+
+  const [cardAberto, setCardAberto] = useState(false);
+  const [tipoCategoria, setTipoCategoria] = useState("Saída");
+  const [categoriaNome, setCategoriaNome] = useState("");
+
+  async function criarCategoria() {
+    if (!categoriaNome || !tipoCategoria) {
+      alert("Nome e tipo da categoria são necessários!");
+      return;
+    }
+
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          nome: categoriaNome,
+          tipo: tipoCategoria,
+        }),
+      },
+    );
+
+    if (!resposta.ok) {
+      alert("Erro ao salvar!");
+      return;
+    }
+
+    alert("Categoria criada!");
   }
 
   return (
     <div className="p-4 bg-white min-h-screen">
       <div className="flex flex-row items-center gap-2">
-        <ChevronLeft color="#2c2438" size={18} />
-        <h1 className="text-[#2c2438] font-semibold text-md">Nova Transacao</h1>
+        <button onClick={() => navigate("/dashboard")}>
+          <ChevronLeft color="#2c2438" size={22} />
+        </button>
+        <h1 className="text-[#2c2438] font-bold text-[1.2rem]">
+          Nova Transacao
+        </h1>
       </div>
 
       <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Valor</p>
       <input
         inputMode="numeric"
-        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl p-3 w-full font-black text-[#2c2438] outline-none"
+        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-4 w-full text-[1.4rem] font-black text-[#2c2438] outline-none"
         value={valorFormatado}
         onChange={handleValor}
       />
 
-      <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">
+      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">
         Forma do pagamento
       </p>
       <div className="flex flex-row gap-2">
@@ -121,28 +171,28 @@ export default function NovaTransacao() {
             key={metodo}
             type="button"
             onClick={() => setOperacaoTipo(metodo)}
-            className={`px-3 py-2 rounded-full text-[0.60rem] font-medium ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
+            className={`px-3 py-2 rounded-full text-[0.68rem] font-semibold ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
           >
             {metodo}
           </button>
         ))}
       </div>
 
-      <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">Descrição</p>
+      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Descrição</p>
       <input
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-2 w-full text-md text-[0.90rem] text-[#2c2438] font-normal outline-none placeholder:text-xs placeholder:text-[#b0a9bd]"
+        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-3 w-full text-md text-[0.90rem] text-[#2c2438] font-normal outline-none placeholder:text-[0.80rem] placeholder:text-[#b0a9bd]"
         placeholder="Ex: Almoço no shopping"
         value={descricao}
         onChange={(e) => setDescricao(e.target.value)}
       />
 
-      <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">Categoria</p>
+      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Categoria</p>
 
       <div
-        className="flex items-center gap-2 w-full border-2 border-[#f0eef6] focus-within:border-[#ece6f7] rounded-2xl px-3 py-2 cursor-text transition-colors mt-2"
+        className="flex items-center gap-2 w-full border-2 border-[#f0eef6] focus-within:border-[#ece6f7] rounded-2xl px-3 py-3 cursor-text transition-colors mt-2"
         onClick={() => inputRef.current?.focus()}
       >
         <Search className="w-4 h-4 text-[#b0a9bd]" />
@@ -152,7 +202,7 @@ export default function NovaTransacao() {
           placeholder="Pesquise a categoria"
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
-          className="w-full bg-transparent outline-none text-[0.90rem] text-[#2c2438] font-normal placeholder:text-xs placeholder:text-[#b0a9bd]"
+          className="w-full bg-transparent outline-none text-[0.90rem] text-[#2c2438] font-normal placeholder:text-[0.80rem] placeholder:text-[#b0a9bd]"
         />
       </div>
 
@@ -160,6 +210,7 @@ export default function NovaTransacao() {
         <button
           type="button"
           className={`flex flex-col justify-center items-center gap-1 py-2`}
+          onClick={() => setCardAberto(true)}
         >
           <span
             className={`border border-dashed border-[#d8d2e7] w-10 h-10 rounded-xl flex items-center justify-center bg-[#F4F2F7]`}
@@ -196,20 +247,73 @@ export default function NovaTransacao() {
         ))}
       </div>
 
-      <p className="mt-3 mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
+      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
       <input
         type="date"
-        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-2 w-full text-[0.90rem] text-[#2c2438] font-normal outline-none"
+        className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-3 w-full text-[0.90rem] text-[#2c2438] font-normal outline-none"
         value={data}
         onChange={(e) => setData(e.target.value)}
       />
 
       <button
-        onClick={criar}
+        onClick={criarTransacao}
         className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full"
       >
         Criar transação
       </button>
+
+      <div
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
+          cardAberto
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      ></div>
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-50 w-full bg-white rounded-t-4xl p-8 flex flex-col justify-center items-center transition-transform duration-300 ease-out transform ${
+          cardAberto ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <span className="bg-[#f0eef6] h-1.5 w-16 rounded-full mb-5"></span>
+        <div className="w-full flex flex-row justify-between">
+          <h1 className="font-semibold text-[1.10rem]">Criar categoria</h1>
+          <button onClick={() => setCardAberto(false)}>
+            <X size={20} />
+          </button>
+        </div>
+        <div className="w-full flex items-start">
+          <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Nome</p>
+        </div>
+        <input
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-3 w-full text-md text-[0.90rem] text-[#2c2438] font-normal outline-none placeholder:text-[0.80rem] placeholder:text-[#b0a9bd]"
+          placeholder="Ex: Pet, Viagens, Investimentos..."
+          value={categoriaNome}
+          onChange={(e) => setCategoriaNome(e.target.value)}
+        />
+        <div className="w-full flex items-start">
+          <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Tipo</p>
+        </div>
+        <div className="w-full bg-[#F4F2F7] p-1.5 rounded-full">
+          {["Saída", "Entrada"].map((tipo) => (
+            <button
+              key={tipo}
+              onClick={() => setTipoCategoria(tipo)}
+              className={`w-1/2 rounded-full p-2 text-[0.85rem] font-semibold ${tipoCategoria === tipo ? (tipoCategoria === "Saída" ? "bg-[#D16B6B] text-white" : "bg-[#309f6f] text-white") : ""}`}
+            >
+              {tipo}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={criarCategoria}
+          className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full"
+        >
+          Criar categoria
+        </button>
+      </div>
     </div>
   );
 }
