@@ -5,9 +5,10 @@ export async function criarCategoria(nome, tipo) {
     throw new Error("O nome e o tipo são necessários!");
   }
 
-  const categoriaExistente = await categoriaRepository.listar(nome);
+  // Precisa de um undefined se não cai nome no id do Repo
+  const categoriaExistente = await categoriaRepository.listar(undefined, nome);
 
-  if (categoriaExistente[0]) {
+  if (categoriaExistente) {
     throw new Error("Já existe uma categoria com este nome!");
   }
 
