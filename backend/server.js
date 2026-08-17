@@ -6,6 +6,7 @@ import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import { dashboardRoutes } from "./src/routes/dashboardRoutes.js";
 
 const fastify = Fastify({
   logger: true,
@@ -17,7 +18,7 @@ fastify.register(fastifyCors, {
   origin: [
     "http://localhost:5173",
     "http://172.55.0.64:5173",
-    "https://supporting-beyond-collectors-hostel.trycloudflare.com",
+    "https://noble-accommodation-return-practitioner.trycloudflare.com",
     "http://10.150.230.180:5173",
     "https://pelagial-bessie-thornless.ngrok-free.dev",
   ], // Libera a rota para o front, proteja futuramente!
@@ -59,6 +60,7 @@ fastify.register(categoriasRoutes);
 fastify.register(usuariosRoutes);
 fastify.register(transacoesRoutes);
 fastify.register(authRoutes);
+fastify.register(dashboardRoutes);
 
 // fastify.listen({ port: 3000 }, function (err, address) {
 //   if (err) {
