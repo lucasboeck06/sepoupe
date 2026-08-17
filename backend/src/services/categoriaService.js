@@ -12,6 +12,13 @@ export async function criarCategoria(nome, tipo) {
     throw new Error("Já existe uma categoria com este nome!");
   }
 
+  // Normaliza o tipo, sem acentos e completamente minúsculo, o banco só aceita assim!
+  // entrada || saida
+  tipo = tipo
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
   return await categoriaRepository.inserir(nome, tipo);
 }
 
