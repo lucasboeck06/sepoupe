@@ -26,6 +26,8 @@ export default function NovaTransacao() {
   const [tipoCategoria, setTipoCategoria] = useState("Saída");
   const [categoriaNome, setCategoriaNome] = useState("");
 
+  const [listaCategorias, setListaCategorias] = useState(false);
+
   // Função padrão de matar acentos e retornar somente o texto puro
   function semAcento(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -218,7 +220,7 @@ export default function NovaTransacao() {
         />
       </div>
 
-      <div className="grid grid-cols-4 gap-x-3 items-start mt-3 h-35">
+      <div className="grid grid-cols-4 gap-x-3 items-start mt-3 h-40">
         <button
           type="button"
           className={`flex flex-col justify-center items-center gap-1 py-2`}
@@ -258,8 +260,16 @@ export default function NovaTransacao() {
           </button>
         ))}
       </div>
+      <div className="col-span-4 flex justify-end pr-4">
+        <button
+          onClick={() => setListaCategorias(true)}
+          className="text-[#8B7BC7] text-[0.85rem] font-semibold"
+        >
+          Ver mais
+        </button>
+      </div>
 
-      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
+      <p className="mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
       <input
         type="date"
         className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-3 w-full text-[0.90rem] text-[#2c2438] font-normal outline-none"
@@ -273,6 +283,46 @@ export default function NovaTransacao() {
       >
         Criar transação
       </button>
+
+      <div
+        className={`fixed flex items-center justify-center inset-0 z-40 bg-black/50 transition-opacity duration-300 p-5 ${
+          listaCategorias
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="right-0 px-4 pb-4 pt-6 z-50 bg-white rounded-4xl transition-transform duration-300 ease-out transform">
+          <div
+            className={`grid grid-cols-4 max-h-[52vh] overflow-y-auto [&::-webkit-scrollbar]:hidden`}
+          >
+            {categorias.map((cat) => (
+              <div className="flex flex-col justify-start items-center gap-1 py-2 min-h-20">
+                <span
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center`}
+                  style={{ backgroundColor: cat.cor_secundaria }}
+                >
+                  <DynamicIcon
+                    name={cat.icone}
+                    color={cat.cor_primaria}
+                    size={16}
+                  />
+                </span>
+                <span className="text-[0.70rem] text-center leading-tight">
+                  {cat.nome}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-end mr-4 mt-3">
+            <p
+              onClick={() => setListaCategorias(false)}
+              className="font-semibold text-[0.90rem]"
+            >
+              Voltar
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div
         className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
