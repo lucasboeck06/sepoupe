@@ -45,6 +45,32 @@ export default function Dashboard() {
 
         <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
           <div>
+            <div className="bg-[#fbebdd] p-2 rounded-full">
+              <CreditCard className="text-[#e08b45] w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex-1 w-full">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-[#aeaeb5]">Cartão de crédito</span>
+              <span className="text-base font-semibold text-[#e08b45]">
+                R$ 320,00
+              </span>
+            </div>
+            <progress
+              value={0.5}
+              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#fbebdd] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#e08b45] [&::-webkit-progress-value]:rounded-full"
+            />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
+              <span className="text-xs text-[#aeaeb5] font-semibold">
+                R$ 680,00 de R$ 1.000,00
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
+          <div>
             <div className="bg-[#e9f0fa] p-2 rounded-full">
               <CreditCard className="text-[#7fa8d6] w-4 h-4" />
             </div>
@@ -58,7 +84,7 @@ export default function Dashboard() {
             </div>
             <progress
               value={0.5}
-              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full [&::-moz-progress-bar]:bg-[#7fa8d6]"
+              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full"
             />
             <div className="flex flex-col gap-0.5">
               <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
