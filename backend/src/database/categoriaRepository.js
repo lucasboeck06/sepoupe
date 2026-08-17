@@ -3,8 +3,8 @@ import { pool } from "./db.js";
 export const categoriaRepository = {
   async inserir(nome, tipo) {
     const { rows } = await pool.query(
-      "INSERT INTO public.categorias (nome, tipo) VALUES ($1, $2) RETURNING *",
-      [nome, tipo],
+      "INSERT INTO public.categorias (nome, tipo, icone, cor_primaria, cor_secundaria) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [nome, tipo, "circle-question-mark", "#a8a2b0", "#ececec"],
     );
 
     return rows[0];

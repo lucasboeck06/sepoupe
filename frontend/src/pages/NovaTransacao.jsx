@@ -19,6 +19,15 @@ export default function NovaTransacao() {
   const [busca, setBusca] = useState("");
   const [categorias, setCategorias] = useState([]);
 
+  const [categoriaId, setCategoriaId] = useState(null);
+  const [data, setData] = useState(new Date().toISOString().slice(0, 10));
+
+  const [cardAberto, setCardAberto] = useState(false);
+  const [tipoCategoria, setTipoCategoria] = useState("Saída");
+  const [categoriaNome, setCategoriaNome] = useState("");
+
+  const [listaCategorias, setListaCategorias] = useState(false);
+
   // Função padrão de matar acentos e retornar somente o texto puro
   function semAcento(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -38,9 +47,6 @@ export default function NovaTransacao() {
     : // Limita o início em 7 categorias (caso não haja busca)
       categorias.slice(0, 7);
 
-  const [categoriaId, setCategoriaId] = useState(null);
-  const [data, setData] = useState(new Date().toISOString().slice(0, 10));
-
   // No campo do valor, substitui tudo que não é dígito, por nada
   function handleValor(e) {
     const digitos = e.target.value.replace(/\D/g, "");
@@ -53,20 +59,21 @@ export default function NovaTransacao() {
     currency: "BRL",
   });
 
-  useEffect(() => {
-    async function buscarCategorias() {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/categorias`,
-        {
-          method: "GET",
-          headers: { "ngrok-skip-browser-warning": "true" },
-          credentials: "include",
-        },
-      );
-      const dados = await resposta.json();
-      setCategorias(dados);
-    }
+  async function buscarCategorias() {
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
+      {
+        method: "GET",
+        headers: { "ngrok-skip-browser-warning": "true" },
+        credentials: "include",
+      },
+    );
+    const dados = await resposta.json();
+    setCategorias(dados);
+  }
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
     buscarCategorias();
   }, []);
 
@@ -109,10 +116,6 @@ export default function NovaTransacao() {
     setBusca("");
   }
 
-  const [cardAberto, setCardAberto] = useState(false);
-  const [tipoCategoria, setTipoCategoria] = useState("Saída");
-  const [categoriaNome, setCategoriaNome] = useState("");
-
   async function criarCategoria() {
     if (!categoriaNome || !tipoCategoria) {
       alert("Nome e tipo da categoria são necessários!");
@@ -136,11 +139,20 @@ export default function NovaTransacao() {
     );
 
     if (!resposta.ok) {
-      alert("Erro ao salvar!");
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
       return;
     }
 
     alert("Categoria criada!");
+
+    await buscarCategorias();
+
+    setCategoriaNome("");
+    setTipoCategoria("Saída");
   }
 
   return (
@@ -166,16 +178,18 @@ export default function NovaTransacao() {
         Forma do pagamento
       </p>
       <div className="flex flex-row gap-2">
-        {["PIX", "Débito", "Crédito", "Cheque E.", "Dinheiro"].map((metodo) => (
-          <button
-            key={metodo}
-            type="button"
-            onClick={() => setOperacaoTipo(metodo)}
-            className={`px-3 py-2 rounded-full text-[0.68rem] font-semibold ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
-          >
-            {metodo}
-          </button>
-        ))}
+        {["PIX", "Débito", "VA", "Crédito", "Cheque", "Dinheiro"].map(
+          (metodo) => (
+            <button
+              key={metodo}
+              type="button"
+              onClick={() => setOperacaoTipo(metodo)}
+              className={`px-2 py-2 rounded-full text-[0.70rem] font-semibold ${operacaoTipo === metodo ? "bg-[#8B7BC7] text-white" : "bg-[#f0eef6] text-[#9c93a9]"}`}
+            >
+              {metodo}
+            </button>
+          ),
+        )}
       </div>
 
       <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Descrição</p>
@@ -206,7 +220,7 @@ export default function NovaTransacao() {
         />
       </div>
 
-      <div className="grid grid-cols-4 gap-x-3 items-start mt-3 h-35">
+      <div className="grid grid-cols-4 gap-x-3 items-start mt-3 h-40">
         <button
           type="button"
           className={`flex flex-col justify-center items-center gap-1 py-2`}
@@ -246,8 +260,16 @@ export default function NovaTransacao() {
           </button>
         ))}
       </div>
+      <div className="col-span-4 flex justify-end pr-4">
+        <button
+          onClick={() => setListaCategorias(true)}
+          className="text-[#8B7BC7] text-[0.85rem] font-semibold"
+        >
+          Ver mais
+        </button>
+      </div>
 
-      <p className="mt-4 mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
+      <p className="mb-2 text-[#9c93a9] text-xs font-medium">Data</p>
       <input
         type="date"
         className="border-2 border-[#f0eef6] focus:border-[#ece6f7] rounded-2xl px-3 py-3 w-full text-[0.90rem] text-[#2c2438] font-normal outline-none"
@@ -261,6 +283,46 @@ export default function NovaTransacao() {
       >
         Criar transação
       </button>
+
+      <div
+        className={`fixed flex items-center justify-center inset-0 z-40 bg-black/50 transition-opacity duration-300 p-5 ${
+          listaCategorias
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="right-0 px-4 pb-4 pt-6 z-50 bg-white rounded-4xl transition-transform duration-300 ease-out transform">
+          <div
+            className={`grid grid-cols-4 max-h-[52vh] overflow-y-auto [&::-webkit-scrollbar]:hidden`}
+          >
+            {categorias.map((cat) => (
+              <div className="flex flex-col justify-start items-center gap-1 py-2 min-h-20">
+                <span
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center`}
+                  style={{ backgroundColor: cat.cor_secundaria }}
+                >
+                  <DynamicIcon
+                    name={cat.icone}
+                    color={cat.cor_primaria}
+                    size={16}
+                  />
+                </span>
+                <span className="text-[0.70rem] text-center leading-tight">
+                  {cat.nome}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-end mr-4 mt-3">
+            <p
+              onClick={() => setListaCategorias(false)}
+              className="font-semibold text-[0.90rem]"
+            >
+              Voltar
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div
         className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
