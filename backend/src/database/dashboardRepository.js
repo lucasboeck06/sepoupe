@@ -1,7 +1,7 @@
 import { pool } from "./db.js";
 
 export const dashboardRepository = {
-  async listar(mes) {
+  async resumo(mes) {
     const { rows } = await pool.query(
       // SUM soma todos os valores das linhas selecionadas
       // CASE WHEN é um tipo de if/else dentro da query
@@ -18,5 +18,38 @@ export const dashboardRepository = {
       entradas: Number(rows[0].entradas || 0),
       saidas: Number(rows[0].saidas || 0),
     };
+  },
+
+  async contas() {
+    const { rows } = await pool.query(
+      `SELECT id, nome, tipo, limite::float, saldo::float FROM public.contas`,
+    );
+
+    return rows;
+  },
+
+  async top(mes) {
+    const { rows } = await pool.query(
+      `
+        SELECT
+            c.id AS categoria_id,
+            c.nome,
+            c.icone,
+            c.cor_primaria,
+            c.cor_secundaria,
+            SUM(t.valor)::float AS total_gasto
+        FROM public.transacoes t
+        JOIN public.categorias c ON t.categoria_id = c.id
+        WHERE t.data >= $1::date
+            AND t.data < $1:: date + INTERVAL '1 month'
+            AND t.tipo = 'saida'
+        GROUP BY c.id
+        ORDER BY total_gasto DESC
+        LIMIT 10
+    `,
+      [mes],
+    );
+
+    return rows;
   },
 };
