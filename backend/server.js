@@ -1,3 +1,5 @@
+// Teste de deploy automático!
+
 import Fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import { categoriasRoutes } from "./src/routes/categorias.js";
