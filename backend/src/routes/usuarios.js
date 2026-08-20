@@ -1,4 +1,4 @@
-import { criar, listar } from "../controllers/usuarioController.js";
+import { criar } from "../controllers/usuarioController.js";
 
 export async function usuariosRoutes(fastify) {
   fastify.register(async function rotasProtegidas(instanciaIsolada) {
