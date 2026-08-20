@@ -70,7 +70,7 @@ export default function NovaTransacao() {
     );
 
     if (resposta.status === 401) {
-      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
       window.location.href = "/"; // Joga na tela de login à força
       return; // Para tudo e não deixa tentar ler o json
     }
@@ -110,7 +110,7 @@ export default function NovaTransacao() {
     );
 
     if (resposta.status === 401) {
-      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
       window.location.href = "/"; // Joga na tela de login à força
       return; // Para tudo e não deixa tentar ler o json
     }
@@ -152,7 +152,7 @@ export default function NovaTransacao() {
     );
 
     if (resposta.status === 401) {
-      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
       window.location.href = "/"; // Joga na tela de login à força
       return; // Para tudo e não deixa tentar ler o json
     }
