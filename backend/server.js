@@ -16,14 +16,7 @@ const fastify = Fastify({
 
 // Precisamos definir o Cors aqui em cima!
 fastify.register(fastifyCors, {
-  // Adicione o IP do front se rodar com -- --host
-  origin: [
-    "http://localhost:5173",
-    "http://172.55.0.64:5173",
-    "https://incoming-documentary-screens-depot.trycloudflare.com",
-    "http://10.150.230.180:5173",
-    "https://pelagial-bessie-thornless.ngrok-free.dev",
-  ], // Libera a rota para o front, proteja futuramente!
+  origin: [process.env.CORS_ORIGIN], // URLs que podem fazer requisições
   credentials: true,
 });
 
