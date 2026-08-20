@@ -2,7 +2,7 @@ import { pool } from "./db.js";
 
 export async function loginQuery(email) {
   const result = await pool.query(
-    "SELECT id, nome, email FROM public.usuarios WHERE email = $1",
+    "SELECT id, nome, email, senha FROM public.usuarios WHERE email = $1",
     [email],
   );
   return result.rows[0];
