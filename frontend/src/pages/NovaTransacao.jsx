@@ -68,6 +68,13 @@ export default function NovaTransacao() {
         credentials: "include",
       },
     );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      window.location.href = "/"; // Joga na tela de login à força
+      return; // Para tudo e não deixa tentar ler o json
+    }
+
     const dados = await resposta.json();
     setCategorias(dados);
   }
@@ -101,6 +108,12 @@ export default function NovaTransacao() {
         }),
       },
     );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      window.location.href = "/"; // Joga na tela de login à força
+      return; // Para tudo e não deixa tentar ler o json
+    }
 
     if (!resposta.ok) {
       alert("Erro ao salvar!");
@@ -137,6 +150,12 @@ export default function NovaTransacao() {
         }),
       },
     );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario_logado"); // Limpa o "crachá"
+      window.location.href = "/"; // Joga na tela de login à força
+      return; // Para tudo e não deixa tentar ler o json
+    }
 
     if (!resposta.ok) {
       const erroDados = await resposta.json().catch(() => ({}));
