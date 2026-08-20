@@ -27,6 +27,8 @@ export default function Login() {
       );
 
       if (resposta.ok) {
+        localStorage.setItem("usuario-logado", "true");
+
         navigate("/dashboard");
       } else {
         const erro = await resposta.json();
