@@ -10,7 +10,10 @@ export async function logar(request, reply) {
     // Precisamos de dois replys, mas não necessariamente eles enviam coisas ao cliente.
     // O primeiro é onde o plugin decorou o método de assinatura, e o segundo é o que faz o envio
 
-    const token = await reply.jwtSign({ id: usuario.id, email: usuario.email });
+    const token = await reply.jwtSign(
+      { id: usuario.id, email: usuario.email },
+      { expiresIn: "7d" },
+    );
 
     reply
       .setCookie("access_token", token, {
