@@ -1,4 +1,4 @@
-import { criarUsuario, listarUsuarios } from "../services/usuarioService.js";
+import { criarUsuario } from "../services/usuarioService.js";
 
 export async function criar(request, reply) {
   try {
