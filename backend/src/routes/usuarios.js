@@ -1,6 +1,9 @@
 import { criar, listar } from "../controllers/usuarioController.js";
 
 export async function usuariosRoutes(fastify) {
-  fastify.get("/usuarios", listar);
-  fastify.post("/usuarios", criar);
+  fastify.register(async function rotasProtegidas(instanciaIsolada) {
+    instanciaIsolada.addHook("preHandler", instanciaIsolada.authenticate);
+
+    instanciaIsolada.post("/usuarios", criar);
+  });
 }
