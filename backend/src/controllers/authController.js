@@ -18,8 +18,8 @@ export async function logar(request, reply) {
     reply
       .setCookie("access_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Quando na env for "production", será true
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // "none" exige secure:true, obrigatório p/ cross-domain (ngrok)
+        secure: true, // Sempre true porque prod e dev usam SSL
+        sameSite: process.env.NODE_ENV === "production" ? "lax" : "none", // "none" exige secure:true, obrigatório p/ cross-domain (ngrok)
         path: "/",
         maxAge: 60 * 60 * 24 * 7,
       })
