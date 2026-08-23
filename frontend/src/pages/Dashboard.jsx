@@ -128,7 +128,9 @@ export default function Dashboard() {
               </span>
             </div>
             <progress
-              value={0.5}
+              value={
+                cartao.limite ? Math.min(cartao.saldo / cartao.limite, 1) : 0
+              }
               className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#fbebdd] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#e08b45] [&::-webkit-progress-value]:rounded-full"
             />
             <div className="flex flex-col gap-0.5">
@@ -155,7 +157,7 @@ export default function Dashboard() {
               </span>
             </div>
             <progress
-              value={0.5}
+              value={va.limite ? Math.min(va.saldo / va.limite, 1) : 0}
               className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#d9f0e5] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#2f9f6f] [&::-webkit-progress-value]:rounded-full"
             />
             <div className="flex flex-col gap-0.5">
@@ -184,7 +186,9 @@ export default function Dashboard() {
               </span>
             </div>
             <progress
-              value={0.5}
+              value={
+                cheque.limite ? Math.min(cheque.saldo / cheque.limite, 1) : 0
+              }
               className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full"
             />
             <div className="flex flex-col gap-0.5">
