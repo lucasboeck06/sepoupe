@@ -7,7 +7,8 @@ export const dashboardRepository = {
       // CASE WHEN é um tipo de if/else dentro da query
       `SELECT
         SUM(CASE WHEN tipo = 'entrada' THEN valor ELSE 0 END) AS entradas,
-        SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END) AS saidas FROM public.transacoes
+        SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END) AS saidas,
+        SUM(CASE WHEN tipo = 'acerto THEN valor ELSE 0 END') FROM public.transacoes
         WHERE data >= $1::date
             ANd data < $1:: date + INTERVAL '1 month'`,
       [mes],
