@@ -8,7 +8,7 @@ export const dashboardRepository = {
       `SELECT
         SUM(CASE WHEN tipo = 'entrada' THEN valor ELSE 0 END) AS entradas,
         SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END) AS saidas,
-        SUM(CASE WHEN tipo = 'acerto THEN valor ELSE 0 END') FROM public.transacoes
+        SUM(CASE WHEN tipo = 'acerto' THEN valor ELSE 0 END) AS acertos FROM public.transacoes
         WHERE data >= $1::date
             ANd data < $1:: date + INTERVAL '1 month'`,
       [mes],
