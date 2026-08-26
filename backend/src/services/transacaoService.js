@@ -1,5 +1,6 @@
 import { transacaoRepository } from "../database/transacoesRepository.js";
 import { categoriaRepository } from "../database/categoriaRepository.js";
+import { contasRepository } from "../database/contasRepository.js";
 
 export async function criarTransacao(
   usuarioId,
@@ -9,7 +10,7 @@ export async function criarTransacao(
   operacaoTipo,
   data,
 ) {
-  if (!valor) {
+  if (!valor || valor < 0) {
     throw new Error("O valor não pode ser 0, negativo ou inexistente");
   }
 
@@ -29,6 +30,31 @@ export async function criarTransacao(
     operacaoTipo,
     data,
   );
+
+  const TIPOS_CONTA = {
+    Crédito: "credito",
+    Cheque: "cheque_especial",
+    VA: "va",
+  };
+
+  const tipoConta = TIPOS_CONTA[operacaoTipo];
+  if (tipoConta) {
+    await contasRepository.adicionarSaldo(TIPOS_CONTA[operacaoTipo], valor);
+  }
+
+  const ACERTOS = {
+    37: "credito",
+    45: "chqeque",
+  };
+
+  if (ACERTOS[categoriaId]) {
+    await contasRepository.reduzirSaldo(ACERTOS[categoriaId], valor);
+  }
+
+  // Só para garantir que a comparação é Number com Number!
+  if (Number(categoriaId) === 12) {
+    await contasRepository.atualizarLimite("va", valor);
+  }
 
   return transacaoCriada;
 }

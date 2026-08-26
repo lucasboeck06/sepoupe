@@ -116,7 +116,11 @@ export default function NovaTransacao() {
     }
 
     if (!resposta.ok) {
-      alert("Erro ao salvar!");
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
       return;
     }
 
