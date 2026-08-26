@@ -24,7 +24,7 @@ export async function logar(request, reply) {
         maxAge: 60 * 60 * 24 * 7,
       })
       .status(200)
-      .send({ mensagem: "Login realizado com sucesso!" });
+      .send({ mensagem: "Login realizado com sucesso!", nome: usuario.nome });
   } catch (err) {
     reply.status(401).send({ erro: err.message });
   }

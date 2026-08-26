@@ -27,7 +27,10 @@ export default function Login() {
       );
 
       if (resposta.ok) {
+        const dados = await resposta.json();
+
         localStorage.setItem("usuario-logado", "true");
+        localStorage.setItem("nome-usuario", dados.nome);
 
         navigate("/dashboard");
       } else {

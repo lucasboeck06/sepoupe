@@ -16,6 +16,9 @@ export default function Dashboard() {
     return "Boa noite,";
   };
 
+  const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
+  const usuarioPrimeiroNome = usuarioNomeCompleto.split(" ")[0];
+
   const mesAtual = new Date().toISOString().slice(0, 7);
 
   async function buscarDados(mesAtual) {
@@ -86,7 +89,7 @@ export default function Dashboard() {
               </span>
               <br />
               <span className="text-xl text-[#1a1a3b] font-semibold">
-                Lucas 👋
+                {usuarioPrimeiroNome} 👋
               </span>
             </h1>
           </div>
