@@ -18,6 +18,7 @@ export const dashboardRepository = {
       // Retorna os objetos entradas e saídas, com o valor transformado para número, ou zero se for null.
       entradas: Number(rows[0].entradas || 0),
       saidas: Number(rows[0].saidas || 0),
+      acertos: Number(rows[0].acertos || 0),
     };
   },
 
