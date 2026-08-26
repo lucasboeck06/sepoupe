@@ -16,6 +16,9 @@ export default function Dashboard() {
     return "Boa noite,";
   };
 
+  const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
+  const usuarioPrimeiroNome = usuarioNomeCompleto.split(" ")[0];
+
   const mesAtual = new Date().toISOString().slice(0, 7);
 
   async function buscarDados(mesAtual) {
@@ -51,6 +54,7 @@ export default function Dashboard() {
   // ?? Se o valor da esquerda for null ou undefined, troca pelo da direita
   // ?? e || são diferentes!
   const totalSaidas = dados.resumo?.saidas ?? 0;
+  const totalAcertos = dados.resuo?.acertos ?? 0;
   const totalEntradas = dados.resumo?.entradas ?? 0;
   const saldoDisponivel = (totalEntradas - totalSaidas).toFixed(2);
 
@@ -85,7 +89,7 @@ export default function Dashboard() {
               </span>
               <br />
               <span className="text-xl text-[#1a1a3b] font-semibold">
-                Lucas 👋
+                {usuarioPrimeiroNome} 👋
               </span>
             </h1>
           </div>
@@ -102,6 +106,12 @@ export default function Dashboard() {
             <span className="text-xl font-semibold text-[#EB7070]">
               R$ {totalSaidas}
               <br />
+            </span>
+            <span className="text-xs text-[#aeaeb5]">
+              Total com acertos: <br />
+            </span>
+            <span className="text-base font-semibold text-[#EB7070]">
+              R$ {(totalAcertos + totalSaidas).toFixed(2)} <br />
             </span>
             <span className="text-xs text-[#aeaeb5]">
               Saldo disponível: <br />
