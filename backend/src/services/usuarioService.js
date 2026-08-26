@@ -1,7 +1,4 @@
-import {
-  loginQuery,
-  criarUsuarioQuery,
-} from "../database/usuarioRepository.js";
+import { criarUsuarioQuery } from "../database/usuarioRepository.js";
 import bcrypt from "bcrypt";
 
 export async function criarUsuario(usuario) {
