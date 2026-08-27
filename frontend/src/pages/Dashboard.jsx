@@ -110,7 +110,7 @@ export default function Dashboard() {
             <span className="text-xs text-[#aeaeb5]">
               Total com acertos: <br />
             </span>
-            <span className="text-base font-semibold text-[#EB7070]">
+            <span className="text-base font-semibold text-[#d6b03a]">
               R$ {(totalAcertos + totalSaidas).toFixed(2)} <br />
             </span>
             <span className="text-xs text-[#aeaeb5]">
