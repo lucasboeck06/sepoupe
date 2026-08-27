@@ -54,7 +54,7 @@ export default function Dashboard() {
   // ?? Se o valor da esquerda for null ou undefined, troca pelo da direita
   // ?? e || são diferentes!
   const totalSaidas = dados.resumo?.saidas ?? 0;
-  const totalAcertos = dados.resuo?.acertos ?? 0;
+  const totalAcertos = dados.resumo?.acertos ?? 0;
   const totalEntradas = dados.resumo?.entradas ?? 0;
   const saldoDisponivel = (totalEntradas - totalSaidas).toFixed(2);
 
