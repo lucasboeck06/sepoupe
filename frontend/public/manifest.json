@@ -1,7 +1,7 @@
 {
     "id": "/",
     "name": "Financeiro Pessoal",
-    "short_name": "FinApp",
+    "short_name": "SePoupe",
     "display": "standalone",
     "start_url": "/",
     "scope": "/",
