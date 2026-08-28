@@ -10,22 +10,27 @@
 }
 
 html,
-body,
-#root {
-  min-height: 100vh;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f7;
 
-  /* Transforma o root em um flex container para ele esticar junto com o conteúdo interno */
+  /* Remove o "efeito elástico" (bounce) ao puxar a tela no mobile,
+     mas PERMITE que o scroll normal continue funcionando perfeitamente */
+  overscroll-behavior-y: none;
+}
+
+#root {
+  /* 100dvh resolve o problema do recarregamento. Ele calcula a tela considerando 
+     a barra de endereços do celular. O 'min-height' permite que a página 
+     cresça e crie scroll naturalmente se tiver muito conteúdo. */
+  min-height: 100dvh;
+
   display: flex;
   flex-direction: column;
 
-  /* Remove margens padrão do navegador que podem causar barra de rolagem horizontal */
-  margin: 0;
-  padding: 0;
-
-  background-color: #f0f0f7;
-}
-
-body {
+  /* Movido para o #root. O Tailwind já usa box-sizing: border-box por padrão, 
+     então esse padding empurra o conteúdo para a área segura sem gerar scroll extra. */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
