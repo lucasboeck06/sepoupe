@@ -48,7 +48,7 @@ export default function Login() {
     <div className="bg-[#F0F0F7] flex flex-col justify-between min-h-screen w-full px-12 pt-12">
       <div>
         <img src={illustration} className="w-full mb-6" />
-        <h1 className="text-[#161637] mb-6 font-medium">
+        <h1 className="text-[#161637] mb-6 font-medium text-center">
           Insira os dados para logar
         </h1>
 
@@ -69,7 +69,7 @@ export default function Login() {
           />
           <button
             type="submit"
-            className="bg-[#b6b6ec] rounded-lg py-2 px-4 text-sm text-[#090933] font-normal"
+            className="bg-[#b6b6ec] rounded-lg py-3.5 px-4 text-md text-[#090933] font-semibold"
           >
             Enviar
           </button>
