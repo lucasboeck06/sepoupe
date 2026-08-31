@@ -19,7 +19,7 @@ export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
     await contasRepository.reduzirSaldo(acerto[categoriaNome], valor);
 
   if (categoriaNome === "VA")
-    await contasRepository.atualizarLimiteMais("va", valor);
+    await contasRepository.atualizarLimite("va", valor);
 }
 
 export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
@@ -41,5 +41,5 @@ export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
     await contasRepository.adicionarSaldo(acerto[categoriaNome], valor);
 
   if (categoriaNome === "VA")
-    await contasRepository.atualizarLimiteMenos("va", valor);
+    await contasRepository.atualizarLimite("va", -valor);
 }

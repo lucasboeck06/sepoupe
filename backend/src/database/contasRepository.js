@@ -16,16 +16,9 @@ export const contasRepository = {
     );
   },
 
-  async atualizarLimiteMais(tipo, valor) {
+  async atualizarLimite(tipo, valor) {
     await pool.query(
       `UPDATE public.contas SET limite = limite + $1 WHERE tipo = $2`,
-      [valor, tipo],
-    );
-  },
-
-  async atualizarLimiteMenos(tipo, valor) {
-    await pool.query(
-      `UPDATE public.contas SET limite = limite - $1 WHERE tipo = $2`,
       [valor, tipo],
     );
   },
