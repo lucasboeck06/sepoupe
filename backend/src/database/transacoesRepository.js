@@ -26,7 +26,20 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(tipo) {
+  async listar(id, tipo) {
+    if (id) {
+      const { rows } = await pool.query(
+        `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
+         FROM public.transacoes t
+         JOIN public.categorias c
+          ON t.categoria_id = c.id
+         WHERE t.id = $1`,
+        [id],
+      );
+
+      return rows[0];
+    }
+
     if (tipo) {
       const { rows } = await pool.query(
         "SELECT * FROM public.transacoes WHERE tipo = $1",
