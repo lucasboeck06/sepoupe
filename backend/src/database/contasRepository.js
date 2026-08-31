@@ -23,5 +23,10 @@ export const contasRepository = {
     );
   },
 
-  async atualizarLimiteMenos(tipo, valor) {},
+  async atualizarLimiteMenos(tipo, valor) {
+    await pool.query(
+      `UPDATE public.contas SET limite = limite - $1 WHERE tipo = $2`,
+      [valor, tipo],
+    );
+  },
 };
