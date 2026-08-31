@@ -41,5 +41,6 @@ export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
     await contasRepository.adicionarSaldo(acerto[categoriaNome], valor);
 
   if (categoriaNome === "VA")
+    // Ao invés de uma nova func para mandar para o repo, deixamos o valor negativo, isso basta!
     await contasRepository.atualizarLimite("va", -valor);
 }
