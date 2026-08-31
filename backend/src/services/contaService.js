@@ -1,19 +1,19 @@
 import { contasRepository } from "../database/contasRepository.js";
 
-export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
-  const conta = {
-    Crédito: "credito",
-    Cheque: "cheque",
-    VA: "va",
-  };
+const conta = {
+  Crédito: "credito",
+  Cheque: "cheque",
+  VA: "va",
+};
 
+const acerto = {
+  "Fatura Inter": "credito",
+  "Fatura Caixa": "cheque",
+};
+
+export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
   if (conta[operacaoTipo])
     await contasRepository.adicionarSaldo(conta[operacaoTipo], valor);
-
-  const acerto = {
-    "Fatura Inter": "credito",
-    "Fatura Caixa": "cheque",
-  };
 
   if (acerto[categoriaNome])
     await contasRepository.reduzirSaldo(acerto[categoriaNome], valor);
@@ -23,19 +23,8 @@ export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
 }
 
 export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
-  const contas = {
-    Crédito: "credito",
-    Cheque: "cheque",
-    VA: "va",
-  };
-
-  if (contas[operacaoTipo])
-    await contasRepository.reduzirSaldo(contas[operacaoTipo], valor);
-
-  const acerto = {
-    "Fatura Inter": "credito",
-    "Fatura Caixa": "cheque",
-  };
+  if (conta[operacaoTipo])
+    await contasRepository.reduzirSaldo(conta[operacaoTipo], valor);
 
   if (acerto[categoriaNome])
     await contasRepository.adicionarSaldo(acerto[categoriaNome], valor);
