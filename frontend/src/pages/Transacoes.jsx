@@ -8,7 +8,9 @@ import {
   ChevronDown,
   Calendar,
   Clock,
+  Trash2,
 } from "lucide-react";
+import { DynamicIcon } from "lucide-react/dynamic";
 
 export default function Pendentes() {
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ export default function Pendentes() {
   const [filtroLista, setFiltroLista] = useState("Todas");
   const [filtroData, setFiltroData] = useState("Data da transação");
 
-  const [transacoes, setTransacoes] = useState();
+  const [transacoes, setTransacoes] = useState([]);
 
   async function buscarTransacoes() {
     const resposta = await fetch(
@@ -157,10 +159,39 @@ export default function Pendentes() {
           </div>
         </div>
       </div>
-      <div className="bg-white">
+      <div className="bg-white px-4">
         {transacoes.map((transacao) => (
-          <div>
-            <span>{transacao.descricao}</span>
+          <div className="flex justify-between  py-3 border-b border-[#FAF9F5]">
+            <div className="flex items-center gap-2">
+              <span
+                className="w-9 h-9 flex items-center justify-center rounded-full"
+                style={{ backgroundColor: transacao.cor_secundaria }}
+              >
+                <DynamicIcon
+                  name={transacao.icone}
+                  color={transacao.cor_primaria}
+                  size={18}
+                />
+              </span>
+              <div>
+                <h3 className="text-[0.8rem] text-[#2C2438] font-semibold leading-none">
+                  {transacao.descricao}
+                </h3>
+                <p className="text-[0.7rem] text-[#9B93A8]">01 Set</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <p
+                className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : "text-[#2F9F6F]"}`}
+              >
+                {transacao.tipo === "saida" ? "- " : "+ "}
+                {transacao.valor}
+              </p>
+
+              <button className="bg-[#F8EBEB] p-2 rounded-lg">
+                <Trash2 color="#D16B6B" size={14} />
+              </button>
+            </div>
           </div>
         ))}
       </div>
