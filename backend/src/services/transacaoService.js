@@ -45,7 +45,7 @@ export async function criarTransacao(
 }
 
 export async function listarTransacoes(tipo) {
-  return transacaoRepository.listar(tipo);
+  return transacaoRepository.listar();
 }
 
 export async function deletarTransacao(id) {

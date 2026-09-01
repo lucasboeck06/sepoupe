@@ -40,16 +40,9 @@ export const transacaoRepository = {
       return rows[0];
     }
 
-    if (tipo) {
-      const { rows } = await pool.query(
-        "SELECT * FROM public.transacoes WHERE tipo = $1",
-        [tipo],
-      );
-
-      return rows;
-    }
-
-    const { rows } = await pool.query("SELECT * FROM public.transacoes");
+    const { rows } = await pool.query(
+      "SELECT * FROM public.transacoes t JOIN public.categorias c ON t.categoria_id = c.id",
+    );
 
     return rows;
   },
