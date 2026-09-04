@@ -26,17 +26,35 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(tipo) {
-    if (tipo) {
+  async listar(id, tipo) {
+    if (id) {
       const { rows } = await pool.query(
-        "SELECT * FROM public.transacoes WHERE tipo = $1",
-        [tipo],
+        `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
+         FROM public.transacoes t
+         JOIN public.categorias c
+          ON t.categoria_id = c.id
+         WHERE t.id = $1`,
+        [id],
       );
 
-      return rows;
+      return rows[0];
     }
 
-    const { rows } = await pool.query("SELECT * FROM public.transacoes");
+    const { rows } = await pool.query(
+      `SELECT
+        t.id,
+        t.descricao,
+        t.tipo,
+        t.valor,
+        t.data,
+        c.nome AS categoria_nome,
+        c.icone,
+        c.cor_primaria,
+        c.cor_secundaria
+      FROM public.transacoes t
+      JOIN public.categorias c
+        ON t.categoria_id = c.id`,
+    );
 
     return rows;
   },

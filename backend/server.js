@@ -18,6 +18,7 @@ const fastify = Fastify({
 fastify.register(fastifyCors, {
   origin: [process.env.CORS_ORIGIN], // URLs que podem fazer requisições
   credentials: true,
+  methods: ["GET", "HEAD", "POST", "DELETE", "OPTIONS"], // Necessário porque a versão do @fastify/cors só permite GET, HEAD e POST por padrão, declaração explícita necessária
 });
 
 // Registro da ferramenta de cookie
