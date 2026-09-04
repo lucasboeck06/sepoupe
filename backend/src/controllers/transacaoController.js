@@ -6,8 +6,14 @@ import {
 
 export async function criar(request, reply) {
   try {
-    const { descricao, categoriaId, tipo, valor, operacaoTipo, data } =
-      request.body;
+    const {
+      descricao,
+      categoriaId,
+      categoriaNomeTransacao,
+      valor,
+      operacaoTipo,
+      data,
+    } = request.body;
 
     const usuarioId = request.user.id;
 
@@ -15,6 +21,7 @@ export async function criar(request, reply) {
       usuarioId,
       descricao,
       categoriaId,
+      categoriaNomeTransacao,
       valor,
       operacaoTipo,
       data,
@@ -28,9 +35,7 @@ export async function criar(request, reply) {
 
 export async function listar(request, reply) {
   try {
-    const { tipo } = request.body;
-
-    const lista = await listarTransacoes(tipo);
+    const lista = await listarTransacoes();
 
     return reply.status(200).send(lista);
   } catch (err) {
@@ -40,7 +45,7 @@ export async function listar(request, reply) {
 
 export async function deletar(request, reply) {
   try {
-    const { id } = request.body;
+    const { id } = request.query;
 
     const transacaoDeletada = await deletarTransacao(id);
 
