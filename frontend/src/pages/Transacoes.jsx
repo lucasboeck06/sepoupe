@@ -65,6 +65,43 @@ export default function Transacoes() {
     });
   }
 
+  async function deletarTransacao() {
+    if (!transacaoSelecionada.id) {
+      alert("O id é necessário para deletar uma transação");
+      return;
+    }
+
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/transacoes?id=${transacaoSelecionada.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+        credentials: "include",
+      },
+    );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario-logado");
+      window.location.href = "/";
+      return;
+    }
+
+    if (!resposta.ok) {
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
+      return;
+    }
+
+    buscarTransacoes();
+    setPopupDelete(false);
+    setTransacaoSelecionada(undefined);
+  }
+
   return (
     <div>
       <div className="p-5 bg-[#F4F2F7]">
@@ -260,8 +297,8 @@ export default function Transacoes() {
                 </p>
                 <span className="flex text-[0.7rem] text-[#9B93A8]">
                   <p>
-                    {formatarData(transacaoSelecionada?.data)} •{" "}
-                    {transacaoSelecionada?.nome}
+                    {transacaoSelecionada?.categoria_nome} <br />
+                    {formatarData(transacaoSelecionada?.data)}
                   </p>
                 </span>
               </div>
@@ -274,7 +311,7 @@ export default function Transacoes() {
             </p>
           </div>
           <button
-            onClick={() => setPopupDelete(false)}
+            onClick={deletarTransacao}
             className="w-full bg-[#D16B6B] rounded-xl py-3 text-[0.9rem] font-semibold text-[#FFFFFF] mb-2"
           >
             Excluir
