@@ -12,13 +12,17 @@ import {
 } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
 
-export default function Pendentes() {
+export default function Transacoes() {
   const navigate = useNavigate();
 
   const [filtroLista, setFiltroLista] = useState("Todas");
   const [filtroData, setFiltroData] = useState("Data da transação");
 
   const [transacoes, setTransacoes] = useState([]);
+
+  const [popupDelete, setPopupDelete] = useState(false);
+
+  const [transacaoSelecionada, setTransacaoSelecionada] = useState();
 
   async function buscarTransacoes() {
     const resposta = await fetch(
@@ -53,6 +57,13 @@ export default function Pendentes() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
     buscarTransacoes();
   }, []);
+
+  function formatarData(dataISO) {
+    return new Date(dataISO).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+    });
+  }
 
   return (
     <div>
@@ -161,7 +172,10 @@ export default function Pendentes() {
       </div>
       <div className="bg-white px-4">
         {transacoes.map((transacao) => (
-          <div className="flex justify-between  py-3 border-b border-[#FAF9F5]">
+          <div
+            key={transacao.id}
+            className="flex justify-between  py-3 border-b border-[#FAF9F5]"
+          >
             <div className="flex items-center gap-2">
               <span
                 className="w-9 h-9 flex items-center justify-center rounded-full"
@@ -177,7 +191,9 @@ export default function Pendentes() {
                 <h3 className="text-[0.8rem] text-[#2C2438] font-semibold leading-none">
                   {transacao.descricao}
                 </h3>
-                <p className="text-[0.7rem] text-[#9B93A8]">01 Set</p>
+                <p className="text-[0.7rem] text-[#9B93A8]">
+                  {formatarData(transacao.data)}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -188,12 +204,88 @@ export default function Pendentes() {
                 {transacao.valor}
               </p>
 
-              <button className="bg-[#F8EBEB] p-2 rounded-lg">
+              <button
+                onClick={() => {
+                  setPopupDelete(true);
+                  setTransacaoSelecionada(transacao);
+                }}
+                className="bg-[#F8EBEB] p-2 rounded-lg"
+              >
                 <Trash2 color="#D16B6B" size={14} />
               </button>
             </div>
           </div>
         ))}
+      </div>
+      <div
+        className={`fixed flex items-center justify-center inset-0 z-40 bg-black/50 p-3 transition-opacity duration-300 ${popupDelete ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+      >
+        <div
+          className={`bg-white z-50 rounded-3xl p-6 ${popupDelete ? "translate-0" : "translate-full"}`}
+        >
+          <div className="">
+            <button
+              onClick={() => setPopupDelete(false)}
+              className="p-3 bg-[#F8EBEB] rounded-full"
+            >
+              <Trash2 color="#D16B6B" size={22} />
+            </button>
+          </div>
+          <div className="mb-4 mt-2">
+            <h2 className="text-[1rem] text-[#2C2438] font-semibold">
+              Excluir transação?
+            </h2>
+            <p className="text-[0.8rem] text-[#9B93A8] leading-4.5">
+              Essa ação não pode ser desfeita. A transação será removida do seu
+              histórico e dos totais do mês
+            </p>
+          </div>
+          <div className="w-full flex items-center justify-between bg-[#F8F7FB] p-3 rounded-xl mb-4">
+            <span className="flex gap-2 items items-center">
+              <span
+                className="flex w-fit p-2 rounded-full"
+                style={{
+                  backgroundColor: transacaoSelecionada?.cor_secundaria,
+                }}
+              >
+                <DynamicIcon
+                  name={transacaoSelecionada?.icone}
+                  color={transacaoSelecionada?.cor_primaria}
+                  size={18}
+                />
+              </span>
+              <div className="leading-4">
+                <p className="text-[0.8rem] text-[#2C2438s] font-semibold">
+                  {transacaoSelecionada?.descricao}
+                </p>
+                <span className="flex text-[0.7rem] text-[#9B93A8]">
+                  <p>
+                    {formatarData(transacaoSelecionada?.data)} •{" "}
+                    {transacaoSelecionada?.nome}
+                  </p>
+                </span>
+              </div>
+            </span>
+            <p
+              className={`text-[0.9rem] font-semibold ${transacaoSelecionada?.tipo === "saida" ? "text-[#D16B6B]" : "text-[#2F9F6F]"}`}
+            >
+              {transacaoSelecionada?.tipo === "saida" ? "- " : "+"}{" "}
+              {transacaoSelecionada?.valor}
+            </p>
+          </div>
+          <button
+            onClick={() => setPopupDelete(false)}
+            className="w-full bg-[#D16B6B] rounded-xl py-3 text-[0.9rem] font-semibold text-[#FFFFFF] mb-2"
+          >
+            Excluir
+          </button>
+          <button
+            onClick={() => setPopupDelete(false)}
+            className="w-full bg-[#F4F2F7] rounded-xl py-3 text-[0.9rem] font-semibold text-[#8B8494]"
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
   );
