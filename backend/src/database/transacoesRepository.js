@@ -41,7 +41,19 @@ export const transacaoRepository = {
     }
 
     const { rows } = await pool.query(
-      "SELECT * FROM public.transacoes t JOIN public.categorias c ON t.categoria_id = c.id",
+      `SELECT
+        t.id,
+        t.descricao,
+        t.tipo,
+        t.valor,
+        t.data,
+        c.nome AS categoria_nome,
+        c.icone,
+        c.cor_primaria,
+        c.cor_secundaria
+      FROM public.transacoes t
+      JOIN public.categorias c
+        ON t.categoria_id = c.id`,
     );
 
     return rows;
