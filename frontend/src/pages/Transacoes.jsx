@@ -15,18 +15,25 @@ import { DynamicIcon } from "lucide-react/dynamic";
 export default function Transacoes() {
   const navigate = useNavigate();
 
-  const [filtroLista, setFiltroLista] = useState("Todas");
-  const [filtroData, setFiltroData] = useState("Data da transação");
-
   const [transacoes, setTransacoes] = useState([]);
 
   const [popupDelete, setPopupDelete] = useState(false);
 
   const [transacaoSelecionada, setTransacaoSelecionada] = useState();
 
+  const [filtros, setFiltros] = useState({
+    tipo: "todas",
+    ordem: "data",
+  });
+
   async function buscarTransacoes() {
+    const params = new URLSearchParams({
+      tipo: filtros.tipo === "todas" ? "" : filtros.tipo,
+      ordem: filtros.ordem,
+    });
+
     const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/transacoes`,
+      `${import.meta.env.VITE_API_BASE_URL}/transacoes?${params}`,
       {
         method: "GET",
         headers: { "ngrok-skip-browser-warning": "true" },
@@ -102,6 +109,14 @@ export default function Transacoes() {
     setTransacaoSelecionada(undefined);
   }
 
+  function mudarTipo(novoTipo) {
+    setFiltros((atual) => ({ ...atual, tipo: novoTipo }));
+  }
+
+  function mudarOrdem(novaOrdem) {
+    setFiltros((atual) => ({ ...atual, ordem: novaOrdem }));
+  }
+
   return (
     <div>
       <div className="p-5 bg-[#F4F2F7]">
@@ -153,20 +168,20 @@ export default function Transacoes() {
         </div>
         <div className="bg-white rounded-full grid grid-cols-3 gap-1.5 p-1.5 mb-3 shadow">
           <button
-            onClick={() => setFiltroLista("Todas")}
-            className={`text-[0.8rem] rounded-full p-2 ${filtroLista === "Todas" ? "text-[#2C2438] font-semibold ring-2 ring-inset ring-[#ECEAFA]" : ""}`}
+            onClick={() => mudarTipo("todas")}
+            className={`text-[0.8rem] rounded-full p-2 ${filtros.tipo === "todas" ? "text-[#2C2438] font-semibold ring-2 ring-inset ring-[#ECEAFA]" : ""}`}
           >
             Todas
           </button>
           <button
-            onClick={() => setFiltroLista("Entradas")}
-            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtroLista === "Entradas" ? "text-white bg-[#2F9F6F] font-medium" : "text-[#A89FC9]"}`}
+            onClick={() => mudarTipo("entradas")}
+            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "entradas" ? "text-white bg-[#2F9F6F] font-medium" : "text-[#A89FC9]"}`}
           >
             Entradas
           </button>
           <button
-            onClick={() => setFiltroLista("Saídas")}
-            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtroLista === "Saídas" ? "text-white bg-[#D16B6B] font-medium" : "text-[#A89FC9]"}`}
+            onClick={() => mudarTipo("saidas")}
+            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "saidas" ? "text-white bg-[#D16B6B] font-medium" : "text-[#A89FC9]"}`}
           >
             Saídas
           </button>
@@ -175,31 +190,29 @@ export default function Transacoes() {
           <p className="text-[0.7rem] text-[#9B93A8] mb-1">Ordenar por</p>
           <div className="flex gap-2">
             <button
-              onClick={() => setFiltroData("Data da transação")}
-              className={`flex items-center rounded-full gap-1 px-2 py-1 shadow transition-colors ${filtroData === "Data da transação" ? "bg-[#8B7BC7]" : "bg-white"}`}
+              onClick={() => mudarOrdem("data")}
+              className={`flex items-center rounded-full gap-1 px-2 py-1 shadow transition-colors ${filtros.ordem === "data" ? "bg-[#8B7BC7]" : "bg-white"}`}
             >
               <Calendar
-                color={
-                  filtroData === "Data da transação" ? "#FFFFFF" : "#9B93A8"
-                }
+                color={filtros.ordem === "data" ? "#FFFFFF" : "#9B93A8"}
                 size={12}
               />
               <span
-                className={`text-[0.7rem] ${filtroData === "Data da transação" ? "text-white" : "text-[#8B8494]"}`}
+                className={`text-[0.7rem] ${filtros.ordem === "data" ? "text-white" : "text-[#8B8494]"}`}
               >
                 Data da transação
               </span>
             </button>
             <button
-              onClick={() => setFiltroData("Criação")}
-              className={`flex items-center rounded-full gap-1 px-2 py-1 shadow transitions-colors ${filtroData === "Criação" ? "bg-[#8B7BC7]" : "bg-white"}`}
+              onClick={() => mudarOrdem("criacao")}
+              className={`flex items-center rounded-full gap-1 px-2 py-1 shadow transitions-colors ${filtros.ordem === "criacao" ? "bg-[#8B7BC7]" : "bg-white"}`}
             >
               <Clock
-                color={filtroData === "Criação" ? "#FFFFFF" : "#9B93A8"}
+                color={filtros.ordem === "criacao" ? "#FFFFFF" : "#9B93A8"}
                 size={12}
               />
               <span
-                className={`text-[0.7rem] ${filtroData === "Criação" ? "text-white" : "text-[#8B8494]"}`}
+                className={`text-[0.7rem] ${filtros.ordem === "criacao" ? "text-white" : "text-[#8B8494]"}`}
               >
                 Criação
               </span>
