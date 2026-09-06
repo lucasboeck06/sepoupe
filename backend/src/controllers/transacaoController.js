@@ -35,7 +35,9 @@ export async function criar(request, reply) {
 
 export async function listar(request, reply) {
   try {
-    const lista = await listarTransacoes();
+    const { tipo, ordem } = request.query;
+
+    const lista = await listarTransacoes(tipo, ordem);
 
     return reply.status(200).send(lista);
   } catch (err) {

@@ -26,7 +26,7 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(id, tipo) {
+  async listar(id, tipo, ordem) {
     if (id) {
       const { rows } = await pool.query(
         `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
@@ -39,6 +39,18 @@ export const transacaoRepository = {
 
       return rows[0];
     }
+
+    const colunaOrdem = ordem === "criacao" ? "t.criado_em" : "t.data";
+
+    const condicoes = [];
+    const valores = [];
+
+    if (tipo) {
+      valores.push(tipo);
+      condicoes.push(`t.tipo = $${valores.length}`);
+    }
+
+    const where = condicoes.length ? `WHERE ${condicoes.join(" AND ")}` : "";
 
     const { rows } = await pool.query(
       `SELECT
@@ -53,7 +65,10 @@ export const transacaoRepository = {
         c.cor_secundaria
       FROM public.transacoes t
       JOIN public.categorias c
-        ON t.categoria_id = c.id`,
+        ON t.categoria_id = c.id
+      ${where}
+      ORDER BY ${colunaOrdem} DESC`,
+      valores,
     );
 
     return rows;
