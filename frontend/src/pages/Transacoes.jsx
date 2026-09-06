@@ -63,7 +63,7 @@ export default function Transacoes() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
     buscarTransacoes();
-  }, []);
+  }, [filtros]);
 
   function formatarData(dataISO) {
     return new Date(dataISO).toLocaleDateString("pt-BR", {
@@ -174,14 +174,14 @@ export default function Transacoes() {
             Todas
           </button>
           <button
-            onClick={() => mudarTipo("entradas")}
-            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "entradas" ? "text-white bg-[#2F9F6F] font-medium" : "text-[#A89FC9]"}`}
+            onClick={() => mudarTipo("entrada")}
+            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "entrada" ? "text-white bg-[#2F9F6F] font-medium" : "text-[#A89FC9]"}`}
           >
             Entradas
           </button>
           <button
-            onClick={() => mudarTipo("saidas")}
-            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "saidas" ? "text-white bg-[#D16B6B] font-medium" : "text-[#A89FC9]"}`}
+            onClick={() => mudarTipo("saida")}
+            className={`text-[0.8rem] rounded-full p-2 transition-colors ${filtros.tipo === "saida" ? "text-white bg-[#D16B6B] font-medium" : "text-[#A89FC9]"}`}
           >
             Saídas
           </button>
