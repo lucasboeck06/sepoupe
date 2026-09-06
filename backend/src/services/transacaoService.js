@@ -44,8 +44,8 @@ export async function criarTransacao(
   return transacaoCriada;
 }
 
-export async function listarTransacoes(tipo) {
-  return transacaoRepository.listar();
+export async function listarTransacoes(tipo, ordem) {
+  return transacaoRepository.listar(undefined, tipo, ordem);
 }
 
 export async function deletarTransacao(id) {
