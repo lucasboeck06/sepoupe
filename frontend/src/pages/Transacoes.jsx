@@ -9,6 +9,7 @@ import {
   Calendar,
   Clock,
   Trash2,
+  ArrowDownUp,
 } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
 
@@ -24,12 +25,14 @@ export default function Transacoes() {
   const [filtros, setFiltros] = useState({
     tipo: "todas",
     ordem: "data",
+    sequencia: true,
   });
 
   async function buscarTransacoes() {
     const params = new URLSearchParams({
       tipo: filtros.tipo === "todas" ? "" : filtros.tipo,
       ordem: filtros.ordem,
+      sequencia: filtros.sequencia,
     });
 
     const resposta = await fetch(
@@ -69,6 +72,7 @@ export default function Transacoes() {
     return new Date(dataISO).toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "short",
+      timeZone: "UTC",
     });
   }
 
@@ -115,6 +119,10 @@ export default function Transacoes() {
 
   function mudarOrdem(novaOrdem) {
     setFiltros((atual) => ({ ...atual, ordem: novaOrdem }));
+  }
+
+  function mudarSequencia(novaSequencia) {
+    setFiltros((atual) => ({ ...atual, sequencia: novaSequencia }));
   }
 
   return (
@@ -215,6 +223,18 @@ export default function Transacoes() {
                 className={`text-[0.7rem] ${filtros.ordem === "criacao" ? "text-white" : "text-[#8B8494]"}`}
               >
                 Criação
+              </span>
+            </button>
+
+            <button
+              onClick={() => mudarSequencia(!filtros.sequencia)}
+              className={`flex items-center rounded-full gap-1 p-1.5 shadow transitions-colors ${filtros.sequencia ? "bg-white" : "bg-[#8B7BC7]"}`}
+            >
+              <span>
+                <ArrowDownUp
+                  color={filtros.sequencia ? "#9B93A8" : "#FFFFFF"}
+                  size={12}
+                />
               </span>
             </button>
           </div>
