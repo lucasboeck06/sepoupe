@@ -26,7 +26,7 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(id, tipo, ordem) {
+  async listar(id, tipo, ordem, sequencia) {
     if (id) {
       const { rows } = await pool.query(
         `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
@@ -52,6 +52,8 @@ export const transacaoRepository = {
 
     const where = condicoes.length ? `WHERE ${condicoes.join(" AND ")}` : "";
 
+    const seq = sequencia === "true" ? "DESC" : "ASC";
+
     const { rows } = await pool.query(
       `SELECT
         t.id,
@@ -67,7 +69,7 @@ export const transacaoRepository = {
       JOIN public.categorias c
         ON t.categoria_id = c.id
       ${where}
-      ORDER BY ${colunaOrdem} DESC`,
+      ORDER BY ${colunaOrdem} ${seq}`,
       valores,
     );
 
