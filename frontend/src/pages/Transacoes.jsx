@@ -72,6 +72,7 @@ export default function Transacoes() {
     return new Date(dataISO).toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "short",
+      timeZone: "UTC",
     });
   }
 
