@@ -26,7 +26,7 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(id, tipo, ordem, sequencia) {
+  async listar(id, tipo, ordem, sequencia, mes) {
     if (id) {
       const { rows } = await pool.query(
         `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
@@ -48,6 +48,13 @@ export const transacaoRepository = {
     if (tipo) {
       valores.push(tipo);
       condicoes.push(`t.tipo = $${valores.length}`);
+    }
+
+    if (mes) {
+      valores.push(`${mes}-01`);
+      condicoes.push(
+        `t.data >= $${valores.length}::date AND t.data < $${valores.length}::date + INTERVAL '1 month'`,
+      );
     }
 
     const where = condicoes.length ? `WHERE ${condicoes.join(" AND ")}` : "";

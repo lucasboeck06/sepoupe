@@ -1,5 +1,6 @@
 import { transacaoRepository } from "../database/transacoesRepository.js";
 import { categoriaRepository } from "../database/categoriaRepository.js";
+import { dashboardRepository } from "../database/dashboardRepository.js";
 import { registraMovimentacao, reverterMovimentacao } from "./contaService.js";
 
 export async function criarTransacao(
@@ -44,8 +45,24 @@ export async function criarTransacao(
   return transacaoCriada;
 }
 
-export async function listarTransacoes(tipo, ordem, sequencia) {
-  return transacaoRepository.listar(undefined, tipo, ordem, sequencia);
+export async function listarTransacoes(tipo, ordem, sequencia, mes) {
+  if (!mes) {
+    throw new Error("Mês atual precisa ser enviado!");
+  }
+
+  const mesCompleto = `${mes}-01`;
+
+  const transacoes = await transacaoRepository.listar(
+    undefined,
+    tipo,
+    ordem,
+    sequencia,
+    mes,
+  );
+
+  const resumo = await dashboardRepository.resumo(mesCompleto);
+
+  return { transacoes, resumo };
 }
 
 export async function deletarTransacao(id) {

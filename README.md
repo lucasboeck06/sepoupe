@@ -185,3 +185,4 @@ Só se o v2 não resolver. A branch `feature/open-finance` está te esperando.
 - Guardar rascunho de formulário entre telas
 - Corrigir ícone do date picker no mobile
 - PWA: manifest + "Adicionar à tela inicial" com logo LVBK
+- Limitar seleção de data até o dia atual, para tudo! (Criar transacao, Ver transacoes e etc)
