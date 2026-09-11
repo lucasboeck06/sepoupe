@@ -13,5 +13,7 @@ export async function resumo(mes) {
 
   const top = await dashboardRepository.top(mesCompleto);
 
-  return { resumo, contas, top };
+  const diario = await dashboardRepository.diario(mesCompleto);
+
+  return { resumo, contas, top, diario };
 }
