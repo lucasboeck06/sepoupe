@@ -54,4 +54,21 @@ export const dashboardRepository = {
 
     return rows;
   },
+
+  async diario(mes) {
+    const { rows } = await pool.query(
+      `
+      SELECT
+        EXTRACT(DAY FROM data) AS dia,
+        SUM(valor)::float AS total
+      FROM public.transacoes
+      WHERE tipo = 'saida' AND data >= $1::date AND data < $1::date + INTERVAL '1 month'
+      GROUP BY EXTRACT(DAY FROM data)
+      ORDER BY dia
+      `,
+      [mes],
+    );
+
+    return rows;
+  },
 };

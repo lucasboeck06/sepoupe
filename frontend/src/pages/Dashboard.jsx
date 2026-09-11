@@ -264,7 +264,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <GraficoGastosScroll />
+        <GraficoGastosScroll dados={dados.diario} />
       </div>
 
       <NavBar />

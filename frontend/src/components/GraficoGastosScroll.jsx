@@ -1,30 +1,11 @@
 import { useState } from "react";
 
-export default function GraficoGastosScroll() {
+export default function GraficoGastosScroll({ dados = [] }) {
   const [diaSelecionado, setDiaSelecionado] = useState(null);
-
-  // Simulei um cenário onde 310 é o seu maior gasto para provar que o eixo Y se adapta
-  const dadosMensais = [
-    { dia: 1, valor: 80 },
-    { dia: 2, valor: 230 },
-    { dia: 3, valor: 40 },
-    { dia: 4, valor: 310 },
-    { dia: 5, valor: 20 },
-    { dia: 6, valor: 250 },
-    { dia: 7, valor: 90 },
-    { dia: 8, valor: 150 },
-    { dia: 9, valor: 280 },
-    { dia: 10, valor: 60 },
-    { dia: 11, valor: 140 },
-    { dia: 12, valor: 10 },
-    { dia: 13, valor: 190 },
-    { dia: 14, valor: 300 },
-    { dia: 15, valor: 70 },
-  ];
 
   // 1. A INTELIGÊNCIA MATEMÁTICA:
   // Descobre qual foi o maior gasto real do mês
-  const maiorGasto = Math.max(...dadosMensais.map((item) => item.valor));
+  const maiorGasto = Math.max(...dados.map((item) => item.total));
 
   // Arredonda para a próxima centena para o gráfico ter um "respiro" no topo
   // Ex: Se o maior gasto for 310, o teto vira 400. Se for 0, previne divisão por zero.
@@ -40,9 +21,15 @@ export default function GraficoGastosScroll() {
   ];
 
   // Busca os dados do dia que o usuário clicou para mostrar no card inferior
-  const itemSelecionado = dadosMensais.find(
-    (item) => item.dia === diaSelecionado,
-  );
+  const itemSelecionado = dados.find((item) => item.dia === diaSelecionado);
+
+  const totalGasto = dados.reduce((soma, item) => soma + item.total, 0);
+  const mediaDiaria = dados.length > 0 ? totalGasto / dados.length : 0;
+
+  const nomeMes = new Date().toLocaleDateString("pt-BR", {
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <div className="w-full bg-white rounded-3xl p-6 shadow-sm">
@@ -51,8 +38,8 @@ export default function GraficoGastosScroll() {
         <h2 className="text-xl font-bold text-[#1a1a3b] leading-tight mb-1">
           Gastos Diários
         </h2>
-        <span className="text-[13px] font-medium text-[#aeaeb5]">
-          Julho 2026 • Média R$ 167/dia
+        <span className="text-[13px] font-medium text-[#aeaeb5] capitalize">
+          {nomeMes} • Média R$ {mediaDiaria.toFixed(2)}/dia
         </span>
       </div>
 
@@ -86,9 +73,9 @@ export default function GraficoGastosScroll() {
             [&::-webkit-scrollbar-track]:bg-[#F0F0F7] [&::-webkit-scrollbar-track]:rounded-full 
             [&::-webkit-scrollbar-thumb]:bg-[#D1D1E0] [&::-webkit-scrollbar-thumb]:rounded-full"
           >
-            {dadosMensais.map((item) => {
+            {dados.map((item) => {
               // A matemática agora é à prova de balas
-              const alturaPorcentagem = (item.valor / valorMaximo) * 100;
+              const alturaPorcentagem = (item.total / valorMaximo) * 100;
               const isSelected = diaSelecionado === item.dia;
 
               return (
@@ -103,7 +90,7 @@ export default function GraficoGastosScroll() {
                   <div
                     className={`absolute top-0 w-full h-[150px] rounded-md transition-colors duration-200 ${
                       isSelected
-                        ? "bg-[#e1e1f7]/60"
+                        ? "bg-[#F0F0F7]/50"
                         : "group-hover:bg-[#F0F0F7]/50"
                     }`}
                   />
@@ -136,7 +123,7 @@ export default function GraficoGastosScroll() {
             </span>
             <span className="w-1.5 h-1.5 bg-[#D1D1E0] rounded-full"></span>
             <span className="text-[14px] font-medium text-[#1a1a3b]">
-              Gasto: R$ {itemSelecionado.valor}
+              Gasto: R$ {itemSelecionado.total}
             </span>
           </div>
         ) : (
