@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar.jsx";
 import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
 import { DynamicIcon } from "lucide-react/dynamic";
-import { Bell, CreditCard } from "lucide-react";
+import { CreditCard } from "lucide-react";
+import SelectMes from "../components/SelectMes.jsx";
 import CircularProgress from "../components/CircularProgress.jsx";
 
 export default function Dashboard() {
@@ -11,9 +12,9 @@ export default function Dashboard() {
   const saudacao = () => {
     // Função para pegar a hora atual
     const hora = new Date().getHours();
-    if (hora < 12) return "Bom dia,";
-    if (hora < 18) return "Boa tarde,";
-    return "Boa noite,";
+    if (hora < 12) return "Bom dia, ";
+    if (hora < 18) return "Boa tarde, ";
+    return "Boa noite, ";
   };
 
   const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
@@ -21,10 +22,14 @@ export default function Dashboard() {
 
   const mesAtual = new Date().toISOString().slice(0, 7);
 
-  async function buscarDados(mesAtual) {
+  const [filtro, setFiltro] = useState({
+    mes: mesAtual,
+  });
+
+  async function buscarDados() {
     const resposta = await fetch(
       `
-        ${import.meta.env.VITE_API_BASE_URL}/dashboard?mes=${mesAtual}`,
+        ${import.meta.env.VITE_API_BASE_URL}/dashboard?mes=${filtro.mes}`,
       {
         method: "GET",
         headers: {
@@ -46,8 +51,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
-    buscarDados(mesAtual);
-  }, []);
+    buscarDados();
+  }, [filtro]);
+
+  function onMudarMes(novoMes) {
+    setFiltro((atual) => ({ ...atual, mes: novoMes }));
+  }
 
   // Se dados.resumo? form undefined ou null, para aqui e retorna undefined
   // Sem tentar .saidas que explode TypeError;
@@ -81,22 +90,22 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col justify-between bg-[#F0F0F7]">
       <div className="flex flex-col p-5 mb-18 gap-4">
-        <div className="flex flex-row justify-between items-center">
+        <div className="w-full flex flex-col justify-between gap-2">
           <div>
             <h1>
               <span className="text-sm text-[#aeaeb5] font-light">
                 {saudacao()}
               </span>
-              <br />
               <span className="text-xl text-[#1a1a3b] font-semibold">
                 {usuarioPrimeiroNome} 👋
               </span>
             </h1>
           </div>
-
-          <div className="bg-[#e1e1f7] p-3 rounded-full">
-            <Bell className="w-4 h-4 text-[#7a7aff]" />
-          </div>
+          <SelectMes
+            mes={filtro.mes}
+            mesAtual={mesAtual}
+            onMudarMes={onMudarMes}
+          />
         </div>
 
         <div className="bg-white p-4 rounded-3xl shadow-sm flex flex-row items-center gap-4">
