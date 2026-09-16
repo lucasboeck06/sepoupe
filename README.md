@@ -130,6 +130,29 @@ npm run dev
 
 O frontend deve abrir em `http://localhost:5173`. Crie um usuário direto no banco (a rota de cadastro exige login, veja o roadmap) ou ajuste conforme sua necessidade.
 
+## Screenshots
+
+### Dashboard
+
+<p align="center">
+  <img src="./docs/dashboard-1.png" width="200" />
+  <img src="./docs/dashboard-2.png" width="200" />
+  <img src="./docs/dashboard-3.png" width="200" />
+</p>
+
+### Nova transação
+
+<p align="center">
+  <img src="./docs/nova-transacao.png" width="220" />
+</p>
+
+### Transações e login
+
+<p align="center">
+  <img src="./docs/transacoes.png" width="200" />
+  <img src="./docs/login.png" width="200" />
+</p>
+
 ## Variáveis de ambiente
 
 ### Backend (`.env`)
