@@ -73,7 +73,7 @@ export default function SelectMes({ mes, mesAtual, onMudarMes }) {
   const noLimiteInferior = anoSelecionado <= anoAtual && mesSelecionado === 1;
 
   return (
-    <div className="relative flex items-center justify-between bg-white rounded-full p-2 mb-3 shadow">
+    <div className="relative flex items-center justify-between bg-white rounded-full p-2 shadow">
       <button
         onClick={() => mudarMes(-1)}
         disabled={noLimiteInferior}
