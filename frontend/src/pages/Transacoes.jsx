@@ -153,7 +153,7 @@ export default function Transacoes() {
           mesAtual={mesAtual}
           onMudarMes={onMudarMes}
         />
-        <div className="grid grid-cols-2 gap-2 mb-3">
+        <div className="grid grid-cols-2 gap-2 mb-3 mt-3">
           <div className="bg-white rounded-2xl p-3 shadow">
             <div className="flex items-center gap-1">
               <CircleArrowDown color="#2F9F6F" size={14} />
