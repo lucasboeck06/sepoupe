@@ -74,20 +74,19 @@ Essas decisões, e o que está planejado para versões futuras (multi-usuário i
 **1. Clone o repositório**
 
 ```bash
-git clone https://github.com/lucasboeck06/financeiro-pessoal.git
-cd financeiro-pessoal
+git clone https://github.com/lucasboeck06/sepoupe.git
+cd sepoupe
 ```
 
 **2. Instale as dependências**
 
 ```bash
 npm install
-cd backend && npm install
-cd ../frontend && npm install
+cd frontend && npm install
 cd ..
 ```
 
-**3. Crie o banco de dados**
+**3.1 Crie o banco de dados**
 
 ```bash
 createdb sepoupe
@@ -96,9 +95,49 @@ psql -d sepoupe -f schema.sql
 
 Isso cria todas as tabelas necessárias. O banco começa vazio — não há dados de exemplo por padrão.
 
+**3.2 Crie o usuario**
+
+A rota de criação de usuário exige autenticação, então o primeiro usuário
+precisa ser inserido diretamente no banco.
+
+- Gere uma senha criptografada:
+
+\`\`\`bash
+cd backend
+node -e "console.log(require('bcrypt').hashSync('sua_senha_aqui', 10))"
+\`\`\`
+
+Isso imprime um texto longo no terminal, algo como
+`$2b$10$abc123...`. Copie esse texto inteiro.
+
+- Abra o banco de dados que você criou no passo anterior:
+
+\`\`\`bash
+psql sepoupe
+\`\`\`
+
+Isso abre um terminal do próprio banco, com o prompt mudando para
+algo como `sepoupe=#`.
+
+- Cole o comando abaixo, substituindo os valores entre aspas
+  pelos seus, e o hash pelo que você copiou no passo 1:
+
+\`\`\`sql
+INSERT INTO usuarios (nome, email, senha)
+VALUES ('Seu Nome', 'seu@email.com', 'COLE_O_HASH_AQUI');
+\`\`\`
+
+- Saia do banco:
+
+\`\`\`sql
+\q
+\`\`\`
+
+Pronto — agora você pode logar no app com o e-mail e a senha que definiu.
+
 **4. Configure as variáveis de ambiente**
 
-Copie o arquivo de exemplo do backend e preencha com seus dados:
+Copie o arquivo de exemplo do backend e preencha com seus dados, é de suma importância que os dados do banco estejam corretos aqui, se não, não vai rodar:
 
 ```bash
 cp .env.example .env
@@ -115,20 +154,18 @@ Veja a seção [Variáveis de ambiente](#variáveis-de-ambiente) para o que cada
 **5. Rode o backend**
 
 ```bash
-cd backend
-npm run dev
+node backend/server.js
 ```
 
 **6. Em outro terminal, rode o frontend**
 
 ```bash
-cd frontend
-npm run dev
+cd frontend && npm run dev
 ```
 
 **7. Acesse**
 
-O frontend deve abrir em `http://localhost:5173`. Crie um usuário direto no banco (a rota de cadastro exige login, veja o roadmap) ou ajuste conforme sua necessidade.
+O frontend deve abrir em `http://localhost:5173`. Faça login com o e-mail e a senha que você definiu no passo 3.2.
 
 ## Screenshots
 
