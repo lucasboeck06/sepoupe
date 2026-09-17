@@ -102,19 +102,19 @@ precisa ser inserido diretamente no banco.
 
 - Gere uma senha criptografada:
 
-\`\`\`bash
+```bash
 cd backend
 node -e "console.log(require('bcrypt').hashSync('sua_senha_aqui', 10))"
-\`\`\`
+```
 
 Isso imprime um texto longo no terminal, algo como
 `$2b$10$abc123...`. Copie esse texto inteiro.
 
 - Abra o banco de dados que você criou no passo anterior:
 
-\`\`\`bash
+```bash
 psql sepoupe
-\`\`\`
+```
 
 Isso abre um terminal do próprio banco, com o prompt mudando para
 algo como `sepoupe=#`.
@@ -122,16 +122,16 @@ algo como `sepoupe=#`.
 - Cole o comando abaixo, substituindo os valores entre aspas
   pelos seus, e o hash pelo que você copiou no passo anterior:
 
-\`\`\`sql
+```sql
 INSERT INTO usuarios (nome, email, senha)
 VALUES ('Seu Nome', 'seu-email@exemplo.com', 'COLE_O_HASH_AQUI');
-\`\`\`
+```
 
 - Saia do banco:
 
-\`\`\`sql
+```sql
 \q
-\`\`\`
+```
 
 Pronto — agora você pode logar no app com o e-mail e a senha que definiu.
 
