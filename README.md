@@ -95,7 +95,7 @@ psql -d sepoupe -f schema.sql
 
 Isso cria todas as tabelas necessárias. O banco começa vazio — não há dados de exemplo por padrão.
 
-**3.2 Crie o usuario**
+**3.2 Crie o usuário**
 
 A rota de criação de usuário exige autenticação, então o primeiro usuário
 precisa ser inserido diretamente no banco.
@@ -120,11 +120,11 @@ Isso abre um terminal do próprio banco, com o prompt mudando para
 algo como `sepoupe=#`.
 
 - Cole o comando abaixo, substituindo os valores entre aspas
-  pelos seus, e o hash pelo que você copiou no passo 1:
+  pelos seus, e o hash pelo que você copiou no passo anterior:
 
 \`\`\`sql
 INSERT INTO usuarios (nome, email, senha)
-VALUES ('Seu Nome', 'seu@email.com', 'COLE_O_HASH_AQUI');
+VALUES ('Seu Nome', 'seu-email@exemplo.com', 'COLE_O_HASH_AQUI');
 \`\`\`
 
 - Saia do banco:
