@@ -40,7 +40,7 @@ export async function criarTransacao(
     data,
   );
 
-  await registraMovimentacao(operacaoTipo, categoriaNome, valor);
+  await registraMovimentacao(operacaoTipo, categoriaNome, valor, categoriaTipo);
 
   return transacaoCriada;
 }
