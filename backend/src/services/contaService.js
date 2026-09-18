@@ -11,7 +11,14 @@ const acerto = {
   "Fatura Caixa": "cheque",
 };
 
-export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
+const metodosContaCorrente = ["PIX", "Débito", "Dinheiro"];
+
+export async function registraMovimentacao(
+  operacaoTipo,
+  categoriaNome,
+  valor,
+  categoriaTipo,
+) {
   if (conta[operacaoTipo])
     await contasRepository.adicionarSaldo(conta[operacaoTipo], valor);
 
@@ -20,6 +27,14 @@ export async function registraMovimentacao(operacaoTipo, categoriaNome, valor) {
 
   if (categoriaNome === "VA")
     await contasRepository.atualizarLimite("va", valor);
+
+  if (metodosContaCorrente.includes(operacaoTipo)) {
+    if (categoriaTipo === "entrada")
+      await contasRepository.adicionarSaldo("conta_corrente", valor);
+
+    if (categoriaTipo === "saida")
+      await contasRepository.reduzirSaldo("conta_corrente", valor);
+  }
 }
 
 export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
