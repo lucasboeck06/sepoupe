@@ -37,7 +37,12 @@ export async function registraMovimentacao(
   }
 }
 
-export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
+export async function reverterMovimentacao(
+  operacaoTipo,
+  categoriaNome,
+  valor,
+  categoriaTipo,
+) {
   if (conta[operacaoTipo])
     await contasRepository.reduzirSaldo(conta[operacaoTipo], valor);
 
@@ -47,4 +52,12 @@ export async function reverterMovimentacao(operacaoTipo, categoriaNome, valor) {
   if (categoriaNome === "VA")
     // Ao invés de uma nova func para mandar para o repo, deixamos o valor negativo, isso basta!
     await contasRepository.atualizarLimite("va", -valor);
+
+  if (metodosContaCorrente.includes(operacaoTipo)) {
+    if (categoriaTipo === "entrada")
+      await contasRepository.reduzirSaldo("conta_corrente", valor);
+
+    if (categoriaTipo === "saida")
+      await contasRepository.adicionarSaldo("conta_corrente", valor);
+  }
 }
