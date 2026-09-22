@@ -1,4 +1,5 @@
 import { contasRepository } from "../database/contasRepository.js";
+import { pool } from "../database/db.js";
 
 const conta = {
   Crédito: "credito",
@@ -70,7 +71,7 @@ export async function registrarInvestimento(valorInvestido) {
   }
 
   // Abre uma conexão com o banco (tem um limite, por isso ela finally, acaba)
-  const client = await pool.connect();
+  const client = pool.connect();
 
   // Por que usar try/catch? O que é isso?
   // BEGIN/COMMIT/ROLLBACK serve para que, ou tudo seja feito ou nada! Garantindo a atomicidade dos dados
