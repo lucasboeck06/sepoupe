@@ -1,16 +1,17 @@
 import { pool } from "./db.js";
 
 export const contasRepository = {
-  async adicionarSaldo(tipo, saldo) {
+  // Condição no parametro, se client for undefined, ele usa pool!
+  async adicionarSaldo(tipo, saldo, client = pool) {
     // Como não retorna nada, mete o await e a func logo!
-    await pool.query(
+    await client.query(
       `UPDATE public.contas SET saldo = saldo + $1 WHERE tipo = $2`,
       [saldo, tipo],
     );
   },
 
-  async reduzirSaldo(tipo, saldo) {
-    await pool.query(
+  async reduzirSaldo(tipo, saldo, client = pool) {
+    await client.query(
       `UPDATE public.contas SET saldo = saldo - $1 WHERE tipo = $2`,
       [saldo, tipo],
     );
