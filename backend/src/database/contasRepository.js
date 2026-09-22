@@ -1,18 +1,18 @@
 import { pool } from "./db.js";
 
 export const contasRepository = {
-  async adicionarSaldo(tipo, saldoGasto) {
+  async adicionarSaldo(tipo, saldo) {
     // Como não retorna nada, mete o await e a func logo!
     await pool.query(
       `UPDATE public.contas SET saldo = saldo + $1 WHERE tipo = $2`,
-      [saldoGasto, tipo],
+      [saldo, tipo],
     );
   },
 
-  async reduzirSaldo(tipo, saldoGanho) {
+  async reduzirSaldo(tipo, saldo) {
     await pool.query(
       `UPDATE public.contas SET saldo = saldo - $1 WHERE tipo = $2`,
-      [saldoGanho, tipo],
+      [saldo, tipo],
     );
   },
 
