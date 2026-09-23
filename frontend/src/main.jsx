@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import Capital from "./pages/Capital";
 import Dashboard from "./pages/Dashboard";
 import Transacoes from "./pages/Transacoes";
 import NovaTransacao from "./pages/NovaTransacao";
@@ -14,6 +15,15 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+
+        <Route
+          path="/capital"
+          element={
+            <ProtectedRoute>
+              <Capital />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/dashboard"
