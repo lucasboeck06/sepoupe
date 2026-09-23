@@ -29,7 +29,7 @@ export const transacaoRepository = {
   async listar(id, tipo, ordem, sequencia, mes) {
     if (id) {
       const { rows } = await pool.query(
-        `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor
+        `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor, t.tipo
          FROM public.transacoes t
          JOIN public.categorias c
           ON t.categoria_id = c.id
