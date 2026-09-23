@@ -11,7 +11,6 @@ export const contasRepository = {
   },
 
   async reduzirSaldo(tipo, saldo, client = pool) {
-    backend / src / database / contasRepository.js;
     await client.query(
       `UPDATE public.contas SET saldo = saldo - $1 WHERE tipo = $2`,
       [saldo, tipo],
