@@ -40,7 +40,7 @@ export async function criarTransacao(
     data,
   );
 
-  await registraMovimentacao(operacaoTipo, categoriaNome, valor);
+  await registraMovimentacao(operacaoTipo, categoriaNome, valor, categoriaTipo);
 
   return transacaoCriada;
 }
@@ -70,7 +70,7 @@ export async function deletarTransacao(id) {
     throw new Error("É necessário o ID para identificar a transação!");
   }
 
-  const transacao = await transacaoRepository.listar(id, undefined);
+  const transacao = await transacaoRepository.listar(id);
 
   if (!transacao) {
     throw new Error("Não existe transação com esse ID!");
@@ -80,6 +80,7 @@ export async function deletarTransacao(id) {
     transacao.operacao_tipo,
     transacao.categoria_nome,
     transacao.valor,
+    transacao.tipo,
   );
 
   await transacaoRepository.deletar(id);
