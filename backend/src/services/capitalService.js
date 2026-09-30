@@ -1,5 +1,5 @@
-import { capitalRepository } from "../database/capitalRepository";
+import { capitalRepository } from "../database/capitalRepository.js";
 
-export async function dados() {
+export async function capital() {
   return capitalRepository.dados();
 }
