@@ -8,7 +8,7 @@ import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
-import { dashboard } from "./src/routes/dashboard.js";
+import { dashboardRoutes } from "./src/routes/dashboard.js";
 import { contaRoutes } from "./src/routes/conta.js";
 
 const fastify = Fastify({
@@ -57,7 +57,7 @@ fastify.register(categoriasRoutes);
 fastify.register(usuariosRoutes);
 fastify.register(transacoesRoutes);
 fastify.register(authRoutes);
-fastify.register(dashboard);
+fastify.register(dashboardRoutes);
 fastify.register(contaRoutes);
 
 // fastify.listen({ port: 3000 }, function (err, address) {

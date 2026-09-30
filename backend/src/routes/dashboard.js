@@ -1,6 +1,6 @@
 import { listar } from "../controllers/dashboardController.js";
 
-export async function dashboard(fastify) {
+export async function dashboardRoutes(fastify) {
   fastify.register(async function rotasProtegidas(instanciaIsolada) {
     instanciaIsolada.addHook("preHandler", instanciaIsolada.authenticate);
 
