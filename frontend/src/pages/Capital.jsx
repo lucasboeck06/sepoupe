@@ -1,8 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { ChevronLeft, Wallet } from "lucide-react";
 
 export default function Capital() {
   const navigate = useNavigate();
+
+  const [dados, setDados] = useState([]);
+
+  async function buscarDados() {
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/capital`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario-logado");
+      window.location.href = "/";
+      return;
+    }
+
+    const dados = await resposta.json();
+    setDados(dados);
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    buscarDados();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -22,7 +49,9 @@ export default function Capital() {
           <h2 className="text-[#9B93A8] text-[0.8rem] mb-1">
             Patrimônio total
           </h2>
-          <p className="text-[#2C2438] text-[1.6rem] font-bold">R$ 6.000,00</p>
+          <p className="text-[#2C2438] text-[1.6rem] font-bold">
+            R$ {Number(dados.patrimonio).toFixed(2)}
+          </p>
         </div>
       </div>
       <div className="flex flex-col flex-1 bg-[#FFFFFF] p-5 gap-4">
