@@ -10,7 +10,7 @@ export const dashboardRepository = {
         SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END) AS saidas,
         SUM(CASE WHEN tipo = 'acerto' THEN valor ELSE 0 END) AS acertos FROM public.transacoes
         WHERE data >= $1::date
-            ANd data < $1:: date + INTERVAL '1 month'`,
+            AND data < $1:: date + INTERVAL '1 month'`,
       [mes],
     );
 
