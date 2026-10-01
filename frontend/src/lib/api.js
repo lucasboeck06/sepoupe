@@ -20,7 +20,7 @@ export async function api(rota, metodo, corpo) {
     const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
 
     alert(`Erro: ${mensagemDoBack}`);
-    return;
+    throw new Error(mensagemDoBack);
   }
 
   const texto = await resposta.text();
