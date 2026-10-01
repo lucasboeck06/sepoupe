@@ -15,22 +15,14 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const resposta = await api("/auth/login", "POST", { email, senha });
+      const dados = await api("/auth/login", "POST", { email, senha });
 
-      if (resposta.ok) {
-        const dados = await resposta.json();
+      localStorage.setItem("usuario-logado", "true");
+      localStorage.setItem("nome-usuario", dados.nome);
 
-        localStorage.setItem("usuario-logado", "true");
-        localStorage.setItem("nome-usuario", dados.nome);
-
-        navigate("/dashboard");
-      } else {
-        const erro = await resposta.json();
-        alert(erro.mensagem || "Erro ao fazer login, tente novamente!");
-      }
+      navigate("/dashboard");
     } catch (err) {
       console.error("Erro na requisição: ", err);
-      alert("Erro ao conectar com o servidor");
     }
   }
 

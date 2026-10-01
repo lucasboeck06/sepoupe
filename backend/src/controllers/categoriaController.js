@@ -13,7 +13,7 @@ export async function criar(request, reply) {
 
     return reply.status(201).send(novaCategoria);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
 
@@ -22,7 +22,7 @@ export async function listar(request, reply) {
     const categorias = await listarCategorias();
     reply.status(200).send(categorias);
   } catch (err) {
-    return reply.status(500).send({ err: err.message });
+    return reply.status(500).send({ erro: err.message });
   }
 }
 
@@ -34,7 +34,7 @@ export async function atualizar(request, reply) {
 
     return reply.status(200).send(categoriaAtualizada);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
 
@@ -46,6 +46,6 @@ export async function deletar(request, reply) {
 
     return reply.status(200).send(categoriaDeletada);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
