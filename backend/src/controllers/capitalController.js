@@ -5,6 +5,6 @@ export async function dados(request, reply) {
     const dados = await getDados();
     return reply.status(200).send(dados);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }

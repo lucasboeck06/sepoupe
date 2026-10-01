@@ -7,6 +7,6 @@ export async function listar(request, reply) {
     const dados = await resumo(mes);
     return reply.status(200).send(dados);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
