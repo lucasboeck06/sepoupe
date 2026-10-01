@@ -8,16 +8,17 @@ export async function api(rota, metodo, corpo) {
     }),
   });
 
-  if (resposta.status === 401) {
+  // No login, 401 é credencial errada, não sessão expirada
+  if (resposta.status === 401 && rota !== "/auth/login") {
     localStorage.removeItem("usuario-logado");
     window.location.href = "/";
-    return;
+    throw new Error("Sessão expirada!");
   }
 
   if (!resposta.ok) {
     const erroDados = await resposta.json().catch(() => ({}));
 
-    const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+    const mensagemDoBack = erroDados.erro || "Erro desconhecido no servidor!";
 
     alert(`Erro: ${mensagemDoBack}`);
     throw new Error(mensagemDoBack);
