@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, Wallet, X } from "lucide-react";
+import { api } from "../lib/api";
 
 export default function Capital() {
   const navigate = useNavigate();
@@ -25,22 +26,9 @@ export default function Capital() {
   });
 
   async function buscarDados() {
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/capital`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const resposta = await api("/capital", "GET");
 
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado");
-      window.location.href = "/";
-      return;
-    }
-
-    const dados = await resposta.json();
-    setDados(dados);
+    setDados(resposta);
   }
 
   useEffect(() => {
@@ -49,34 +37,12 @@ export default function Capital() {
   }, []);
 
   async function resgatar() {
-    if (!centavos) alert("Precisa haver um valor!");
-
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/conta/resgatar`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ valor: centavos / 100 }),
-      },
-    );
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado");
-      window.location.href = "/";
+    if (!centavos) {
+      alert(`O valor não pode ser nulo!`);
       return;
     }
 
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
-
-    alert(`Movimentação registrada`);
+    await api("/conta/resgatar", "POST", { valor: centavos / 100 });
 
     setCentavos(0);
     setCardAberto(false);
@@ -85,34 +51,12 @@ export default function Capital() {
   }
 
   async function investir() {
-    if (!centavos) alert(`Precisa haver um valor`);
-
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/conta/investir`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ valor: centavos / 100 }),
-      },
-    );
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado");
-      window.location.href = "/";
+    if (!centavos) {
+      alert(`O valor não pode ser nulo!`);
       return;
     }
 
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
-
-    alert(`Movimentação registrada`);
+    await api("/conta/investir", "POST", { valor: centavos / 100 });
 
     setCentavos(0);
     setCardAberto(false);
