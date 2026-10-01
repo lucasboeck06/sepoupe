@@ -1,15 +1,23 @@
-import { Home, SlidersHorizontal, BanknoteArrowUp } from "lucide-react";
+import {
+  Home,
+  SlidersHorizontal,
+  BanknoteArrowUp,
+  CircleDollarSign,
+  WalletCards,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const navItems = [
-    { id: "transacoes", Icon: SlidersHorizontal, path: "/transacoes" },
+    { id: "dividas", Icon: WalletCards, path: "/dividas" },
+    { id: "capital", Icon: CircleDollarSign, path: "/capital" },
     { id: "home", Icon: Home, path: "/dashboard" },
+    { id: "transacoes", Icon: SlidersHorizontal, path: "/transacoes" },
     { id: "nova-transacao", Icon: BanknoteArrowUp, path: "/nova-transacao" },
   ];
 
   return (
-    <div className="w-full bottom-0 fixed flex flex-raw justify-between px-12 pt-3 pb-2 bg-[#F0F0F7] shadow-[0_-20px_25px_-5px_rgba(0,0,0,0.06)] rounded-t-4xl z-50">
+    <div className="w-full bottom-0 fixed flex flex-raw justify-between px-8 pt-3 pb-2 bg-[#F0F0F7] shadow-[0_-20px_25px_-5px_rgba(0,0,0,0.06)] rounded-t-4xl z-50">
       <div className="w-full flex flex-row items-center justify-between">
         {navItems.map(({ path, Icon }) => (
           <NavLink
