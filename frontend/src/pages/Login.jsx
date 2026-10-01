@@ -20,7 +20,6 @@ export default function Login() {
           method: "POST",
           headers: {
             "Content-type": "application/json",
-            "ngrok-skip-browser-warning": "true",
           },
           credentials: "include", // Necessário agora que temos token via cookie
           body: JSON.stringify({ email, senha }),
