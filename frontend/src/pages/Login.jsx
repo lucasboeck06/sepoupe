@@ -4,6 +4,7 @@ import { Mail, Lock } from "lucide-react";
 import Input from "../components/Input.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api.js";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,17 +15,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          credentials: "include", // Necessário agora que temos token via cookie
-          body: JSON.stringify({ email, senha }),
-        },
-      );
+      const resposta = await api("/auth/login", "POST", { email, senha });
 
       if (resposta.ok) {
         const dados = await resposta.json();
