@@ -5,6 +5,7 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { CreditCard } from "lucide-react";
 import SelectMes from "../components/SelectMes.jsx";
 import CircularProgress from "../components/CircularProgress.jsx";
+import { api } from "../lib/api.js";
 
 export default function Dashboard() {
   const [dados, setDados] = useState([]);
@@ -27,23 +28,9 @@ export default function Dashboard() {
   });
 
   async function buscarDados() {
-    const resposta = await fetch(
-      `
-        ${import.meta.env.VITE_API_BASE_URL}/dashboard?mes=${filtro.mes}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const resposta = await api(`/dashboard?mes=${filtro.mes}`, "GET");
 
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
-      window.location.href = "/"; // Joga na tela de login à força
-      return; // Para tudo e não deixa tentar ler o json
-    }
-
-    const result = await resposta.json();
-    setDados(result);
+    setDados(resposta);
   }
 
   useEffect(() => {
