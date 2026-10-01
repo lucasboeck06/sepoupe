@@ -48,6 +48,78 @@ export default function Capital() {
     buscarDados();
   }, []);
 
+  async function resgatar() {
+    if (!centavos) alert("Precisa haver um valor!");
+
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/conta/resgatar`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ valor: centavos / 100 }),
+      },
+    );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario-logado");
+      window.location.href = "/";
+      return;
+    }
+
+    if (!resposta.ok) {
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
+      return;
+    }
+
+    alert(`Movimentação registrada`);
+
+    setCentavos(0);
+    setCardAberto(false);
+
+    await buscarDados();
+  }
+
+  async function investir() {
+    if (!centavos) alert(`Precisa haver um valor`);
+
+    const resposta = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/conta/investir`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ valor: centavos / 100 }),
+      },
+    );
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("usuario-logado");
+      window.location.href = "/";
+      return;
+    }
+
+    if (!resposta.ok) {
+      const erroDados = await resposta.json().catch(() => ({}));
+
+      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
+
+      alert(`Erro: ${mensagemDoBack}`);
+      return;
+    }
+
+    alert(`Movimentação registrada`);
+
+    setCentavos(0);
+    setCardAberto(false);
+
+    await buscarDados();
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="p-5">
@@ -167,6 +239,9 @@ export default function Capital() {
           </p>
         </div>
         <button
+          onClick={() =>
+            tipoMovimentacao === "Sacar" ? resgatar() : investir()
+          }
           className={`mt-4 text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full transition-colors duration-300 ${tipoMovimentacao === "Sacar" ? "bg-[#D16B6B]" : "bg-[#309f6f]"}`}
         >
           Confirmar {tipoMovimentacao === "Sacar" ? "saque" : "investimento"}
