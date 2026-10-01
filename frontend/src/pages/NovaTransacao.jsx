@@ -3,6 +3,7 @@ import { ChevronLeft, Search, Plus, X } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useThemeColor } from "../hooks/useThemeColor";
 import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api";
 
 export default function NovaTransacao() {
   useThemeColor("#FFFFFF");
@@ -61,22 +62,9 @@ export default function NovaTransacao() {
   });
 
   async function buscarCategorias() {
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const resposta = await api("/categorias", "GET");
 
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
-      window.location.href = "/"; // Joga na tela de login à força
-      return; // Para tudo e não deixa tentar ler o json
-    }
-
-    const dados = await resposta.json();
-    setCategorias(dados);
+    setCategorias(resposta);
   }
 
   useEffect(() => {
