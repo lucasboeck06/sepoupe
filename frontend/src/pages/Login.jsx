@@ -15,11 +15,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const resposta = await api(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
-        "POST",
-        { email, senha },
-      );
+      const resposta = await api("/auth/login", "POST", { email, senha });
 
       if (resposta.ok) {
         const dados = await resposta.json();
