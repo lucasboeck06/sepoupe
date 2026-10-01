@@ -43,7 +43,6 @@ export default function Transacoes() {
       `${import.meta.env.VITE_API_BASE_URL}/transacoes?${params}`,
       {
         method: "GET",
-        headers: { "ngrok-skip-browser-warning": "true" },
         credentials: "include",
       },
     );
@@ -91,9 +90,6 @@ export default function Transacoes() {
       `${import.meta.env.VITE_API_BASE_URL}/transacoes?id=${transacaoSelecionada.id}`,
       {
         method: "DELETE",
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
         credentials: "include",
       },
     );
