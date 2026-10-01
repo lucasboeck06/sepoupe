@@ -5,7 +5,7 @@ import { ChevronLeft, Wallet } from "lucide-react";
 export default function Capital() {
   const navigate = useNavigate();
 
-  const [dados, setDados] = useState([]);
+  const [dados, setDados] = useState({ patrimonio: 0, conta: 0, poupanca: 0 });
 
   async function buscarDados() {
     const resposta = await fetch(
@@ -50,7 +50,7 @@ export default function Capital() {
             Patrimônio total
           </h2>
           <p className="text-[#2C2438] text-[1.6rem] font-bold">
-            R$ {Number(dados.patrimonio).toFixed(2)}
+            R$ {dados.patrimonio.toFixed(2)}
           </p>
         </div>
       </div>
@@ -69,7 +69,9 @@ export default function Capital() {
               </p>
             </div>
           </div>
-          <p className="text-[1.1rem] font-bold text-[#2C2438]">R$ 3.000</p>
+          <p className="text-[1.1rem] font-bold text-[#2C2438]">
+            R$ {dados.conta.toFixed(2)}
+          </p>
         </div>
         <div className="flex items-center justify-between bg-[#FFFFFF] shadow-sm rounded-2xl p-3">
           <div className="flex gap-3">
@@ -85,7 +87,9 @@ export default function Capital() {
               </p>
             </div>
           </div>
-          <p className="text-[1.1rem] font-bold text-[#2C2438]">R$ 3.000</p>
+          <p className="text-[1.1rem] font-bold text-[#2C2438]">
+            R$ {dados.poupanca.toFixed(2)}
+          </p>
         </div>
       </div>
     </div>
