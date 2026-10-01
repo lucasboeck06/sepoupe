@@ -32,9 +32,6 @@ export default function Dashboard() {
         ${import.meta.env.VITE_API_BASE_URL}/dashboard?mes=${filtro.mes}`,
       {
         method: "GET",
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
         credentials: "include",
       },
     );
