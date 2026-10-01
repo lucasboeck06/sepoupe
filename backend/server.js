@@ -8,8 +8,9 @@ import { transacoesRoutes } from "./src/routes/transacoes.js";
 import { authRoutes } from "./src/routes/auth.js";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
-import { dashboardRoutes } from "./src/routes/dashboardRoutes.js";
+import { dashboardRoutes } from "./src/routes/dashboard.js";
 import { contaRoutes } from "./src/routes/conta.js";
+import { capitalRoutes } from "./src/routes/capital.js";
 
 const fastify = Fastify({
   logger: true,
@@ -59,6 +60,7 @@ fastify.register(transacoesRoutes);
 fastify.register(authRoutes);
 fastify.register(dashboardRoutes);
 fastify.register(contaRoutes);
+fastify.register(capitalRoutes);
 
 // fastify.listen({ port: 3000 }, function (err, address) {
 //   if (err) {
