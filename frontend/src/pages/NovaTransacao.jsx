@@ -3,6 +3,7 @@ import { ChevronLeft, Search, Plus, X } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { useThemeColor } from "../hooks/useThemeColor";
 import { useNavigate } from "react-router-dom";
+import { api } from "../lib/api";
 
 export default function NovaTransacao() {
   useThemeColor("#FFFFFF");
@@ -61,22 +62,9 @@ export default function NovaTransacao() {
   });
 
   async function buscarCategorias() {
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const resposta = await api("/categorias", "GET");
 
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
-      window.location.href = "/"; // Joga na tela de login à força
-      return; // Para tudo e não deixa tentar ler o json
-    }
-
-    const dados = await resposta.json();
-    setCategorias(dados);
+    setCategorias(resposta);
   }
 
   useEffect(() => {
@@ -97,39 +85,14 @@ export default function NovaTransacao() {
       return;
     }
 
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/transacoes`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          descricao,
-          categoriaId,
-          categoriaNomeTransacao,
-          valor: centavos / 100,
-          operacaoTipo,
-          data,
-        }),
-      },
-    );
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
-      window.location.href = "/"; // Joga na tela de login à força
-      return; // Para tudo e não deixa tentar ler o json
-    }
-
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
+    await api("/transacoes", "POST", {
+      descricao,
+      categoriaId,
+      categoriaNomeTransacao,
+      valor: centavos / 100,
+      operacaoTipo,
+      data,
+    });
 
     alert("Transacao criada!");
 
@@ -146,35 +109,10 @@ export default function NovaTransacao() {
       return;
     }
 
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/categorias`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          nome: categoriaNome,
-          tipo: tipoCategoria,
-        }),
-      },
-    );
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado"); // Limpa o "crachá"
-      window.location.href = "/"; // Joga na tela de login à força
-      return; // Para tudo e não deixa tentar ler o json
-    }
-
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
+    await api("/categorias", "POST", {
+      nome: categoriaNome,
+      tipo: tipoCategoria,
+    });
 
     alert("Categoria criada!");
 

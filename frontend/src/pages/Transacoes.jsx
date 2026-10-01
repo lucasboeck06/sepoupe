@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { DynamicIcon } from "lucide-react/dynamic";
 import SelectMes from "../components/SelectMes.jsx";
+import { api } from "../lib/api.js";
 
 export default function Transacoes() {
   const navigate = useNavigate();
@@ -39,30 +40,9 @@ export default function Transacoes() {
       mes: filtros.mes,
     });
 
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/transacoes?${params}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const resposta = await api(`/transacoes?${params}`, "GET");
 
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado");
-      window.location.href = "/";
-      return;
-    }
-
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
-
-    const { transacoes, resumo } = await resposta.json();
+    const { transacoes, resumo } = resposta;
     setTransacoes(transacoes);
     setResumo(resumo);
   }
@@ -86,28 +66,7 @@ export default function Transacoes() {
       return;
     }
 
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/transacoes?id=${transacaoSelecionada.id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-      },
-    );
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("usuario-logado");
-      window.location.href = "/";
-      return;
-    }
-
-    if (!resposta.ok) {
-      const erroDados = await resposta.json().catch(() => ({}));
-
-      const mensagemDoBack = erroDados.err || "Erro desconhecido no servidor!";
-
-      alert(`Erro: ${mensagemDoBack}`);
-      return;
-    }
+    await api(`/transacoes?id=${transacaoSelecionada.id}`, "DELETE");
 
     buscarTransacoes();
     setPopupDelete(false);
