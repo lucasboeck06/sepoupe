@@ -29,7 +29,7 @@ export async function criar(request, reply) {
 
     return reply.status(201).send(novaTransacao);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
 
@@ -41,7 +41,7 @@ export async function listar(request, reply) {
 
     return reply.status(200).send(lista);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
 
@@ -53,6 +53,6 @@ export async function deletar(request, reply) {
 
     return reply.status(200).send(transacaoDeletada);
   } catch (err) {
-    return reply.status(400).send({ err: err.message });
+    return reply.status(400).send({ erro: err.message });
   }
 }
