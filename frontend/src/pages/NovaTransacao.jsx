@@ -65,7 +65,6 @@ export default function NovaTransacao() {
       `${import.meta.env.VITE_API_BASE_URL}/categorias`,
       {
         method: "GET",
-        headers: { "ngrok-skip-browser-warning": "true" },
         credentials: "include",
       },
     );
@@ -104,7 +103,6 @@ export default function NovaTransacao() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
         },
         credentials: "include",
         body: JSON.stringify({
@@ -154,7 +152,6 @@ export default function NovaTransacao() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true",
         },
         credentials: "include",
         body: JSON.stringify({
