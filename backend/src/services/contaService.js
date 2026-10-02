@@ -3,13 +3,13 @@ import { pool } from "../database/db.js";
 
 const conta = {
   Crédito: "credito",
-  Cheque: "cheque",
+  Cheque: "cheque_especial",
   VA: "va",
 };
 
 const acerto = {
   "Fatura Inter": "credito",
-  "Fatura Caixa": "cheque",
+  "Fatura Caixa": "cheque_especial",
 };
 
 const metodosContaCorrente = ["PIX", "Débito", "Dinheiro"];
