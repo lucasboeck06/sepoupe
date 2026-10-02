@@ -33,7 +33,7 @@ export async function registraMovimentacao(
     if (categoriaTipo === "entrada")
       await contasRepository.adicionarSaldo("conta_corrente", valor);
 
-    if (categoriaTipo === "saida")
+    if (categoriaTipo === "saida" || categoriaTipo === "acerto")
       await contasRepository.reduzirSaldo("conta_corrente", valor);
   }
 }
@@ -58,7 +58,7 @@ export async function reverterMovimentacao(
     if (categoriaTipo === "entrada")
       await contasRepository.reduzirSaldo("conta_corrente", valor);
 
-    if (categoriaTipo === "saida")
+    if (categoriaTipo === "saida" || categoriaTipo === "acerto")
       await contasRepository.adicionarSaldo("conta_corrente", valor);
   }
 }
