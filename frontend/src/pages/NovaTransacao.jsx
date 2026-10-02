@@ -29,6 +29,9 @@ export default function NovaTransacao() {
 
   const [listaCategorias, setListaCategorias] = useState(false);
 
+  const [enviandoTransacao, setEnviandoTransacao] = useState(false);
+  const [enviandoCategoria, setEnviandoCategoria] = useState(false);
+
   // Função padrão de matar acentos e retornar somente o texto puro
   function semAcento(texto) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -77,21 +80,26 @@ export default function NovaTransacao() {
       return;
     }
 
-    await api("/transacoes", "POST", {
-      descricao,
-      categoriaId,
-      valor: centavos / 100,
-      operacaoTipo,
-      data,
-    });
+    setEnviandoTransacao(true);
+    try {
+      await api("/transacoes", "POST", {
+        descricao,
+        categoriaId,
+        valor: centavos / 100,
+        operacaoTipo,
+        data,
+      });
 
-    alert("Transacao criada!");
+      alert("Transacao criada!");
 
-    setCentavos(0);
-    setDescricao("");
-    setCategoriaId(null);
-    setOperacaoTipo("PIX");
-    setBusca("");
+      setCentavos(0);
+      setDescricao("");
+      setCategoriaId(null);
+      setOperacaoTipo("PIX");
+      setBusca("");
+    } finally {
+      setEnviandoTransacao(false);
+    }
   }
 
   async function criarCategoria() {
@@ -100,17 +108,22 @@ export default function NovaTransacao() {
       return;
     }
 
-    await api("/categorias", "POST", {
-      nome: categoriaNome,
-      tipo: tipoCategoria,
-    });
+    setEnviandoCategoria(true);
+    try {
+      await api("/categorias", "POST", {
+        nome: categoriaNome,
+        tipo: tipoCategoria,
+      });
 
-    alert("Categoria criada!");
+      alert("Categoria criada!");
 
-    await buscarCategorias();
+      await buscarCategorias();
 
-    setCategoriaNome("");
-    setTipoCategoria("Saída");
+      setCategoriaNome("");
+      setTipoCategoria("Saída");
+    } finally {
+      setEnviandoCategoria(false);
+    }
   }
 
   return (
@@ -239,9 +252,10 @@ export default function NovaTransacao() {
 
       <button
         onClick={criarTransacao}
-        className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full"
+        disabled={enviandoTransacao}
+        className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full disabled:opacity-50"
       >
-        Criar transação
+        {enviandoTransacao ? "Salvando..." : "Criar transação"}
       </button>
 
       <div
@@ -331,9 +345,10 @@ export default function NovaTransacao() {
         </div>
         <button
           onClick={criarCategoria}
-          className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full"
+          disabled={enviandoCategoria}
+          className="mt-6 bg-[#8B7BC7] text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full disabled:opacity-50"
         >
-          Criar categoria
+          {enviandoCategoria ? "Salvando..." : "Criar categoria"}
         </button>
       </div>
     </div>
