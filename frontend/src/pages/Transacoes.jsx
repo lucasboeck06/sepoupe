@@ -12,6 +12,7 @@ import {
 import { DynamicIcon } from "lucide-react/dynamic";
 import SelectMes from "../components/SelectMes.jsx";
 import { api } from "../lib/api.js";
+import hojeLocal from "../lib/data.js";
 
 export default function Transacoes() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function Transacoes() {
 
   const [transacaoSelecionada, setTransacaoSelecionada] = useState();
 
-  const mesAtual = new Date().toISOString().slice(0, 7);
+  const mesAtual = hojeLocal().slice(0, 7);
 
   const [filtros, setFiltros] = useState({
     tipo: "todas",
