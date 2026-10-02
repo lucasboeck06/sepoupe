@@ -79,6 +79,18 @@ export async function registrarInvestimento(valorInvestido) {
   try {
     // Começa o bloco
     await client.query("BEGIN");
+    const { saldo } = await contasRepository.consultarSaldo(
+      "conta_corrente",
+      client,
+    );
+
+    const saldoContaNumber = Number(saldo);
+
+    if (saldoContaNumber <= 0) throw new Error("Não há saldo para investir");
+
+    if (saldoContaNumber < valorInvestido)
+      throw new Error("Valor não disponível!");
+
     // Executa as duas chamadas
     await contasRepository.reduzirSaldo(
       "conta_corrente",
@@ -110,6 +122,17 @@ export async function registrarResgate(valorResgatado) {
 
   try {
     await client.query("BEGIN");
+
+    const { saldo } = await contasRepository.consultarSaldo("poupanca", client);
+
+    const saldoContaNumber = Number(saldo);
+
+    if (saldoContaNumber <= 0)
+      throw new Error("O investimento não tem valor para sacar!");
+
+    if (saldoContaNumber < valorResgatado)
+      throw new Error("Valor não disponível!");
+
     await contasRepository.reduzirSaldo("poupanca", valorResgatado, client);
     await contasRepository.adicionarSaldo(
       "conta_corrente",
