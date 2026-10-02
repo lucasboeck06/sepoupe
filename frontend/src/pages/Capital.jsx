@@ -13,6 +13,8 @@ export default function Capital() {
 
   const [centavos, setCentavos] = useState(0);
 
+  const [enviando, setEnviando] = useState(false);
+
   // No campo do valor, substitui tudo que não é dígito, por nada
   function handleValor(e) {
     const digitos = e.target.value.replace(/\D/g, "");
@@ -42,12 +44,17 @@ export default function Capital() {
       return;
     }
 
-    await api("/conta/resgatar", "POST", { valor: centavos / 100 });
+    setEnviando(true);
+    try {
+      await api("/conta/resgatar", "POST", { valor: centavos / 100 });
 
-    setCentavos(0);
-    setCardAberto(false);
+      setCentavos(0);
+      setCardAberto(false);
 
-    await buscarDados();
+      await buscarDados();
+    } finally {
+      setEnviando(false);
+    }
   }
 
   async function investir() {
@@ -56,12 +63,17 @@ export default function Capital() {
       return;
     }
 
-    await api("/conta/investir", "POST", { valor: centavos / 100 });
+    setEnviando(true);
+    try {
+      await api("/conta/investir", "POST", { valor: centavos / 100 });
 
-    setCentavos(0);
-    setCardAberto(false);
+      setCentavos(0);
+      setCardAberto(false);
 
-    await buscarDados();
+      await buscarDados();
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -186,9 +198,12 @@ export default function Capital() {
           onClick={() =>
             tipoMovimentacao === "Sacar" ? resgatar() : investir()
           }
-          className={`mt-4 text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full transition-colors duration-300 ${tipoMovimentacao === "Sacar" ? "bg-[#D16B6B]" : "bg-[#309f6f]"}`}
+          disabled={enviando}
+          className={`mt-4 text-white text-[0.90rem] font-semibold rounded-2xl p-4 w-full transition-colors duration-300 disabled:opacity-50 ${tipoMovimentacao === "Sacar" ? "bg-[#D16B6B]" : "bg-[#309f6f]"}`}
         >
-          Confirmar {tipoMovimentacao === "Sacar" ? "saque" : "investimento"}
+          {enviando
+            ? "Salvando..."
+            : `Confirmar ${tipoMovimentacao === "Sacar" ? "saque" : "investimento"}`}
         </button>
       </div>
     </div>

@@ -32,6 +32,8 @@ export default function Transacoes() {
     mes: mesAtual,
   });
 
+  const [enviando, setEnviando] = useState(false);
+
   async function buscarTransacoes() {
     const params = new URLSearchParams({
       tipo: filtros.tipo === "todas" ? "" : filtros.tipo,
@@ -66,11 +68,16 @@ export default function Transacoes() {
       return;
     }
 
-    await api(`/transacoes?id=${transacaoSelecionada.id}`, "DELETE");
+    setEnviando(true);
+    try {
+      await api(`/transacoes?id=${transacaoSelecionada.id}`, "DELETE");
 
-    buscarTransacoes();
-    setPopupDelete(false);
-    setTransacaoSelecionada(undefined);
+      buscarTransacoes();
+      setPopupDelete(false);
+      setTransacaoSelecionada(undefined);
+    } finally {
+      setEnviando(false);
+    }
   }
 
   function mudarTipo(novoTipo) {
@@ -299,9 +306,10 @@ export default function Transacoes() {
           </div>
           <button
             onClick={deletarTransacao}
-            className="w-full bg-[#D16B6B] rounded-xl py-3 text-[0.9rem] font-semibold text-[#FFFFFF] mb-2"
+            disabled={enviando}
+            className="w-full bg-[#D16B6B] rounded-xl py-3 text-[0.9rem] font-semibold text-[#FFFFFF] mb-2 disabled:opacity-50"
           >
-            Excluir
+            {enviando ? "Salvando..." : "Excluir"}
           </button>
           <button
             onClick={() => setPopupDelete(false)}
