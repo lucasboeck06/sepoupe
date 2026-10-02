@@ -6,14 +6,7 @@ import {
 
 export async function criar(request, reply) {
   try {
-    const {
-      descricao,
-      categoriaId,
-      categoriaNomeTransacao,
-      valor,
-      operacaoTipo,
-      data,
-    } = request.body;
+    const { descricao, categoriaId, valor, operacaoTipo, data } = request.body;
 
     const usuarioId = request.user.id;
 
@@ -21,7 +14,6 @@ export async function criar(request, reply) {
       usuarioId,
       descricao,
       categoriaId,
-      categoriaNomeTransacao,
       valor,
       operacaoTipo,
       data,

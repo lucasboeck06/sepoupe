@@ -21,7 +21,6 @@ export default function NovaTransacao() {
   const [categorias, setCategorias] = useState([]);
 
   const [categoriaId, setCategoriaId] = useState(null);
-  const [categoriaNomeTransacao, setCategoriaNomeTransacao] = useState("");
   const [data, setData] = useState(new Date().toISOString().slice(0, 10));
 
   const [cardAberto, setCardAberto] = useState(false);
@@ -73,14 +72,7 @@ export default function NovaTransacao() {
   }, []);
 
   async function criarTransacao() {
-    if (
-      !centavos ||
-      !operacaoTipo ||
-      !descricao ||
-      !categoriaId ||
-      !categoriaNomeTransacao ||
-      !data
-    ) {
+    if (!centavos || !operacaoTipo || !descricao || !categoriaId || !data) {
       alert("Todos os campos são obrigatórios!");
       return;
     }
@@ -88,7 +80,6 @@ export default function NovaTransacao() {
     await api("/transacoes", "POST", {
       descricao,
       categoriaId,
-      categoriaNomeTransacao,
       valor: centavos / 100,
       operacaoTipo,
       data,
@@ -210,7 +201,6 @@ export default function NovaTransacao() {
             // Cada volta do map cria um arrow function próprio para a categoria!
             onClick={() => {
               setCategoriaId(cat.id);
-              setCategoriaNomeTransacao(cat.nome);
             }}
             className={`flex flex-col justify-center items-center gap-1 py-2 ${categoriaId === cat.id ? "bg-[#FAFAFA] rounded-2xl transition-colors" : ""}`}
           >

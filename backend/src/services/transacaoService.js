@@ -7,7 +7,6 @@ export async function criarTransacao(
   usuarioId,
   descricao,
   categoriaId,
-  categoriaNome,
   valor,
   operacaoTipo,
   data,
@@ -16,19 +15,13 @@ export async function criarTransacao(
     throw new Error("O valor não pode ser 0, negativo ou inexistente");
   }
 
-  if (
-    !usuarioId ||
-    !descricao ||
-    !categoriaId ||
-    !categoriaNome ||
-    !operacaoTipo ||
-    !data
-  ) {
+  if (!usuarioId || !descricao || !categoriaId || !operacaoTipo || !data) {
     throw new Error("Todos os dados são necessários para criar uma transação");
   }
 
   // Desestruturo o tipo e atribuo o nome que eu quero
-  const { tipo: categoriaTipo } = await categoriaRepository.listar(categoriaId);
+  const { tipo: categoriaTipo, categoria_nome: categoriaNome } =
+    await categoriaRepository.listar(categoriaId);
 
   const transacaoCriada = await transacaoRepository.inserir(
     usuarioId,
