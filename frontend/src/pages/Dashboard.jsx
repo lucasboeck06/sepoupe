@@ -6,6 +6,7 @@ import { CreditCard } from "lucide-react";
 import SelectMes from "../components/SelectMes.jsx";
 import CircularProgress from "../components/CircularProgress.jsx";
 import { api } from "../lib/api.js";
+import hojeLocal from "../lib/data.js";
 
 export default function Dashboard() {
   const [dados, setDados] = useState([]);
@@ -21,7 +22,7 @@ export default function Dashboard() {
   const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
   const usuarioPrimeiroNome = usuarioNomeCompleto.split(" ")[0];
 
-  const mesAtual = new Date().toISOString().slice(0, 7);
+  const mesAtual = hojeLocal().slice(0, 7);
 
   const [filtro, setFiltro] = useState({
     mes: mesAtual,

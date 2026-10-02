@@ -4,6 +4,7 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import { useThemeColor } from "../hooks/useThemeColor";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
+import hojeLocal from "../lib/data";
 
 export default function NovaTransacao() {
   useThemeColor("#FFFFFF");
@@ -21,7 +22,7 @@ export default function NovaTransacao() {
   const [categorias, setCategorias] = useState([]);
 
   const [categoriaId, setCategoriaId] = useState(null);
-  const [data, setData] = useState(new Date().toISOString().slice(0, 10));
+  const [data, setData] = useState(hojeLocal());
 
   const [cardAberto, setCardAberto] = useState(false);
   const [tipoCategoria, setTipoCategoria] = useState("Saída");
