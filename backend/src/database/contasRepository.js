@@ -1,6 +1,15 @@
 import { pool } from "./db.js";
 
 export const contasRepository = {
+  async consultarSaldo(tipoConta, client = pool) {
+    const { rows } = await client.query(
+      `SELECT saldo FROM public.contas WHERE tipo = $1`,
+      [tipoConta],
+    );
+
+    return rows[0];
+  },
+
   // Condição no parametro, se client for undefined, ele usa pool!
   async adicionarSaldo(tipo, saldo, client = pool) {
     // Como não retorna nada, mete o await e a func logo!
