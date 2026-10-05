@@ -34,6 +34,7 @@ export default function Transacoes() {
   });
 
   const [enviando, setEnviando] = useState(false);
+  const [carregando, setCarregando] = useState(true);
 
   async function buscarTransacoes() {
     const params = new URLSearchParams({
@@ -43,15 +44,20 @@ export default function Transacoes() {
       mes: filtros.mes,
     });
 
-    const resposta = await api(`/transacoes?${params}`, "GET");
+    try {
+      const resposta = await api(`/transacoes?${params}`, "GET");
 
-    const { transacoes, resumo } = resposta;
-    setTransacoes(transacoes);
-    setResumo(resumo);
+      const { transacoes, resumo } = resposta;
+      setTransacoes(transacoes);
+      setResumo(resumo);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
+    setCarregando(true);
     buscarTransacoes();
   }, [filtros]);
 
@@ -202,53 +208,61 @@ export default function Transacoes() {
           </div>
         </div>
       </div>
-      <div className="bg-white px-4">
-        {transacoes.map((transacao) => (
-          <div
-            key={transacao.id}
-            className="flex justify-between  py-3 border-b border-[#FAF9F5]"
-          >
-            <div className="flex items-center gap-2">
-              <span
-                className="w-9 h-9 flex items-center justify-center rounded-full"
-                style={{ backgroundColor: transacao.cor_secundaria }}
-              >
-                <DynamicIcon
-                  name={transacao.icone}
-                  color={transacao.cor_primaria}
-                  size={18}
-                />
-              </span>
-              <div>
-                <h3 className="text-[0.8rem] text-[#2C2438] font-semibold leading-none">
-                  {transacao.descricao}
-                </h3>
-                <p className="text-[0.7rem] text-[#9B93A8]">
-                  {formatarData(transacao.data)}
+      {carregando ? (
+        <div className="flex items-center justify-center py-20">
+          <p className="text-[#8B7BC7] text-[1rem] font-semibold">
+            Carregando...
+          </p>
+        </div>
+      ) : (
+        <div className="bg-white px-4">
+          {transacoes.map((transacao) => (
+            <div
+              key={transacao.id}
+              className="flex justify-between  py-3 border-b border-[#FAF9F5]"
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className="w-9 h-9 flex items-center justify-center rounded-full"
+                  style={{ backgroundColor: transacao.cor_secundaria }}
+                >
+                  <DynamicIcon
+                    name={transacao.icone}
+                    color={transacao.cor_primaria}
+                    size={18}
+                  />
+                </span>
+                <div>
+                  <h3 className="text-[0.8rem] text-[#2C2438] font-semibold leading-none">
+                    {transacao.descricao}
+                  </h3>
+                  <p className="text-[0.7rem] text-[#9B93A8]">
+                    {formatarData(transacao.data)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <p
+                  className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : "text-[#2F9F6F]"}`}
+                >
+                  {transacao.tipo === "saida" ? "- " : "+ "}
+                  {transacao.valor}
                 </p>
+
+                <button
+                  onClick={() => {
+                    setPopupDelete(true);
+                    setTransacaoSelecionada(transacao);
+                  }}
+                  className="bg-[#F8EBEB] p-2 rounded-lg"
+                >
+                  <Trash2 color="#D16B6B" size={14} />
+                </button>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <p
-                className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : "text-[#2F9F6F]"}`}
-              >
-                {transacao.tipo === "saida" ? "- " : "+ "}
-                {transacao.valor}
-              </p>
-
-              <button
-                onClick={() => {
-                  setPopupDelete(true);
-                  setTransacaoSelecionada(transacao);
-                }}
-                className="bg-[#F8EBEB] p-2 rounded-lg"
-              >
-                <Trash2 color="#D16B6B" size={14} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
       <div
         className={`fixed flex items-center justify-center inset-0 z-40 bg-black/50 p-3 transition-opacity duration-300 ${popupDelete ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
@@ -310,7 +324,7 @@ export default function Transacoes() {
             disabled={enviando}
             className="w-full bg-[#D16B6B] rounded-xl py-3 text-[0.9rem] font-semibold text-[#FFFFFF] mb-2 disabled:opacity-50"
           >
-            {enviando ? "Salvando..." : "Excluir"}
+            {enviando ? "Excluindo..." : "Excluir"}
           </button>
           <button
             onClick={() => setPopupDelete(false)}
