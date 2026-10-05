@@ -39,7 +39,7 @@ export async function listar(request, reply) {
 
 export async function deletar(request, reply) {
   try {
-    const { id } = request.query;
+    const { id } = request.params;
 
     const transacaoDeletada = await deletarTransacao(id);
 

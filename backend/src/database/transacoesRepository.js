@@ -9,8 +9,9 @@ export const transacaoRepository = {
     valor,
     operacaoTipo,
     data,
+    client = pool,
   ) {
-    const { rows } = await pool.query(
+    const { rows } = await client.query(
       "INSERT INTO public.transacoes (usuario_id, descricao, categoria_id, tipo, valor, operacao_tipo, data) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
       [
         usuarioId,
@@ -26,20 +27,20 @@ export const transacaoRepository = {
     return rows[0];
   },
 
-  async listar(id, tipo, ordem, sequencia, mes) {
-    if (id) {
-      const { rows } = await pool.query(
-        `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor, t.tipo
+  async buscarPorId(id, client = pool) {
+    const { rows } = await client.query(
+      `SELECT t.operacao_tipo, c.nome AS categoria_nome, t.valor, t.tipo
          FROM public.transacoes t
          JOIN public.categorias c
           ON t.categoria_id = c.id
          WHERE t.id = $1`,
-        [id],
-      );
+      [id],
+    );
 
-      return rows[0];
-    }
+    return rows[0];
+  },
 
+  async listar(tipo, ordem, sequencia, mes) {
     const colunaOrdem = ordem === "criacao" ? "t.criado_em" : "t.data";
 
     const condicoes = [];
@@ -83,8 +84,8 @@ export const transacaoRepository = {
     return rows;
   },
 
-  async deletar(id) {
-    const { rows } = await pool.query(
+  async deletar(id, client = pool) {
+    const { rows } = await client.query(
       "DELETE FROM public.transacoes WHERE id = $1 RETURNING *",
       [id],
     );

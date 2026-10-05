@@ -26,8 +26,8 @@ export const contasRepository = {
     );
   },
 
-  async atualizarLimite(tipo, valor) {
-    await pool.query(
+  async atualizarLimite(tipo, valor, client = pool) {
+    await client.query(
       // Se $1 for negativo, é executado uma subtração!
       `UPDATE public.contas SET limite = limite + $1 WHERE tipo = $2`,
       [valor, tipo],

@@ -2,6 +2,7 @@ import { transacaoRepository } from "../database/transacoesRepository.js";
 import { categoriaRepository } from "../database/categoriaRepository.js";
 import { dashboardRepository } from "../database/dashboardRepository.js";
 import { registraMovimentacao, reverterMovimentacao } from "./contaService.js";
+import { pool } from "../database/db.js";
 
 export async function criarTransacao(
   usuarioId,
@@ -19,23 +20,49 @@ export async function criarTransacao(
     throw new Error("Todos os dados são necessários para criar uma transação");
   }
 
-  // Desestruturo o tipo e atribuo o nome que eu quero
-  const { tipo: categoriaTipo, categoria_nome: categoriaNome } =
-    await categoriaRepository.listar(categoriaId);
+  const client = await pool.connect();
 
-  const transacaoCriada = await transacaoRepository.inserir(
-    usuarioId,
-    descricao,
-    categoriaId,
-    categoriaTipo,
-    valor,
-    operacaoTipo,
-    data,
-  );
+  try {
+    await client.query("BEGIN");
 
-  await registraMovimentacao(operacaoTipo, categoriaNome, valor, categoriaTipo);
+    const categoria = await categoriaRepository.listar(
+      categoriaId,
+      undefined,
+      client,
+    );
 
-  return transacaoCriada;
+    if (!categoria) throw new Error("Categoria inexistente na base!");
+
+    const { tipo: categoriaTipo, categoria_nome: categoriaNome } = categoria;
+
+    const transacaoCriada = await transacaoRepository.inserir(
+      usuarioId,
+      descricao,
+      categoriaId,
+      categoriaTipo,
+      valor,
+      operacaoTipo,
+      data,
+      client,
+    );
+
+    await registraMovimentacao(
+      operacaoTipo,
+      categoriaNome,
+      valor,
+      categoriaTipo,
+      client,
+    );
+
+    await client.query("COMMIT");
+
+    return transacaoCriada;
+  } catch (erro) {
+    await client.query("ROLLBACK");
+    throw erro;
+  } finally {
+    client.release();
+  }
 }
 
 export async function listarTransacoes(tipo, ordem, sequencia, mes) {
@@ -46,7 +73,6 @@ export async function listarTransacoes(tipo, ordem, sequencia, mes) {
   const mesCompleto = `${mes}-01`;
 
   const transacoes = await transacaoRepository.listar(
-    undefined,
     tipo,
     ordem,
     sequencia,
@@ -63,18 +89,32 @@ export async function deletarTransacao(id) {
     throw new Error("É necessário o ID para identificar a transação!");
   }
 
-  const transacao = await transacaoRepository.listar(id);
+  const client = await pool.connect();
 
-  if (!transacao) {
-    throw new Error("Não existe transação com esse ID!");
+  try {
+    await client.query("BEGIN");
+
+    const transacao = await transacaoRepository.buscarPorId(id, client);
+
+    if (!transacao) {
+      throw new Error("Não existe transação com esse ID!");
+    }
+
+    await reverterMovimentacao(
+      transacao.operacao_tipo,
+      transacao.categoria_nome,
+      transacao.valor,
+      transacao.tipo,
+      client,
+    );
+
+    await transacaoRepository.deletar(id, client);
+
+    await client.query("COMMIT");
+  } catch (erro) {
+    await client.query("ROLLBACK");
+    throw erro;
+  } finally {
+    client.release();
   }
-
-  await reverterMovimentacao(
-    transacao.operacao_tipo,
-    transacao.categoria_nome,
-    transacao.valor,
-    transacao.tipo,
-  );
-
-  await transacaoRepository.deletar(id);
 }
