@@ -6,6 +6,6 @@ export async function transacoesRoutes(fastify) {
 
     instanciaIsolada.post("/transacoes", criar);
     instanciaIsolada.get("/transacoes", listar);
-    instanciaIsolada.delete("/transacoes", deletar);
+    instanciaIsolada.delete("/transacoes/:id", deletar);
   });
 }
