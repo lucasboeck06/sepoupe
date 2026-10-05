@@ -2,7 +2,7 @@ export async function api(rota, metodo, corpo) {
   const resposta = await fetch(`${import.meta.env.VITE_API_BASE_URL}${rota}`, {
     method: metodo,
     credentials: "include",
-    ...(metodo !== "GET" && {
+    ...(corpo !== undefined && {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(corpo),
     }),

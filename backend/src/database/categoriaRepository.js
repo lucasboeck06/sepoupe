@@ -10,10 +10,10 @@ export const categoriaRepository = {
     return rows[0];
   },
 
-  async listar(id, nome) {
+  async listar(id, nome, client = pool) {
     if (id) {
-      const { rows } = await pool.query(
-        `SELECT tipo FROM public.categorias WHERE id = $1`,
+      const { rows } = await client.query(
+        `SELECT tipo, nome AS categoria_nome FROM public.categorias WHERE id = $1`,
         [id],
       );
 

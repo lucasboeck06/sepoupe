@@ -71,7 +71,7 @@ export default function Transacoes() {
 
     setEnviando(true);
     try {
-      await api(`/transacoes?id=${transacaoSelecionada.id}`, "DELETE");
+      await api(`/transacoes/${transacaoSelecionada.id}`, "DELETE");
 
       buscarTransacoes();
       setPopupDelete(false);
