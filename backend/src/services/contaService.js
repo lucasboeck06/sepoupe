@@ -19,22 +19,23 @@ export async function registraMovimentacao(
   categoriaNome,
   valor,
   categoriaTipo,
+  client,
 ) {
   if (conta[operacaoTipo])
-    await contasRepository.adicionarSaldo(conta[operacaoTipo], valor);
+    await contasRepository.adicionarSaldo(conta[operacaoTipo], valor, client);
 
   if (acerto[categoriaNome])
-    await contasRepository.reduzirSaldo(acerto[categoriaNome], valor);
+    await contasRepository.reduzirSaldo(acerto[categoriaNome], valor, client);
 
   if (categoriaNome === "VA")
-    await contasRepository.atualizarLimite("va", valor);
+    await contasRepository.atualizarLimite("va", valor, client);
 
   if (metodosContaCorrente.includes(operacaoTipo)) {
     if (categoriaTipo === "entrada")
-      await contasRepository.adicionarSaldo("conta_corrente", valor);
+      await contasRepository.adicionarSaldo("conta_corrente", valor, client);
 
     if (categoriaTipo === "saida" || categoriaTipo === "acerto")
-      await contasRepository.reduzirSaldo("conta_corrente", valor);
+      await contasRepository.reduzirSaldo("conta_corrente", valor, client);
   }
 }
 
@@ -43,23 +44,24 @@ export async function reverterMovimentacao(
   categoriaNome,
   valor,
   categoriaTipo,
+  client,
 ) {
   if (conta[operacaoTipo])
-    await contasRepository.reduzirSaldo(conta[operacaoTipo], valor);
+    await contasRepository.reduzirSaldo(conta[operacaoTipo], valor, client);
 
   if (acerto[categoriaNome])
-    await contasRepository.adicionarSaldo(acerto[categoriaNome], valor);
+    await contasRepository.adicionarSaldo(acerto[categoriaNome], valor, client);
 
   if (categoriaNome === "VA")
     // Ao invés de uma nova func para mandar para o repo, deixamos o valor negativo, isso basta!
-    await contasRepository.atualizarLimite("va", -valor);
+    await contasRepository.atualizarLimite("va", -valor, client);
 
   if (metodosContaCorrente.includes(operacaoTipo)) {
     if (categoriaTipo === "entrada")
-      await contasRepository.reduzirSaldo("conta_corrente", valor);
+      await contasRepository.reduzirSaldo("conta_corrente", valor, client);
 
     if (categoriaTipo === "saida" || categoriaTipo === "acerto")
-      await contasRepository.adicionarSaldo("conta_corrente", valor);
+      await contasRepository.adicionarSaldo("conta_corrente", valor, client);
   }
 }
 
