@@ -12,6 +12,11 @@ import { dashboardRoutes } from "./src/routes/dashboard.js";
 import { contaRoutes } from "./src/routes/conta.js";
 import { capitalRoutes } from "./src/routes/capital.js";
 
+if (!process.env.SECRET || process.env.SECRET.length < 32) {
+  console.error("SECRET ausente ou muito curto (mínimo 32 caracteres)");
+  process.exit(1);
+}
+
 const fastify = Fastify({
   logger: true,
 });
