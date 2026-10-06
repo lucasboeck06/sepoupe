@@ -3,7 +3,7 @@ import { pool } from "./db.js";
 export const contasRepository = {
   async consultarSaldo(tipoConta, client = pool) {
     const { rows } = await client.query(
-      `SELECT saldo FROM public.contas WHERE tipo = $1`,
+      `SELECT saldo FROM public.contas WHERE tipo = $1 FOR UPDATE`,
       [tipoConta],
     );
 
