@@ -11,6 +11,8 @@ import hojeLocal from "../lib/data.js";
 export default function Dashboard() {
   const [dados, setDados] = useState([]);
 
+  const [carregando, setCarregando] = useState(true);
+
   const saudacao = () => {
     // Função para pegar a hora atual
     const hora = new Date().getHours();
@@ -29,13 +31,17 @@ export default function Dashboard() {
   });
 
   async function buscarDados() {
-    const resposta = await api(`/dashboard?mes=${filtro.mes}`, "GET");
-
-    setDados(resposta);
+    try {
+      const resposta = await api(`/dashboard?mes=${filtro.mes}`, "GET");
+      setDados(resposta);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch assíncrono, setState roda fora do render síncrono
+    setCarregando(true);
     buscarDados();
   }, [filtro]);
 
@@ -74,191 +80,215 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col justify-between bg-[#F0F0F7]">
-      <div className="flex flex-col p-5 mb-18 gap-4">
-        <div className="w-full flex flex-col justify-between gap-2">
-          <div>
-            <h1>
-              <span className="text-sm text-[#aeaeb5] font-light">
-                {saudacao()}
-              </span>
-              <span className="text-xl text-[#1a1a3b] font-semibold">
-                {usuarioPrimeiroNome} 👋
-              </span>
-            </h1>
-          </div>
-          <SelectMes
-            mes={filtro.mes}
-            mesAtual={mesAtual}
-            onMudarMes={onMudarMes}
-          />
-        </div>
-
-        <div className="bg-white p-4 rounded-3xl shadow-sm flex flex-row items-center gap-4">
-          <CircularProgress porcentagem={porcentagemTotal} />
-          <div className="flex-1 w-full">
-            <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
-            <span className="text-xl font-semibold text-[#EB7070]">
-              R$ {totalSaidas}
-              <br />
-            </span>
-            <span className="text-xs text-[#aeaeb5]">
-              Total com acertos: <br />
-            </span>
-            <span className="text-base font-semibold text-[#d6b03a]">
-              R$ {(totalAcertos + totalSaidas).toFixed(2)} <br />
-            </span>
-            <span className="text-xs text-[#aeaeb5]">
-              Saldo disponível: <br />
-            </span>
-            <span className="text-base font-semibold text-[#68C18C]">
-              R$ {saldoDisponivel}
-            </span>
-          </div>
-        </div>
-
-        <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
-          <div>
-            <div className="bg-[#fbebdd] p-2 rounded-full">
-              <CreditCard className="text-[#e08b45] w-4 h-4" />
+      <div>
+        <div className="flex flex-col px-5 pt-5 gap-4">
+          <div className="w-full flex flex-col justify-between gap-2">
+            <div>
+              <h1>
+                <span className="text-sm text-[#aeaeb5] font-light">
+                  {saudacao()}
+                </span>
+                <span className="text-xl text-[#1a1a3b] font-semibold">
+                  {usuarioPrimeiroNome} 👋
+                </span>
+              </h1>
             </div>
+            <SelectMes
+              mes={filtro.mes}
+              mesAtual={mesAtual}
+              onMudarMes={onMudarMes}
+            />
           </div>
-          <div className="flex-1 w-full">
-            <div className="flex justify-between items-center">
+
+          <div className="bg-white p-4 rounded-3xl shadow-sm flex flex-row items-center gap-4">
+            <CircularProgress porcentagem={porcentagemTotal} />
+            <div className="flex-1 w-full">
+              <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
+              <span className="text-xl font-semibold text-[#EB7070]">
+                R$ {totalSaidas}
+                <br />
+              </span>
               <span className="text-xs text-[#aeaeb5]">
-                Cartão de Crédito Inter
+                Total com acertos: <br />
               </span>
-              <span className="text-base font-semibold text-[#e08b45]">
-                R$ {(cartao.saldo ?? 0).toFixed(2)}
+              <span className="text-base font-semibold text-[#d6b03a]">
+                R$ {(totalAcertos + totalSaidas).toFixed(2)} <br />
               </span>
-            </div>
-            <progress
-              value={
-                cartao.limite ? Math.min(cartao.saldo / cartao.limite, 1) : 0
-              }
-              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#fbebdd] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#e08b45] [&::-webkit-progress-value]:rounded-full"
-            />
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
-              <span className="text-xs text-[#aeaeb5] font-semibold">
-                R$ {cartao.limiteDisponivel ?? 0} de{" "}
-                {(cartao.limite ?? 0).toFixed(2)}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
-          <div>
-            <div className="bg-[#d9f0e5] p-2 rounded-full">
-              <CreditCard className="text-[#2f9f6f] w-4 h-4" />
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-[#aeaeb5]">Vale Alimentação</span>
-              <span className="text-base font-semibold text-[#2f9f6f]">
-                R$ {(va.saldo ?? 0).toFixed(2)}
-              </span>
-            </div>
-            <progress
-              value={va.limite ? Math.min(va.saldo / va.limite, 1) : 0}
-              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#d9f0e5] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#2f9f6f] [&::-webkit-progress-value]:rounded-full"
-            />
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
-              <span className="text-xs text-[#aeaeb5] font-semibold">
-                R$ {(va.limiteDisponivel ?? 0).toFixed(2)} de{" "}
-                {(va.limite ?? 0).toFixed(2)}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
-          <div>
-            <div className="bg-[#e9f0fa] p-2 rounded-full">
-              <CreditCard className="text-[#7fa8d6] w-4 h-4" />
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <div className="flex justify-between items-center">
               <span className="text-xs text-[#aeaeb5]">
-                Cheque Especial Caixa
+                Saldo disponível: <br />
               </span>
-              <span className="text-base font-semibold text-[#7fa8d6]">
-                R$ {(cheque.saldo ?? 0).toFixed(2)}
-              </span>
-            </div>
-            <progress
-              value={
-                cheque.limite ? Math.min(cheque.saldo / cheque.limite, 1) : 0
-              }
-              className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full"
-            />
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs text-[#aeaeb5]">Limite disponível:</span>
-              <span className="text-xs text-[#aeaeb5] font-semibold">
-                R$ {(cheque.limiteDisponivel ?? 0).toFixed(2)} de{" "}
-                {(cheque.limite ?? 0).toFixed(2)}
+              <span className="text-base font-semibold text-[#68C18C]">
+                R$ {saldoDisponivel}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col bg-white p-4 rounded-3xl shadow-sm gap-1">
-          <h2 className="text-md font-semibold">Ranking de Gastos</h2>
-          <span className="text-xs text-[#9B93A8]">
-            {mesAtual} • Total R$ {totalSaidas}
-          </span>
-          <div className="mt-3 flex flex-col gap-3">
-            {dados.top?.map((n) => {
-              const porcentagemItem = totalSaidas
-                ? Math.min(
-                    ((n.total_gasto / totalSaidas) * 100).toFixed(0),
-                    100,
-                  )
-                : 0;
-
-              return (
-                <div
-                  key={n.categoria_id}
-                  className="relative flex items-center justify-between p-3 bg-[#F5F5F9] rounded-2xl overflow-hidden"
-                >
-                  <div
-                    className="absolute top-0 left-0 bottom-0 rounded-2xl"
-                    style={{
-                      width: `${porcentagemItem}%`,
-                      backgroundColor: n.cor_secundaria,
-                    }}
-                  />
-                  <div className="flex items-center gap-2 z-10">
-                    <DynamicIcon
-                      name={n.icone}
-                      className="w-4 h-4"
-                      color={n.cor_primaria}
-                    />
-                    <span className="text-sm font-semibold text-[#3A3248]">
-                      {n.nome}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 z-10">
-                    <span
-                      className="text-sm font-semibold"
-                      style={{ color: n.cor_primaria }}
-                    >
-                      {porcentagemItem}%
-                    </span>
-                    <span className="text-sm text-[#9B93A8]">
-                      R${n.total_gasto.toFixed(2)}
-                    </span>
-                  </div>
+        {carregando ? (
+          <div className="flex items-center justify-center py-20">
+            <p className="text-[#8B7BC7] text-[1rem] font-semibold">
+              Carregando...
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col p-5 mb-18 gap-4">
+            <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
+              <div>
+                <div className="bg-[#fbebdd] p-2 rounded-full">
+                  <CreditCard className="text-[#e08b45] w-4 h-4" />
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </div>
+              <div className="flex-1 w-full">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Cartão de Crédito Inter
+                  </span>
+                  <span className="text-base font-semibold text-[#e08b45]">
+                    R$ {(cartao.saldo ?? 0).toFixed(2)}
+                  </span>
+                </div>
+                <progress
+                  value={
+                    cartao.limite
+                      ? Math.min(cartao.saldo / cartao.limite, 1)
+                      : 0
+                  }
+                  className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#fbebdd] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#e08b45] [&::-webkit-progress-value]:rounded-full"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Limite disponível:
+                  </span>
+                  <span className="text-xs text-[#aeaeb5] font-semibold">
+                    R$ {cartao.limiteDisponivel ?? 0} de{" "}
+                    {(cartao.limite ?? 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-        <GraficoGastosScroll dados={dados.diario} />
+            <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
+              <div>
+                <div className="bg-[#d9f0e5] p-2 rounded-full">
+                  <CreditCard className="text-[#2f9f6f] w-4 h-4" />
+                </div>
+              </div>
+              <div className="flex-1 w-full">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Vale Alimentação
+                  </span>
+                  <span className="text-base font-semibold text-[#2f9f6f]">
+                    R$ {(va.saldo ?? 0).toFixed(2)}
+                  </span>
+                </div>
+                <progress
+                  value={va.limite ? Math.min(va.saldo / va.limite, 1) : 0}
+                  className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#d9f0e5] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#2f9f6f] [&::-webkit-progress-value]:rounded-full"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Limite disponível:
+                  </span>
+                  <span className="text-xs text-[#aeaeb5] font-semibold">
+                    R$ {(va.limiteDisponivel ?? 0).toFixed(2)} de{" "}
+                    {(va.limite ?? 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className=" bg-white p-4 rounded-3xl shadow-sm flex flex-row gap-2">
+              <div>
+                <div className="bg-[#e9f0fa] p-2 rounded-full">
+                  <CreditCard className="text-[#7fa8d6] w-4 h-4" />
+                </div>
+              </div>
+              <div className="flex-1 w-full">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Cheque Especial Caixa
+                  </span>
+                  <span className="text-base font-semibold text-[#7fa8d6]">
+                    R$ {(cheque.saldo ?? 0).toFixed(2)}
+                  </span>
+                </div>
+                <progress
+                  value={
+                    cheque.limite
+                      ? Math.min(cheque.saldo / cheque.limite, 1)
+                      : 0
+                  }
+                  className="w-full h-2 appearance-none rounded-full [&::-webkit-progress-bar]:bg-[#e9f0fa] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-value]:bg-[#7fa8d6] [&::-webkit-progress-value]:rounded-full"
+                />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs text-[#aeaeb5]">
+                    Limite disponível:
+                  </span>
+                  <span className="text-xs text-[#aeaeb5] font-semibold">
+                    R$ {(cheque.limiteDisponivel ?? 0).toFixed(2)} de{" "}
+                    {(cheque.limite ?? 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col bg-white p-4 rounded-3xl shadow-sm gap-1">
+              <h2 className="text-md font-semibold">Ranking de Gastos</h2>
+              <span className="text-xs text-[#9B93A8]">
+                {mesAtual} • Total R$ {totalSaidas}
+              </span>
+              <div className="mt-3 flex flex-col gap-3">
+                {dados.top?.map((n) => {
+                  const porcentagemItem = totalSaidas
+                    ? Math.min(
+                        ((n.total_gasto / totalSaidas) * 100).toFixed(0),
+                        100,
+                      )
+                    : 0;
+
+                  return (
+                    <div
+                      key={n.categoria_id}
+                      className="relative flex items-center justify-between p-3 bg-[#F5F5F9] rounded-2xl overflow-hidden"
+                    >
+                      <div
+                        className="absolute top-0 left-0 bottom-0 rounded-2xl"
+                        style={{
+                          width: `${porcentagemItem}%`,
+                          backgroundColor: n.cor_secundaria,
+                        }}
+                      />
+                      <div className="flex items-center gap-2 z-10">
+                        <DynamicIcon
+                          name={n.icone}
+                          className="w-4 h-4"
+                          color={n.cor_primaria}
+                        />
+                        <span className="text-sm font-semibold text-[#3A3248]">
+                          {n.nome}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 z-10">
+                        <span
+                          className="text-sm font-semibold"
+                          style={{ color: n.cor_primaria }}
+                        >
+                          {porcentagemItem}%
+                        </span>
+                        <span className="text-sm text-[#9B93A8]">
+                          R${n.total_gasto.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <GraficoGastosScroll dados={dados.diario} />
+          </div>
+        )}
       </div>
 
       <NavBar />
