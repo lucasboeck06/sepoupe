@@ -15,10 +15,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -e
             cd /opt/financeiro-pessoal
             git pull origin main
-            npm install
+            npm ci
             cd frontend
-            npm install
+            npm ci
             npm run build
             pm2 restart financeiro-api
