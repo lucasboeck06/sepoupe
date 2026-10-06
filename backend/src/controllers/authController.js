@@ -29,3 +29,15 @@ export async function logar(request, reply) {
     reply.status(401).send({ erro: err.message });
   }
 }
+
+export async function deslogar(request, reply) {
+  reply
+    .clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: process.env.NODE_ENV === "production" ? "lax" : "none",
+      path: "/",
+    })
+    .status(200)
+    .send();
+}

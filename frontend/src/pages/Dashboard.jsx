@@ -2,13 +2,16 @@ import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar.jsx";
 import GraficoGastosScroll from "../components/GraficoGastosScroll.jsx";
 import { DynamicIcon } from "lucide-react/dynamic";
-import { CreditCard } from "lucide-react";
+import { CreditCard, LogOut } from "lucide-react";
 import SelectMes from "../components/SelectMes.jsx";
 import CircularProgress from "../components/CircularProgress.jsx";
 import { api } from "../lib/api.js";
 import hojeLocal from "../lib/data.js";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [dados, setDados] = useState([]);
 
   const [carregando, setCarregando] = useState(true);
@@ -49,6 +52,14 @@ export default function Dashboard() {
     setFiltro((atual) => ({ ...atual, mes: novoMes }));
   }
 
+  async function sair() {
+    try {
+      await api("/auth/logout", "POST");
+    } finally {
+      navigate("/");
+    }
+  }
+
   // Se dados.resumo? form undefined ou null, para aqui e retorna undefined
   // Sem tentar .saidas que explode TypeError;
   // ?? Se o valor da esquerda for null ou undefined, troca pelo da direita
@@ -83,7 +94,7 @@ export default function Dashboard() {
       <div>
         <div className="flex flex-col px-5 pt-5 gap-4">
           <div className="w-full flex flex-col justify-between gap-2">
-            <div>
+            <div className="flex justify-between items-center">
               <h1>
                 <span className="text-sm text-[#aeaeb5] font-light">
                   {saudacao()}
@@ -92,6 +103,9 @@ export default function Dashboard() {
                   {usuarioPrimeiroNome} 👋
                 </span>
               </h1>
+              <button onClick={sair}>
+                <LogOut size={18} className="text-[#8B7BC7]" />
+              </button>
             </div>
             <SelectMes
               mes={filtro.mes}
