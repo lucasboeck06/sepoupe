@@ -10,7 +10,7 @@ export async function loginQuery(email) {
 
 export async function criarUsuarioQuery(usuario) {
   const result = await pool.query(
-    "INSERT INTO public.usuarios(nome, email, senha) VALUES($1, $2, $3) RETURNING *",
+    "INSERT INTO public.usuarios(nome, email, senha) VALUES($1, $2, $3) RETURNING id, nome, email",
     [usuario.nome, usuario.email, usuario.senha],
   );
 
