@@ -20,6 +20,7 @@ if (!process.env.SECRET || process.env.SECRET.length < 32) {
 
 const fastify = Fastify({
   logger: true,
+  trustProxy: true,
 });
 
 // Precisamos definir o Cors aqui em cima!
