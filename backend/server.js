@@ -11,6 +11,7 @@ import fastifyCookie from "@fastify/cookie";
 import { dashboardRoutes } from "./src/routes/dashboard.js";
 import { contaRoutes } from "./src/routes/conta.js";
 import { capitalRoutes } from "./src/routes/capital.js";
+import fastifyRateLimit from "@fastify/rate-limit";
 
 if (!process.env.SECRET || process.env.SECRET.length < 32) {
   console.error("SECRET ausente ou muito curto (mínimo 32 caracteres)");
@@ -19,6 +20,7 @@ if (!process.env.SECRET || process.env.SECRET.length < 32) {
 
 const fastify = Fastify({
   logger: true,
+  trustProxy: true,
 });
 
 // Precisamos definir o Cors aqui em cima!
@@ -50,6 +52,8 @@ fastify.register(fastifyJwt, {
     signed: false,
   },
 });
+
+fastify.register(fastifyRateLimit, { global: false });
 
 fastify.decorate("authenticate", async function (request, reply) {
   try {
