@@ -29,7 +29,7 @@ export async function listarCategorias() {
 
 export async function atualizarCategoria(nome, tipo, id) {
   if (!id) {
-    throw new Error("o IDé necessário para atualizar a categoria!");
+    throw new Error("o ID é necessário para atualizar a categoria!");
   }
 
   if (!nome && !tipo) {

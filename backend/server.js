@@ -1,5 +1,3 @@
-// Teste de deploy automático!
-
 import Fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import { categoriasRoutes } from "./src/routes/categorias.js";
@@ -33,20 +31,10 @@ fastify.register(fastifyCors, {
 // Registro da ferramenta de cookie
 fastify.register(fastifyCookie);
 
-//Define o método como GET
-//async aqui porque, algum dia vai consultar um banco e precisar de um await para a resposta
-// fastify.get("/", async (request, reply) => {
-//request é o que é enviado para o server, o que chega. Dados da requisição. (body, params, headers, query)
-
-//reply é a resposta do servidor para quem solicitou. Interface... (send, status, header)
-// reply.send({ hello: "world" });
-//   return { hello: "world" };
-// });
-
-// Register sempre acima das rotas registradaas
+// Register sempre acima das rotas registradas
 fastify.register(fastifyJwt, {
   secret: process.env.SECRET,
-  // Configurações para o acess_token nos cookies
+  // Configurações para o access_token nos cookies
   cookie: {
     cookieName: "access_token",
     signed: false,
@@ -70,13 +58,6 @@ fastify.register(authRoutes);
 fastify.register(dashboardRoutes);
 fastify.register(contaRoutes);
 fastify.register(capitalRoutes);
-
-// fastify.listen({ port: 3000 }, function (err, address) {
-//   if (err) {
-//     fastify.log.error(err);
-//     process.exit(1);
-//   }
-// });
 
 const start = async () => {
   try {

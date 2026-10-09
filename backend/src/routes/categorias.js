@@ -6,10 +6,6 @@ import {
 } from "../controllers/categoriaController.js";
 
 export async function categoriasRoutes(fastify) {
-  // Se você tivesse uma rota pública (ex: listar categorias para visitantes verem),
-  // ela ficaria solta aqui fora, sem proteção.
-  // fastify.get('/categorias/publicas', listar);
-
   fastify.register(async function rotasProtegidas(instanciaIsolada) {
     instanciaIsolada.addHook("preHandler", instanciaIsolada.authenticate);
 

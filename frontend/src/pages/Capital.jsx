@@ -21,7 +21,7 @@ export default function Capital() {
     setCentavos(Number(digitos));
   }
 
-  // Formata o insert para o modelo braasileiro e trazendo o efeito de direita para esquerda
+  // Formata o insert para o modelo brasileiro e trazendo o efeito de direita para esquerda
   const valorFormatado = (centavos / 100).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",

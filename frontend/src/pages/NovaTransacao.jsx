@@ -58,7 +58,7 @@ export default function NovaTransacao() {
     setCentavos(Number(digitos));
   }
 
-  // Formata o insert para o modelo braasileiro e trazendo o efeito de direita para esquerda
+  // Formata o insert para o modelo brasileiro e trazendo o efeito de direita para esquerda
   const valorFormatado = (centavos / 100).toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
@@ -91,7 +91,7 @@ export default function NovaTransacao() {
         data,
       });
 
-      alert("Transacao criada!");
+      alert("Transação criada!");
 
       setCentavos(0);
       setDescricao("");
@@ -134,7 +134,7 @@ export default function NovaTransacao() {
           <ChevronLeft color="#2c2438" size={22} />
         </button>
         <h1 className="text-[#2c2438] font-bold text-[1.2rem]">
-          Nova Transacao
+          Nova Transação
         </h1>
       </div>
 
