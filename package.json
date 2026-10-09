@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,9 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
   "bugs": {
     "url": "https://github.com/lucasboeck06/sepoupe/issues"
   },
