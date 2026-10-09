@@ -3,13 +3,11 @@ import {
   SlidersHorizontal,
   BanknoteArrowUp,
   CircleDollarSign,
-  WalletCards,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const navItems = [
-    { id: "dividas", Icon: WalletCards, path: "/dividas" },
     { id: "capital", Icon: CircleDollarSign, path: "/capital" },
     { id: "home", Icon: Home, path: "/dashboard" },
     { id: "transacoes", Icon: SlidersHorizontal, path: "/transacoes" },
