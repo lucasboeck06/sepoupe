@@ -300,7 +300,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <GraficoGastosScroll dados={dados.diario} />
+            <GraficoGastosScroll dados={dados.diario} mes={filtro.mes} />
           </div>
         )}
       </div>
