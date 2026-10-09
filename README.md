@@ -200,7 +200,7 @@ O frontend deve abrir em `http://localhost:5173`. Faça login com o e-mail e a s
 | `DBHOST`      | Endereço do banco (geralmente `localhost`)                                |
 | `DBPORT`      | Porta do banco (padrão `5432`)                                            |
 | `DBNAME`      | Nome do banco criado no passo 3                                           |
-| `DBPASSWORD`  | Senha do usuário do banco                                                 |
+| `DBPASS`      | Senha do usuário do banco                                                 |
 | `SECRET`      | Chave secreta usada para assinar o JWT — use uma string longa e aleatória |
 | `NODE_ENV`    | `development` localmente, `production` em produção                        |
 | `CORS_ORIGIN` | Endereço do frontend (`http://localhost:5173` em desenvolvimento)         |
