@@ -243,9 +243,9 @@ export default function Transacoes() {
               </div>
               <div className="flex items-center gap-3">
                 <p
-                  className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : "text-[#2F9F6F]"}`}
+                  className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : transacao.tipo === "entrada" ? "text-[#2F9F6F]" : "text-[#d6b03a]"}`}
                 >
-                  {transacao.tipo === "saida" ? "- " : "+ "}
+                  {transacao.tipo === "entrada" ? "+ " : "- "}
                   {transacao.valor}
                 </p>
 
