@@ -271,7 +271,10 @@ export default function NovaTransacao() {
             className={`grid grid-cols-4 max-h-[52vh] overflow-y-auto [&::-webkit-scrollbar]:hidden`}
           >
             {categorias.map((cat) => (
-              <div className="flex flex-col justify-start items-center gap-1 py-2 min-h-20">
+              <div
+                key={cat.id}
+                className="flex flex-col justify-start items-center gap-1 py-2 min-h-20"
+              >
                 <span
                   className={`w-10 h-10 rounded-xl flex items-center justify-center`}
                   style={{ backgroundColor: cat.cor_secundaria }}
