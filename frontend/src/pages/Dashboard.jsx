@@ -24,7 +24,7 @@ export default function Dashboard() {
     return "Boa noite, ";
   };
 
-  const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
+  const usuarioNomeCompleto = localStorage.getItem("nome-usuario") ?? "";
   const usuarioPrimeiroNome = usuarioNomeCompleto.split(" ")[0];
 
   const mesAtual = hojeLocal().slice(0, 7);
