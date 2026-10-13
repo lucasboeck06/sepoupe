@@ -25,8 +25,8 @@ export async function logar(request, reply) {
       })
       .status(200)
       .send({ mensagem: "Login realizado com sucesso!", nome: usuario.nome });
-  } catch (err) {
-    reply.status(401).send({ erro: err.message });
+  } catch (erro) {
+    reply.status(401).send({ erro: erro.message });
   }
 }
 

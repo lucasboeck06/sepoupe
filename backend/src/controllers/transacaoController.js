@@ -20,8 +20,8 @@ export async function criar(request, reply) {
     );
 
     return reply.status(201).send(novaTransacao);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }
 
@@ -32,8 +32,8 @@ export async function listar(request, reply) {
     const lista = await listarTransacoes(tipo, ordem, sequencia, mes);
 
     return reply.status(200).send(lista);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }
 
@@ -44,7 +44,7 @@ export async function deletar(request, reply) {
     const transacaoDeletada = await deletarTransacao(id);
 
     return reply.status(200).send(transacaoDeletada);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }

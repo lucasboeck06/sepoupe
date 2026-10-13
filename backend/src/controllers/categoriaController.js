@@ -12,8 +12,8 @@ export async function criar(request, reply) {
     const novaCategoria = await criarCategoria(nome, tipo);
 
     return reply.status(201).send(novaCategoria);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }
 
@@ -21,8 +21,8 @@ export async function listar(request, reply) {
   try {
     const categorias = await listarCategorias();
     reply.status(200).send(categorias);
-  } catch (err) {
-    return reply.status(500).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(500).send({ erro: erro.message });
   }
 }
 
@@ -33,8 +33,8 @@ export async function atualizar(request, reply) {
     const categoriaAtualizada = await atualizarCategoria(nome, tipo, id);
 
     return reply.status(200).send(categoriaAtualizada);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }
 
@@ -45,7 +45,7 @@ export async function deletar(request, reply) {
     const categoriaDeletada = await deletarCategoria(id);
 
     return reply.status(200).send(categoriaDeletada);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }

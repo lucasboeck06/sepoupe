@@ -46,7 +46,7 @@ fastify.register(fastifyRateLimit, { global: false });
 fastify.decorate("authenticate", async function (request, reply) {
   try {
     await request.jwtVerify();
-  } catch (err) {
+  } catch (erro) {
     return reply.status(401).send({ erro: "Token inválido ou ausente" });
   }
 });
@@ -63,8 +63,8 @@ const start = async () => {
   try {
     //async/await aqui porquer precisamos fazer o bind (associar o IP e a porta da máquina)
     await fastify.listen({ port: 3000 });
-  } catch (err) {
-    fastify.log.error(err);
+  } catch (erro) {
+    fastify.log.error(erro);
     process.exit(1);
   }
 };

@@ -21,8 +21,8 @@ export default function Login() {
       localStorage.setItem("nome-usuario", dados.nome);
 
       navigate("/dashboard");
-    } catch (err) {
-      console.error("Erro na requisição: ", err);
+    } catch (erro) {
+      console.error("Erro na requisição: ", erro);
     }
   }
 
