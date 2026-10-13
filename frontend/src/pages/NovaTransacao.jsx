@@ -271,9 +271,15 @@ export default function NovaTransacao() {
             className={`grid grid-cols-4 max-h-[52vh] overflow-y-auto [&::-webkit-scrollbar]:hidden`}
           >
             {categorias.map((cat) => (
-              <div
+              <button
                 key={cat.id}
+                type="button"
                 className="flex flex-col justify-start items-center gap-1 py-2 min-h-20"
+                onClick={() => {
+                  setCategoriaId(cat.id);
+                  setListaCategorias(false);
+                  setBusca(cat.nome);
+                }}
               >
                 <span
                   className={`w-10 h-10 rounded-xl flex items-center justify-center`}
@@ -288,7 +294,7 @@ export default function NovaTransacao() {
                 <span className="text-[0.70rem] text-center leading-tight">
                   {cat.nome}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
           <div className="flex justify-end mr-4 mt-3">

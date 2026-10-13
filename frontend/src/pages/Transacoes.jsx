@@ -13,6 +13,7 @@ import { DynamicIcon } from "lucide-react/dynamic";
 import SelectMes from "../components/SelectMes.jsx";
 import { api } from "../lib/api.js";
 import hojeLocal from "../lib/data.js";
+import formatarBRL from "../lib/formatarBRL.js";
 
 export default function Transacoes() {
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ export default function Transacoes() {
               <h2 className="text-[0.7rem] text-[#9B93A8]">Entradas</h2>
             </div>
             <span className="text-[1rem] text-[#2C2438] font-bold">
-              R$ {resumo.entradas}
+              {formatarBRL(resumo.entradas)}
             </span>
           </div>
           <div className=" bg-white rounded-2xl p-3 shadow">
@@ -138,7 +139,7 @@ export default function Transacoes() {
               <h2 className="text-[0.7rem] text-[#9B93A8]">Saídas</h2>
             </div>
             <span className="text-[1rem] text-[#2C2438] font-bold">
-              R$ {resumo.saidas}
+              {formatarBRL(resumo.saidas)}
             </span>
           </div>
         </div>
@@ -246,7 +247,7 @@ export default function Transacoes() {
                   className={`text-[0.9rem] font-semibold ${transacao.tipo === "saida" ? "text-[#D16B6B]" : transacao.tipo === "entrada" ? "text-[#2F9F6F]" : "text-[#d6b03a]"}`}
                 >
                   {transacao.tipo === "entrada" ? "+ " : "- "}
-                  {transacao.valor}
+                  {formatarBRL(transacao.valor)}
                 </p>
 
                 <button
