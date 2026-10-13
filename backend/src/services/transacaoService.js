@@ -1,7 +1,7 @@
 import { transacaoRepository } from "../database/transacoesRepository.js";
 import { categoriaRepository } from "../database/categoriaRepository.js";
 import { dashboardRepository } from "../database/dashboardRepository.js";
-import { registraMovimentacao, reverterMovimentacao } from "./contaService.js";
+import { registrarMovimentacao, reverterMovimentacao } from "./contaService.js";
 import { pool } from "../database/db.js";
 
 export async function criarTransacao(
@@ -46,7 +46,7 @@ export async function criarTransacao(
       client,
     );
 
-    await registraMovimentacao(
+    await registrarMovimentacao(
       operacaoTipo,
       categoriaNome,
       valor,

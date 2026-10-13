@@ -1,4 +1,4 @@
-import { contasRepository } from "../database/contasRepository.js";
+import { contaRepository } from "../database/contaRepository.js";
 import { pool } from "../database/db.js";
 
 const conta = {
@@ -14,7 +14,7 @@ const acerto = {
 
 const metodosContaCorrente = ["PIX", "Débito", "Dinheiro"];
 
-export async function registraMovimentacao(
+export async function registrarMovimentacao(
   operacaoTipo,
   categoriaNome,
   valor,
@@ -22,20 +22,20 @@ export async function registraMovimentacao(
   client,
 ) {
   if (conta[operacaoTipo])
-    await contasRepository.adicionarSaldo(conta[operacaoTipo], valor, client);
+    await contaRepository.adicionarSaldo(conta[operacaoTipo], valor, client);
 
   if (acerto[categoriaNome])
-    await contasRepository.reduzirSaldo(acerto[categoriaNome], valor, client);
+    await contaRepository.reduzirSaldo(acerto[categoriaNome], valor, client);
 
   if (categoriaNome === "VA")
-    await contasRepository.atualizarLimite("va", valor, client);
+    await contaRepository.atualizarLimite("va", valor, client);
 
   if (metodosContaCorrente.includes(operacaoTipo)) {
     if (categoriaTipo === "entrada")
-      await contasRepository.adicionarSaldo("conta_corrente", valor, client);
+      await contaRepository.adicionarSaldo("conta_corrente", valor, client);
 
     if (categoriaTipo === "saida" || categoriaTipo === "acerto")
-      await contasRepository.reduzirSaldo("conta_corrente", valor, client);
+      await contaRepository.reduzirSaldo("conta_corrente", valor, client);
   }
 }
 
@@ -47,21 +47,21 @@ export async function reverterMovimentacao(
   client,
 ) {
   if (conta[operacaoTipo])
-    await contasRepository.reduzirSaldo(conta[operacaoTipo], valor, client);
+    await contaRepository.reduzirSaldo(conta[operacaoTipo], valor, client);
 
   if (acerto[categoriaNome])
-    await contasRepository.adicionarSaldo(acerto[categoriaNome], valor, client);
+    await contaRepository.adicionarSaldo(acerto[categoriaNome], valor, client);
 
   if (categoriaNome === "VA")
     // Ao invés de uma nova func para mandar para o repo, deixamos o valor negativo, isso basta!
-    await contasRepository.atualizarLimite("va", -valor, client);
+    await contaRepository.atualizarLimite("va", -valor, client);
 
   if (metodosContaCorrente.includes(operacaoTipo)) {
     if (categoriaTipo === "entrada")
-      await contasRepository.reduzirSaldo("conta_corrente", valor, client);
+      await contaRepository.reduzirSaldo("conta_corrente", valor, client);
 
     if (categoriaTipo === "saida" || categoriaTipo === "acerto")
-      await contasRepository.adicionarSaldo("conta_corrente", valor, client);
+      await contaRepository.adicionarSaldo("conta_corrente", valor, client);
   }
 }
 
@@ -81,7 +81,7 @@ export async function registrarInvestimento(valorInvestido) {
   try {
     // Começa o bloco
     await client.query("BEGIN");
-    const { saldo } = await contasRepository.consultarSaldo(
+    const { saldo } = await contaRepository.consultarSaldo(
       "conta_corrente",
       client,
     );
@@ -94,13 +94,13 @@ export async function registrarInvestimento(valorInvestido) {
       throw new Error("Valor não disponível!");
 
     // Executa as duas chamadas
-    await contasRepository.reduzirSaldo(
+    await contaRepository.reduzirSaldo(
       "conta_corrente",
       valorInvestido,
       client,
     );
     // Falhou aqui? Cai no catch, ele executou o primeiro, opa!
-    await contasRepository.adicionarSaldo("poupanca", valorInvestido, client);
+    await contaRepository.adicionarSaldo("poupanca", valorInvestido, client);
     // Finaliza como uma coisa só!
     await client.query("COMMIT");
   } catch (erro) {
@@ -125,7 +125,7 @@ export async function registrarResgate(valorResgatado) {
   try {
     await client.query("BEGIN");
 
-    const { saldo } = await contasRepository.consultarSaldo("poupanca", client);
+    const { saldo } = await contaRepository.consultarSaldo("poupanca", client);
 
     const saldoContaNumber = Number(saldo);
 
@@ -135,8 +135,8 @@ export async function registrarResgate(valorResgatado) {
     if (saldoContaNumber < valorResgatado)
       throw new Error("Valor não disponível!");
 
-    await contasRepository.reduzirSaldo("poupanca", valorResgatado, client);
-    await contasRepository.adicionarSaldo(
+    await contaRepository.reduzirSaldo("poupanca", valorResgatado, client);
+    await contaRepository.adicionarSaldo(
       "conta_corrente",
       valorResgatado,
       client,

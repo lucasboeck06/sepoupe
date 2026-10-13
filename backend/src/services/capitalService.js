@@ -1,6 +1,6 @@
 import { capitalRepository } from "../database/capitalRepository.js";
 
-export async function getDados() {
+export async function buscarDados() {
   const dados = await capitalRepository.dados();
 
   return {
