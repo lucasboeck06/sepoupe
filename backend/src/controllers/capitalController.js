@@ -4,7 +4,7 @@ export async function dados(request, reply) {
   try {
     const dados = await getDados();
     return reply.status(200).send(dados);
-  } catch (err) {
-    return reply.status(400).send({ erro: err.message });
+  } catch (erro) {
+    return reply.status(400).send({ erro: erro.message });
   }
 }
