@@ -47,7 +47,7 @@ export default function Capital() {
 
     setEnviando(true);
     try {
-      await api("/conta/resgatar", "POST", { valor: centavos / 100 });
+      await api("/contas/resgatar", "POST", { valor: centavos / 100 });
 
       setCentavos(0);
       setCardAberto(false);
@@ -66,7 +66,7 @@ export default function Capital() {
 
     setEnviando(true);
     try {
-      await api("/conta/investir", "POST", { valor: centavos / 100 });
+      await api("/contas/investir", "POST", { valor: centavos / 100 });
 
       setCentavos(0);
       setCardAberto(false);
