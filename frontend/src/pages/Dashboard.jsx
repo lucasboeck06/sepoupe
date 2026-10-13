@@ -8,6 +8,7 @@ import CircularProgress from "../components/CircularProgress.jsx";
 import { api } from "../lib/api.js";
 import hojeLocal from "../lib/data.js";
 import { useNavigate } from "react-router-dom";
+import formatarBRL from "../lib/formatarBRL.js";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Dashboard() {
     return "Boa noite, ";
   };
 
-  const usuarioNomeCompleto = localStorage.getItem("nome-usuario");
+  const usuarioNomeCompleto = localStorage.getItem("nome-usuario") ?? "";
   const usuarioPrimeiroNome = usuarioNomeCompleto.split(" ")[0];
 
   const mesAtual = hojeLocal().slice(0, 7);
@@ -119,20 +120,20 @@ export default function Dashboard() {
             <div className="flex-1 w-full">
               <h2 className="text-xs text-[#aeaeb5]">Total gasto esse mês:</h2>
               <span className="text-xl font-semibold text-[#EB7070]">
-                R$ {totalSaidas}
+                {formatarBRL(totalSaidas)}
                 <br />
               </span>
               <span className="text-xs text-[#aeaeb5]">
                 Total com acertos: <br />
               </span>
               <span className="text-base font-semibold text-[#d6b03a]">
-                R$ {(totalAcertos + totalSaidas).toFixed(2)} <br />
+                {formatarBRL(totalAcertos + totalSaidas)} <br />
               </span>
               <span className="text-xs text-[#aeaeb5]">
                 Saldo disponível: <br />
               </span>
               <span className="text-base font-semibold text-[#68C18C]">
-                R$ {saldoDisponivel}
+                {formatarBRL(saldoDisponivel)}
               </span>
             </div>
           </div>
@@ -158,7 +159,7 @@ export default function Dashboard() {
                     Cartão de Crédito Inter
                   </span>
                   <span className="text-base font-semibold text-[#e08b45]">
-                    R$ {(cartao.saldo ?? 0).toFixed(2)}
+                    {formatarBRL(cartao.saldo)}
                   </span>
                 </div>
                 <progress
@@ -174,8 +175,8 @@ export default function Dashboard() {
                     Limite disponível:
                   </span>
                   <span className="text-xs text-[#aeaeb5] font-semibold">
-                    R$ {cartao.limiteDisponivel ?? 0} de{" "}
-                    {(cartao.limite ?? 0).toFixed(2)}
+                    {formatarBRL(cartao.limiteDisponivel)} de{" "}
+                    {formatarBRL(cartao.limite)}
                   </span>
                 </div>
               </div>
@@ -193,7 +194,7 @@ export default function Dashboard() {
                     Vale Alimentação
                   </span>
                   <span className="text-base font-semibold text-[#2f9f6f]">
-                    R$ {(va.saldo ?? 0).toFixed(2)}
+                    {formatarBRL(va.saldo)}
                   </span>
                 </div>
                 <progress
@@ -205,8 +206,8 @@ export default function Dashboard() {
                     Limite disponível:
                   </span>
                   <span className="text-xs text-[#aeaeb5] font-semibold">
-                    R$ {(va.limiteDisponivel ?? 0).toFixed(2)} de{" "}
-                    {(va.limite ?? 0).toFixed(2)}
+                    {formatarBRL(va.limiteDisponivel)} de{" "}
+                    {formatarBRL(va.limite)}
                   </span>
                 </div>
               </div>
@@ -224,7 +225,7 @@ export default function Dashboard() {
                     Cheque Especial Caixa
                   </span>
                   <span className="text-base font-semibold text-[#7fa8d6]">
-                    R$ {(cheque.saldo ?? 0).toFixed(2)}
+                    {formatarBRL(cheque.saldo)}
                   </span>
                 </div>
                 <progress
@@ -240,8 +241,8 @@ export default function Dashboard() {
                     Limite disponível:
                   </span>
                   <span className="text-xs text-[#aeaeb5] font-semibold">
-                    R$ {(cheque.limiteDisponivel ?? 0).toFixed(2)} de{" "}
-                    {(cheque.limite ?? 0).toFixed(2)}
+                    {formatarBRL(cheque.limiteDisponivel)} de{" "}
+                    {formatarBRL(cheque.limite)}
                   </span>
                 </div>
               </div>
@@ -291,7 +292,7 @@ export default function Dashboard() {
                           {porcentagemItem}%
                         </span>
                         <span className="text-sm text-[#9B93A8]">
-                          R${n.total_gasto.toFixed(2)}
+                          {formatarBRL(n.total_gasto)}
                         </span>
                       </div>
                     </div>
@@ -300,7 +301,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <GraficoGastosScroll dados={dados.diario} />
+            <GraficoGastosScroll dados={dados.diario} mes={filtro.mes} />
           </div>
         )}
       </div>

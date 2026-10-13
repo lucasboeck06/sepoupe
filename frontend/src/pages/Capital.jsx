@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ChevronLeft, Wallet, X } from "lucide-react";
 import { api } from "../lib/api";
+import formatarBRL from "../lib/formatarBRL.js";
 
 export default function Capital() {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ export default function Capital() {
             Patrimônio total
           </h2>
           <p className="text-[#2C2438] text-[1.6rem] font-bold">
-            R$ {dados.patrimonio.toFixed(2)}
+            {formatarBRL(dados.patrimonio)}
           </p>
         </div>
       </div>
@@ -115,7 +116,7 @@ export default function Capital() {
             </div>
           </div>
           <p className="text-[1.1rem] font-bold text-[#2C2438]">
-            R$ {dados.conta.toFixed(2)}
+            {formatarBRL(dados.conta)}
           </p>
         </div>
         <div
@@ -136,7 +137,7 @@ export default function Capital() {
             </div>
           </div>
           <p className="text-[1.1rem] font-bold text-[#2C2438]">
-            R$ {dados.poupanca.toFixed(2)}
+            {formatarBRL(dados.poupanca)}
           </p>
         </div>
       </div>

@@ -6,6 +6,7 @@ import {
   Calendar,
   RotateCcw,
 } from "lucide-react";
+import formatarMesExibicao from "../lib/formatarMesExibicao.js";
 
 export default function SelectMes({ mes, mesAtual, onMudarMes }) {
   const [seletorMes, setSeletorMes] = useState(false);
@@ -34,17 +35,6 @@ export default function SelectMes({ mes, mesAtual, onMudarMes }) {
     { numero: 11, label: "Nov" },
     { numero: 12, label: "Dez" },
   ];
-
-  function formatarMesExibicao(mesString) {
-    const [ano, mes] = mesString.split("-").map(Number);
-    const data = new Date(ano, mes - 1, 1);
-    const texto = data.toLocaleDateString("pt-BR", {
-      month: "long",
-      year: "numeric",
-    });
-
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
-  }
 
   const [anoAtual] = mesAtual.split("-").map(Number);
 

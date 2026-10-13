@@ -3,13 +3,11 @@ import {
   SlidersHorizontal,
   BanknoteArrowUp,
   CircleDollarSign,
-  WalletCards,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const navItems = [
-    { id: "dividas", Icon: WalletCards, path: "/dividas" },
     { id: "capital", Icon: CircleDollarSign, path: "/capital" },
     { id: "home", Icon: Home, path: "/dashboard" },
     { id: "transacoes", Icon: SlidersHorizontal, path: "/transacoes" },
@@ -21,6 +19,7 @@ export default function NavBar() {
       <div className="w-full flex flex-row items-center justify-between">
         {navItems.map(({ path, Icon }) => (
           <NavLink
+            key={navItems.rota}
             to={path}
             className="h-12 flex flex-col items-center gap-1 py-2 px-3 rounded-lg"
           >

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import formatarMesExibicao from "../lib/formatarMesExibicao";
 
-export default function GraficoGastosScroll({ dados = [] }) {
+export default function GraficoGastosScroll({ dados = [], mes }) {
   const [diaSelecionado, setDiaSelecionado] = useState(null);
 
   // 1. A INTELIGÊNCIA MATEMÁTICA:
@@ -26,10 +27,7 @@ export default function GraficoGastosScroll({ dados = [] }) {
   const totalGasto = dados.reduce((soma, item) => soma + item.total, 0);
   const mediaDiaria = dados.length > 0 ? totalGasto / dados.length : 0;
 
-  const nomeMes = new Date().toLocaleDateString("pt-BR", {
-    month: "long",
-    year: "numeric",
-  });
+  const nomeMes = formatarMesExibicao(mes);
 
   return (
     <div className="w-full bg-white rounded-3xl p-6 shadow-sm">
