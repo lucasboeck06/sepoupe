@@ -1,9 +1,9 @@
-import { criarUsuarioQuery } from "../database/usuarioRepository.js";
+import { usuarioRepository } from "../database/usuarioRepository.js";
 import bcrypt from "bcrypt";
 
 export async function criarUsuario(usuario) {
   usuario.senha = await bcrypt.hash(usuario.senha, 10);
 
-  const result = await criarUsuarioQuery(usuario);
+  const result = await usuarioRepository.criarUsuarioQuery(usuario);
   return result;
 }

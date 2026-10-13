@@ -1,8 +1,8 @@
-import { getDados } from "../services/capitalService.js";
+import { buscarDados } from "../services/capitalService.js";
 
 export async function dados(request, reply) {
   try {
-    const dados = await getDados();
+    const dados = await buscarDados();
     return reply.status(200).send(dados);
   } catch (erro) {
     return reply.status(400).send({ erro: erro.message });
