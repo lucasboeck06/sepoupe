@@ -17,7 +17,8 @@ jobs:
           script: |
             set -e
             cd /opt/financeiro-pessoal
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             npm ci
             cd frontend
             npm ci

@@ -1,4 +1,4 @@
-import { transacaoRepository } from "../database/transacoesRepository.js";
+import { transacaoRepository } from "../database/transacaoRepository.js";
 import { categoriaRepository } from "../database/categoriaRepository.js";
 import { dashboardRepository } from "../database/dashboardRepository.js";
 import { registrarMovimentacao, reverterMovimentacao } from "./contaService.js";

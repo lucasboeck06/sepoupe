@@ -1,8 +1,8 @@
 import Fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
-import { categoriasRoutes } from "./src/routes/categorias.js";
-import { usuariosRoutes } from "./src/routes/usuarios.js";
-import { transacoesRoutes } from "./src/routes/transacoes.js";
+import { categoriasRoutes } from "./src/routes/categoria.js";
+import { usuariosRoutes } from "./src/routes/usuario.js";
+import { transacoesRoutes } from "./src/routes/transacao.js";
 import { authRoutes } from "./src/routes/auth.js";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
